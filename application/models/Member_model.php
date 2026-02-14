@@ -1,6 +1,6 @@
 <?php
 class Member_model extends CI_Model{
-	var $user_prefix="SC";
+	var $user_prefix="SHIV";
 	var $random_user=true;
 	var $pool_size=2; // pool count
 	var $downline_table="members";
@@ -46,11 +46,11 @@ class Member_model extends CI_Model{
 			$memberdata['added_on']=date('Y-m-d H:i:s');
 			
 			$this->db->insert("members",$memberdata);
-            print_pre($this->db->error());
+            //print_pre($this->db->error());
 			$this->db->insert("acc_details",$accountdata);
-            print_pre($this->db->error());
+            //print_pre($this->db->error());
 			$this->db->insert("nominee",$nomineedata);
-            print_pre($this->db->error());
+            //print_pre($this->db->error());
 			$this->addintree($treedata);
             $this->db->trans_complete();
             //$this->addlevel($regid);
@@ -104,13 +104,14 @@ class Member_model extends CI_Model{
 			}
 		}
 		else{
-			$userid=random_string('numeric',6);
-			$username=$this->user_prefix.$userid;
+			$userid=random_string('numeric',5);
+			$username=$this->user_prefix.$userid.'OM';
 		}
 		$where="username='$username'";
 		$query=$this->db->get_where("users",$where);
 		$checkuser=$query->num_rows();
 		if($checkuser!=0){
+            $username=str_replace('OM','',$username);
 			return $this->generateusername($username);
 		}
 		else{

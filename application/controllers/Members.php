@@ -12,7 +12,7 @@ class Members extends MY_Controller {
 	}
 	
 	public function index(){
-        $this->registration();
+        $this->memberlist();
 		/*if($this->session->user===NULL){
 			$this->register();
 		}else{

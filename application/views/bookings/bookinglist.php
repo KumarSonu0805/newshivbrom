@@ -52,6 +52,10 @@
                                                                     if($booking['a_status']==1){
                                                                         $a_status="<span class='text-success'>Active</span>";
                                                                     }
+                                                                    $status="<span class='text-danger'>Pending</span>";
+                                                                    if($booking['status']==1){
+                                                                        $status="<span class='text-success'>Approved</span>";
+                                                                    }
                                                         ?>
                                                         <tr>
                                                             <td><?= $i; ?></td>
@@ -70,7 +74,7 @@
                                                             <td><?= ucfirst($booking['payment_mode']); ?></td>
                                                             <td><?= $a_status; ?></td>
                                                             <td><?= date('d-m-Y',strtotime($booking['added_on'])); ?></td>
-                                                            <td><?= $booking['status']; ?></td>
+                                                            <td><?= $status; ?></td>
                                                             <td></td>
                                                         </tr>
                                                         <?php
