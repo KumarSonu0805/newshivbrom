@@ -38,33 +38,39 @@
                                                             if(is_array($bookings)){$i=0;
                                                                 foreach($bookings as $booking){
                                                                     $i++;
-                                                                    $status="<span class='text-danger'>Not Approved</span>";
-                                                                    if($booking['status']==1){
-                                                                        $status="<span class='text-success'>Approved</span>";
-                                                                    }elseif($booking['status']==2 && $booking['approved_on']===NULL){
-                                                                        $status="<span class='text-danger'>Request Cancelled</span>";
-                                                                    }elseif($booking['status']==2){
-                                                                        $status="<span class='text-danger'>Request Rejected By Admin</span>";
+                                                                    $payment_type='';
+                                                                    if($booking['payment_type']=='full'){
+                                                                        $payment_type='Full Payment';
+                                                                    }
+                                                                    elseif($booking['payment_type']=='partial'){
+                                                                        $payment_type='Partial Payment';
+                                                                    }
+                                                                    elseif($booking['payment_type']=='emi'){
+                                                                        $payment_type='EMI Payment';
+                                                                    }
+                                                                    $a_status="<span class='text-danger'>In-Active</span>";
+                                                                    if($booking['a_status']==1){
+                                                                        $a_status="<span class='text-success'>Active</span>";
                                                                     }
                                                         ?>
                                                         <tr>
                                                             <td><?= $i; ?></td>
-                                                            <td><?php echo $booking['member_id']; ?></td>
-                                                            <td><?php echo $booking['member_name']; ?></td>
-                                                            <td><?php echo $booking['name']; ?></td>
-                                                            <td><?php echo $booking['email']; ?></td>
-                                                            <td><?php echo $booking['mobile']; ?></td>
-                                                            <td><?php echo $booking['type']; ?></td>
-                                                            <td><?php echo $booking['city']; ?></td>
-                                                            <td><?php echo $booking['landmark']; ?></td>
-                                                            <td><?php echo $booking['total_amount']; ?></td>
-                                                            <td><?php echo $booking['token_amount']; ?></td>
-                                                            <td><?php echo $booking['b_type']; ?></td>
-                                                            <td><?php echo $booking['payment_type']; ?></td>
-                                                            <td><?php echo $booking['payment_mode']; ?></td>
-                                                            <td><?php echo $booking['a_status']; ?></td>
-                                                            <td><?php echo date('d-m-Y',strtotime($booking['added_on'])); ?></td>
-                                                            <td><?php echo $booking['status']; ?></td>
+                                                            <td><?= $booking['member_id']; ?></td>
+                                                            <td><?= $booking['member_name']; ?></td>
+                                                            <td><?= $booking['name']; ?></td>
+                                                            <td><?= $booking['email']; ?></td>
+                                                            <td><?= $booking['mobile']; ?></td>
+                                                            <td><?= $booking['type']; ?></td>
+                                                            <td><?= $booking['city']; ?></td>
+                                                            <td><?= $booking['landmark']; ?></td>
+                                                            <td><?= $booking['total_amount']; ?></td>
+                                                            <td><?= $booking['token_amount']; ?></td>
+                                                            <td><?= $booking['b_type']; ?></td>
+                                                            <td><?= $payment_type; ?></td>
+                                                            <td><?= ucfirst($booking['payment_mode']); ?></td>
+                                                            <td><?= $a_status; ?></td>
+                                                            <td><?= date('d-m-Y',strtotime($booking['added_on'])); ?></td>
+                                                            <td><?= $booking['status']; ?></td>
                                                             <td></td>
                                                         </tr>
                                                         <?php

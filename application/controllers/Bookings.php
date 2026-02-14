@@ -28,6 +28,7 @@ class Bookings extends MY_Controller {
             $data['title']="Member Bookings";
         }
         $data['bookings']=$this->booking->getbookings($where);
+        $data['datatable']=true;
 		$this->template->load('bookings','bookinglist',$data);
 	}
 	

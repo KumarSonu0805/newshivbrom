@@ -53,7 +53,7 @@
                 <?php
                     }
                 ?>
-            	<a href="<?php echo base_url('members/editmember/'.$member['username']); ?>" class="btn btn-sm btn-info"><i class=" fa fa-edit"></i> Edit</a>
+            	<a href="<?php echo base_url('members/editmember/'.$member['username']); ?>" class="btn btn-sm btn-info d-none"><i class=" fa fa-edit"></i> Edit</a>
             </td>
             <?php } ?>
         </tr>
