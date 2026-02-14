@@ -32,6 +32,17 @@ class Bookings extends MY_Controller {
 		$this->template->load('bookings','bookinglist',$data);
 	}
 	
+	public function details($id=NULL){
+		$data['title']="Booking Details";
+		$data['breadcrumb']=array("/"=>"Home",'bookings/bookinglist/'=>"Booking List");
+		$data['user']=getuser();
+        $where=array("md5(concat('id-',t1.id))"=>$id);
+        $booking=$this->booking->getbookings($where,'single');
+        $data['booking']=$booking;
+        $data['datatable']=true;
+		$this->template->load('bookings','details',$data);
+	}
+	
 	public function savebooking(){
 		if($this->input->post('savebooking')!==NULL){
             $user=getuser();
