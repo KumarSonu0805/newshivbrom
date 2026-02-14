@@ -95,7 +95,7 @@ class Bookings extends MY_Controller {
             $data=array("bdata"=>$bdata,"details"=>$details,"nomineedata"=>$nomineedata);
             //print_pre($data,true);
             $result=$this->booking->savebooking($data);
-            print_pre($result,true);
+            //print_pre($result,true);
             if($result['status']===true){
                 $this->session->set_flashdata("msg",$result['message']);
             }
@@ -104,6 +104,22 @@ class Bookings extends MY_Controller {
             }
 		}
 		redirect($_SERVER['HTTP_REFERER']);
+	}
+	
+	public function approvebooking(){
+        $id=$this->input->post('id');
+        $where=array("md5(concat('id-',t1.id))"=>$id);
+        $booking=$this->booking->getbookings($where,'single');
+        if($booking['status']==0){
+            $result=$this->booking->approvebooking($booking['id'],$booking['regid']);
+            //print_pre($result,true);
+            if($result['status']===true){
+                $this->session->set_flashdata("msg",$result['message']);
+            }
+            else{
+                $this->session->set_flashdata("err_msg",$result['message']);
+            }
+        }
 	}
 	
 }

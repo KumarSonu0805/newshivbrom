@@ -75,7 +75,15 @@
                                                             <td><?= $a_status; ?></td>
                                                             <td><?= date('d-m-Y',strtotime($booking['added_on'])); ?></td>
                                                             <td><?= $status; ?></td>
-                                                            <td></td>
+                                                            <td>
+                                                                <?php
+                                                                    if($this->session->role=='admin'){
+                                                                ?>
+                                                                <button type="button" value="<?= md5('id-'.$booking['id']) ?>" class="btn btn-sm btn-success approve">Approve Booking</button>
+                                                                <?php
+                                                                    }
+                                                                ?>
+                                                            </td>
                                                         </tr>
                                                         <?php
                                                                 }
@@ -109,6 +117,14 @@
                 <script>
                     $(document).ready(function(e) {
                         createDatatable();
+                        $('body').on('click','.approve',function(){
+                            var id=$(this).val();
+                            if(confirm("Confirm Approve this Booking?")){
+                               $.post('<?= base_url('bookings/approvebooking') ?>',{id:id},function(){
+                                   window.location.reload();
+                               });
+                            }
+                        });
                         $('body').on('click','.view',function(){
                             $('#img-popup').attr('src','');
                             var src=$(this).val();

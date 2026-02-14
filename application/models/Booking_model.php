@@ -51,4 +51,22 @@ class Booking_model extends CI_Model{
         return $array;
     }
     
+	public function approvebooking($booking_id,$regid){
+        $member=$this->db->get_where('members',['regid'=>$regid])->unbuffered_row('array');
+        $datetime=date('Y-m-d H:i:s');
+        $data=array('approved_date'=>$datetime,'approved_by'=>1,'status'=>1,'updated_on'=>$datetime);
+        if($this->db->update('bookings',$data,['id'=>$booking_id])){
+            $this->db->update('booking_details',['status'=>1,'updated_on'],['booking_id'=>$booking_id]);
+            if($member['status']==0){
+                $data=array('activation_date'=>$datetime,'status'=>1);
+                $this->db->update('members',$data,['regid'=>$regid]);
+            }
+            return array('status'=>true,'message'=>"Booking Approved Successfully");
+        }
+        else{
+            $error=$this->db->error();
+            return array('status'=>false,'message'=>$error['message']);
+        }
+	}
+	
 }
