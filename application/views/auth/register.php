@@ -83,8 +83,8 @@
                             </div>
                         <?= form_close(); ?>
 
-                        <p class="mb-1 d-none">
-                            <a href="<?= base_url('forgot-password/'); ?>">I forgot my password</a>
+                        <p class="mb-1">
+                            Already have an account? <a href="<?= base_url('login/'); ?>">Login</a>
                         </p>
                     </div>
                     <!-- /.card-body -->

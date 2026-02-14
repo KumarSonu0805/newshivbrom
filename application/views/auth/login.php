@@ -42,8 +42,8 @@
                             </div>
                         <?= form_close(); ?>
 
-                        <p class="mb-1 d-none">
-                            <a href="<?= base_url('forgot-password/'); ?>">I forgot my password</a>
+                        <p class="mb-1">
+                            Don’t have an account? <a href="<?= base_url('register/'); ?>">Register</a>
                         </p>
                     </div>
                     <!-- /.card-body -->
