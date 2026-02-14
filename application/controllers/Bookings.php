@@ -16,6 +16,21 @@ class Bookings extends MY_Controller {
 		$this->template->load('bookings','bookingform',$data);
 	}
 	
+	public function bookinglist(){
+		$data['title']="My Bookings";
+		$data['breadcrumb']=array("/"=>"Home");
+		$data['user']=getuser();
+        $where=array();
+        if($this->session->role!='admin'){
+            $where['t1.regid']=$data['user']['id'];
+        }
+        else{
+            $data['title']="Member Bookings";
+        }
+        $data['bookings']=$this->booking->getbookings($where);
+		$this->template->load('bookings','bookinglist',$data);
+	}
+	
 	public function savebooking(){
 		if($this->input->post('savebooking')!==NULL){
             $user=getuser();

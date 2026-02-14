@@ -31,7 +31,9 @@ class Booking_model extends CI_Model{
     }
     
     public function getbookings($where=array(),$type='all',$order_by='t1.id desc'){
-        $columns="t1.*,t4.username as member_id,t4.name as member_name,t3.status as a_status";
+        $columns ="t1.*,t1.type as b_type,t2.type,t2.city,t2.landmark,t2.price,t2.other_price,t2.total_amount";
+        $columns.=",t2.token_amount,t2.payment_mode,t2.payment_type";
+        $columns.=",t4.username as member_id,t4.name as member_name,t3.status as a_status";
         $this->db->select($columns);
         $this->db->where($where);
         $this->db->order_by($order_by);
