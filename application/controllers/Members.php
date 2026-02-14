@@ -77,7 +77,7 @@ class Members extends MY_Controller {
 			$this->template->load('members','registered',$data);
 		}
 		else{
-            $this->load->view('website/registered',$data);   
+            $this->template->load('website','registered',$data,'auth');    
 		}
 	}
 	
