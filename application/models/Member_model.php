@@ -333,7 +333,7 @@ class Member_model extends CI_Model{
 			if($query->num_rows()==1){
 				$array=$query->row_array();
 				$array['date']=date('d-m-Y',strtotime($array['date']));
-				if($array['activation_date']!='0000-00-00'){ $array['activation_date']=date('d-m-Y',strtotime($array['activation_date'])); }
+				if($array['activation_date']!='0000-00-00' && !empty($array['activation_date'])){ $array['activation_date']=date('d-m-Y',strtotime($array['activation_date'])); }
 				else{ $array['activation_date']='--/--/----'; }
 				$leftright=$this->countleftrightmembers($regid);	
 				$array['left']=$leftright['left'];

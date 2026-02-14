@@ -122,7 +122,7 @@
 			}
 			else{
 				$member['parent_id']=$CI->db->get_where("member_tree",array("regid"=>$regid))->row()->parent_id;
-				if($status==1){ $btnclass=$member['package_id']==0?'btn-warning text-white':$member['btn_class']; $imgclass=$member['imgclass']; }
+				if($status==1){ $btnclass=$member['package_id']==0?'btn-success text-white':$member['btn_class']; $imgclass=$member['imgclass']; }
 				elseif($status==0){ $btnclass="btn-danger"; $imgclass="inactive"; }
 				$btnclass.=" open-branch";
 			}

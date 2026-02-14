@@ -73,7 +73,6 @@
                     <li>Name : <span id="name"></span></li>
                     <li>Joining Date : <span id="jdate"></span></li>
                     <li>Activation Date : <span id="adate"></span></li>
-                    <li>Package : <span id="package"></span></li>
                     <li class="hidden">Rank : <span id="rank"></span></li>
                     <li>Left Members : <span id="left"></span></li>
                     <li>Right Members : <span id="right"></span></li>
