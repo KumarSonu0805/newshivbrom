@@ -10,13 +10,13 @@ class Booking_model extends CI_Model{
         $bdata=$data['bdata'];
         $details=$data['details'];
         $nomineedata=$data['nomineedata'];
-        $bdata['added_on']=$bdata['added_on']=date('Y-m-d H:i:s');
+        $bdata['added_on']=$bdata['updated_on']=date('Y-m-d H:i:s');
         $this->db->trans_start();
         if($this->db->insert('bookings',$bdata)){
             $booking_id=$this->db->insert_id();
             
             $details['booking_id']=$booking_id;
-            $details['added_on']=$details['added_on']=date('Y-m-d H:i:s');
+            $details['added_on']=$details['updated_on']=date('Y-m-d H:i:s');
             
             $nomineedata['booking_id']=$booking_id;
             $this->db->insert('nominee',$nomineedata);
@@ -29,4 +29,24 @@ class Booking_model extends CI_Model{
             return array('status'=>false,'message'=>$error['message']);
         }
     }
+    
+    public function getbookings($where=array(),$type='all',$order_by='t1.id desc'){
+        $columns="t1.*,t4.username as member_id,t4.name as member_name,t3.status as a_status";
+        $this->db->select($columns);
+        $this->db->where($where);
+        $this->db->order_by($order_by);
+        $this->db->from('bookings t1');
+        $this->db->join('booking_details t2','t1.id=t2.booking_id');
+        $this->db->join('members t3','t1.regid=t3.regid');
+        $this->db->join('users t4','t1.regid=t4.id');
+        $query=$this->db->get();
+        if($type=='all'){
+            $array=$query->result_array();
+        }
+        else{
+            $array=$query->unbuffered_row('array');
+        }
+        return $array;
+    }
+    
 }
