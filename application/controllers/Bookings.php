@@ -62,6 +62,7 @@ class Bookings extends MY_Controller {
             $details['other_price']=$data['other_price'];
             $details['total_amount']=$data['price']+$data['other_price'];
             $details['token_amount']=$data['token_amount'];
+            $details['bv']=$this->bv;
             $details['payment_mode']=$data['payment_mode'];
             $details['address']=$data['b_address'];
             $details['city']=$data['b_city'];

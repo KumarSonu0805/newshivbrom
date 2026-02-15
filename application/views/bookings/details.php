@@ -237,14 +237,13 @@ $details=$booking['details'];
                                             ?>
                                         </div>
                                     </div>
+                                    <?php if(!empty($nominee['photo'])){ ?>
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <?php
-                                                $attributes=array("id"=>"nom_photo",'class'=>'form-control');
-                                                echo create_form_input("file","nom_photo","Nominee Photo",false,'',$attributes); 
-                                            ?>
+                                        <div class="form-group"><br>
+                                            <a href="<?= file_url($nominee['photo']) ?>" class="btn btn-sm btn-info" target="_blank">View Photo</a>
                                         </div>
                                     </div>
+                                    <?php } ?>
                                 </div><hr>
                                 <h3 class="header smaller lighter">Booking Information</h3>
                                 <div class="row">
