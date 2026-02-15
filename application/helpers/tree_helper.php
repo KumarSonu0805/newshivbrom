@@ -98,7 +98,7 @@
                 $status=0;
             }
 			$btnclass="btn-primary";
-			$imgclass="";
+			$imgclass="no-member";
             if(is_array($member) && $member['photo']!=''){ 
                 $photo=file_url($member['photo']); 
             }

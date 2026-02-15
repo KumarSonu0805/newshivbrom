@@ -1,3 +1,14 @@
+<style>
+    .member-img{
+        filter: drop-shadow(0px -2px 6px #cdffcd)
+    }
+    .member-img.inactive{
+        filter: drop-shadow(0px -2px 6px #ffcdcd)
+    }
+    .member-img.no-member{
+        filter: grayscale(1);
+    }
+</style>
 
             <div class="col-md-12">
                 <div class="card">
@@ -36,14 +47,19 @@
                                     <div class="col-md-12">
                                         <div style="margin:0 auto; max-width:840px">
                                             <div class="float-left mx-1 my-5 text-center">
-                                                <img src="<?php echo file_url("assets/images/no-image.png"); ?>" alt='Member' class='member-img' >
+                                                <img src="<?php echo file_url("assets/images/no-image.png"); ?>" alt='Member' class='member-img no-member' >
                                                 <br>
                                                 <button type='button' class='btn btn-sm btn-default tree-btn btn-flat'>No Member</button>
                                             </div>
                                             <div class="float-left mx-1 my-5 text-center">
-                                                <img src="<?php echo file_url("assets/images/no-image.png"); ?>" alt='Member' class='member-img' >
+                                                <img src="<?php echo file_url("assets/images/no-image.png"); ?>" alt='Member' class='member-img inactive' >
                                                 <br>
-                                                <button type='button' class='btn btn-sm btn-danger tree-btn btn-flat'>Free Member</button>
+                                                <button type='button' class='btn btn-sm btn-danger tree-btn btn-flat'>In-Active</button>
+                                            </div>
+                                            <div class="float-left mx-1 my-5 text-center">
+                                                <img src="<?php echo file_url("assets/images/no-image.png"); ?>" alt='Member' class='member-img active' >
+                                                <br>
+                                                <button type='button' class='btn btn-sm btn-success tree-btn btn-flat'>Active</button>
                                             </div>
                                             <?php
                                                 foreach($packages as $package){

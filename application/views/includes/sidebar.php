@@ -136,6 +136,12 @@
                                             <p>Member Tree</p>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="<?= base_url("members/generate/"); ?>" class="nav-link <?= activate_menu('members/generate'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Generate Members</p>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="nav-item has-treeview <?php echo activate_dropdown('bookings'); ?>">

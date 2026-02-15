@@ -231,9 +231,15 @@ class Members extends MY_Controller {
 		$data['datatableexport']=true;
 		$this->template->load('deposits','approvedlist',$data);
 	}
+    
+    public function generate(){
+        if($this->session->role!='admin'){ redirect('/'); }
+        $data=['title'=>'Generate Members'];
+        $this->template->load('members','generate',$data);
+    }
 	
 	public function addmember(){
-		if($this->input->post('addmember')!==NULL){
+		if($this->input->post('addmember')!==NULL || $this->input->post('generate')==1){
 			$data=$this->input->post();
 			$userdata=$memberdata=$accountdata=$treedata=$familydata=array();
 			if($data['refid']>0){
@@ -293,17 +299,20 @@ class Members extends MY_Controller {
                 $data=array("userdata"=>$userdata,"memberdata"=>$memberdata,"accountdata"=>$accountdata,
                             "treedata"=>$treedata,"nomineedata"=>$nomineedata);
                 //print_pre($data,true);
+                //print_pre($data);return false;
 				$result=$this->member->addmember($data);
                 //print_pre($result,true);
 				if($result['status']===true){
-					$message = "Welcome $memberdata[name]! Thank you for joining ".PROJECT_NAME."! Your Username is $result[username] and Password is $result[password]. ";
-					$message.= "Visit our site ".str_replace('members.','',base_url()).".";
-					$smsdata=array("mobile"=>$memberdata['mobile'],"message"=>$message);
-					//send_sms($smsdata);
-					$flash=array("mname"=>$memberdata['name'],"uname"=>$result['username'],"pass"=>$result['password']);
-					$this->session->set_flashdata($flash);
-					$this->session->set_flashdata("msg","Member Added successfully!");
-					redirect('registered/');
+                    if($this->input->post('generate')!=1){
+                        $message = "Welcome $memberdata[name]! Thank you for joining ".PROJECT_NAME."! Your Username is $result[username] and Password is $result[password]. ";
+                        $message.= "Visit our site ".str_replace('members.','',base_url()).".";
+                        $smsdata=array("mobile"=>$memberdata['mobile'],"message"=>$message);
+                        //send_sms($smsdata);
+                        $flash=array("mname"=>$memberdata['name'],"uname"=>$result['username'],"pass"=>$result['password']);
+                        $this->session->set_flashdata($flash);
+                        $this->session->set_flashdata("msg","Member Added successfully!");
+                        redirect('registered/');
+                    }
 				}
 				else{
 					$this->session->set_flashdata("err_msg",$result['message']);
@@ -313,7 +322,9 @@ class Members extends MY_Controller {
 				$this->session->set_flashdata("err_msg","Invalid Sponsor ID!");
 			}
 		}
-		redirect('members/');
+        if($this->input->post('generate')!=1){
+            redirect('members/');
+        }
 	}
 	
 	public function updatemember(){
@@ -652,6 +663,27 @@ class Members extends MY_Controller {
         redirect($_SERVER['HTTP_REFERER']);
     }
     
+    
+    public function generatemembers(){
+        if($this->input->post('generatemembers')!==NULL){
+            $data=$this->input->post();
+            $getreferrer=$this->account->getuser("id='$data[refid]'");
+			$userdata=$memberdata=array();
+			if($getreferrer['status']===true){
+                for($i=0;$i<$data['count'];$i++){
+                    $memberdata=array('refid'=>$data['refid'],'position'=>$data['position'],'name'=>'Demo',
+                                      'mobile'=>'0000000000','email'=>'demo@gmail.com','password'=>'12345','generate'=>'1');
+                    $_POST=$memberdata;
+                    $this->addmember();
+                }
+                $this->session->set_flashdata('msg',"Members Generated Successfully");
+			}
+			else{
+				$this->session->set_flashdata("err_msg","Invalid Sponsor ID!");
+			}
+        }
+        redirect($_SERVER['HTTP_REFERER']);
+    }
     
 	/*public function upgrade(){
 		checklogin();

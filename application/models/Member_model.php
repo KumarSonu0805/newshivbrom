@@ -466,11 +466,11 @@ class Member_model extends CI_Model{
 	}
 	
 	public function countallmembers($regid){
-		$table=TP.$this->downline_table;
+		$table=TP.'member_tree';
 		$sql="select count(regid) as members from 
-				(select * from $table order by ".$this->downline_order.") member_tree, 
+				(select * from $table order by parent_id) member_tree, 
 				(select @pv := '$regid') initialisation 
-				where find_in_set(".$this->downline_parent.", @pv) > 0 and @pv := concat(@pv, ',', regid)";
+				where find_in_set(parent_id, @pv) > 0 and @pv := concat(@pv, ',', regid)";
 		return $this->db->query($sql)->row()->members;
 	}
 	
