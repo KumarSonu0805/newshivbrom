@@ -170,21 +170,25 @@ $details=$booking['details'];
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <?php if(!empty($details['photo'])){ ?>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <a href="<?= file_url($booking['photo']) ?>" class="btn btn-sm btn-info" target="_blank">View Photo</a>
                                         </div>
                                     </div>
+                                    <?php }if(!empty($details['passbook'])){ ?>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <a href="<?= file_url($booking['passbook']) ?>" class="btn btn-sm btn-info" target="_blank">View Passbook or Cancelled Cheque</a>
                                         </div>
                                     </div>
+                                    <?php }if(!empty($details['aadhar_image'])){ ?>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <a href="<?= file_url($booking['aadhar_image']) ?>" class="btn btn-sm btn-info" target="_blank">View Aadhar Image</a>
                                         </div>
                                     </div>
+                                    <?php } ?>
                                 </div><hr>
                                 <h3 class="header smaller lighter">Nominee Details</h3>
                                 <div class="row">
@@ -320,7 +324,7 @@ $details=$booking['details'];
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <?php
-                                                $attributes=array("id"=>"payment_mode");
+                                                $attributes=array("id"=>"payment_mode",'disabled'=>'true');
                                                 $payment_modes=array(''=>'Select','cash'=>'Cash','online'=>'Online',
                                                                      'cheque'=>'Cheque');
                                                 echo create_form_input("select","payment_mode","Payment Type",true,$details['payment_mode'],$attributes,$payment_modes); 
@@ -355,11 +359,13 @@ $details=$booking['details'];
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <?php if(!empty($details['document'])){ ?>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <a href="<?= file_url($details['document']) ?>" class="btn btn-sm btn-info" target="_blank">View Other Document</a>
                                         </div>
                                     </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
