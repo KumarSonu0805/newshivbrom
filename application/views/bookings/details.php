@@ -170,19 +170,19 @@ $details=$booking['details'];
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <?php if(!empty($details['photo'])){ ?>
+                                    <?php if(!empty($booking['photo'])){ ?>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <a href="<?= file_url($booking['photo']) ?>" class="btn btn-sm btn-info" target="_blank">View Photo</a>
                                         </div>
                                     </div>
-                                    <?php }if(!empty($details['passbook'])){ ?>
+                                    <?php }if(!empty($booking['passbook'])){ ?>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <a href="<?= file_url($booking['passbook']) ?>" class="btn btn-sm btn-info" target="_blank">View Passbook or Cancelled Cheque</a>
                                         </div>
                                     </div>
-                                    <?php }if(!empty($details['aadhar_image'])){ ?>
+                                    <?php }if(!empty($booking['aadhar_image'])){ ?>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <a href="<?= file_url($booking['aadhar_image']) ?>" class="btn btn-sm btn-info" target="_blank">View Aadhar Image</a>
