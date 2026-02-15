@@ -51,6 +51,21 @@ class Booking_model extends CI_Model{
         return $array;
     }
     
+    public function getbookingdetails($where=array()){
+        $columns ="t1.*,t2.username as member_id,t2.name as member_name,t2.mobile as member_mobile";
+        $this->db->select($columns);
+        $this->db->where($where);
+        $this->db->from('bookings t1');
+        $this->db->join('users t2','t1.regid=t2.id');
+        $query=$this->db->get();
+        $array=$query->unbuffered_row('array');
+        if(!empty($array)){
+            $array['details']=$this->db->get_where('booking_details',['booking_id'=>$array['id']])->unbuffered_row('array');
+            $array['nominee']=$this->db->get_where('nominee',['booking_id'=>$array['id']])->unbuffered_row('array');
+        }
+        return $array;
+    }
+    
 	public function approvebooking($booking_id,$regid){
         $member=$this->db->get_where('members',['regid'=>$regid])->unbuffered_row('array');
         $datetime=date('Y-m-d H:i:s');
