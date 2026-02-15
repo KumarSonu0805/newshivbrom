@@ -550,7 +550,7 @@ class Member_model extends CI_Model{
 		return $result;
 	}
 	
-	public function getdirectmembers($regid){
+	public function getdirectmembers($regid,$status=false){
 		$columns="t1.id as regid,t1.username,t1.name,t1.vp as password,concat_ws(',',t2.district,t2.state) as location,
 					t3.username as ref,t3.name as refname,t2.date,t2.activation_date,'--' as package,0 as direct,t2.status";
 		$this->db->select($columns);
@@ -560,6 +560,9 @@ class Member_model extends CI_Model{
 		$this->db->join('packages t4','t2.package_id=t4.id','Left');
 		
 		$this->db->where("t2.refid",$regid);
+        if($status!==false){
+            $this->db->where("t2.status",$status);
+        }
 		$query=$this->db->get();
 		$array=$query->result_array();
 		return $array;

@@ -267,6 +267,8 @@ class Home extends MY_Controller {
 	
     public function runquery(){
         $query=array(
+            "ALTER TABLE `sc_wallet` CHANGE `purchase` `purchase` DECIMAL(16,2) NOT NULL, CHANGE `percent` `percent` DECIMAL(10,6) NOT NULL, CHANGE `amount` `amount` DECIMAL(16,2) NOT NULL;",
+            "ALTER TABLE `sc_wallet` ADD `booking_id` INT NOT NULL AFTER `member_id`;",
             "ALTER TABLE `sc_booking_details` ADD `bv` DECIMAL(14,2) NOT NULL AFTER `token_amount`;"
         );
         foreach($query as $sql){

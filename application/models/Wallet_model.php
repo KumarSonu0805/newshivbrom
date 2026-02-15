@@ -2,7 +2,7 @@
 class Wallet_model extends CI_Model{
 	
     var $status=false;
-    var $direct=500;
+    var $activation_date=NULL;
     
 	function __construct(){
 		parent::__construct(); 
@@ -11,35 +11,46 @@ class Wallet_model extends CI_Model{
 	
 	public function checkstatus($regid,$date=NULL){
 		$where=array("regid"=>$regid,"status"=>'1');
-		if($date!==NULL){
-			$where['date(activation_date)<=']=$date;
-		}
-		$checkstatus=$this->db->get_where("members",$where)->num_rows();
-		if($checkstatus==0){ $this->status=false; }
-		else{ $this->status=true; }
+        $this->activation_date=NULL;
+		$getmember=$this->db->get_where("members",$where);
+		if($getmember->num_rows()==0){ $this->status=false; }
+		else{ 
+            $member=$getmember->unbuffered_row('array');
+            if(date('Y-m-d',strtotime($member['activation_date']))>$date){
+                $this->status=false;
+            }
+            else{
+                $this->status=true; 
+                $this->activation_date = $member['activation_date'];
+            }
+        }
 	}
 	
-    public function sponsorincome($regid,$date=NULL){
+    public function directincome($regid,$date=NULL){
         if($date===NULL){
             $date=date('Y-m-d');
         }
         if($this->status){
-            $where="t1.refid='$regid' and date(t1.activation_date)<='$date' and t1.regid not in 
-                    (SELECT member_id from ".TP."wallet where regid='$regid' and remarks='Direct Income')";
-            $newdirects=$this->member->getdirectmembers($regid);
-            $added=$this->db->get_where('wallet',['regid'=>$regid,'remarks'=>'Direct Income'])->result_array();
-            $member_ids=!empty($added)?array_column($added,'member_id'):array();
+            $newdirects=$this->member->getdirectmembers($regid,1);
             if(!empty($newdirects)){
                 foreach($newdirects as $member){
-                    if($member['status']==1 && !in_array($member['regid'],$member_ids)){
+                    if($member['status']==1 && $member['activation_date']>$this->activation_date){
                         $member_id=$member['regid'];
-                        $amount=$this->direct;
+                        $this->db->order_by('approved_date asc');
+                        $booking=$this->booking->getbookingdetails(['t1.regid'=>$member_id,
+                                                                          't1.status'=>1]);
+                        $booking_id=$booking['id'];
+                        $details=$booking['details'];
+                        $percent = calculatepercent($details['total_amount'],$details['token_amount']);
+                        $amount = calculateincome($percent,'direct',0);
                         if($amount>0){
+                            $amount=round($amount,2);
                             $data=array("date"=>$date,"type"=>"ewallet","regid"=>$regid,"member_id"=>$member_id,
-                                        "amount"=>$amount,"remarks"=>"Direct Income","added_on"=>date('Y-m-d H:i:s'),
+                                        "booking_id"=>$booking_id,"percent"=>$percent,"amount"=>$amount,
+                                        "remarks"=>"Direct Income","added_on"=>date('Y-m-d H:i:s'),
                                         "updated_on"=>date('Y-m-d H:i:s'));
-                            $where=array("type"=>"ewallet","regid"=>$regid,"member_id"=>$member_id,
-                                         "remarks"=>"Direct Income");
+                            $where=array("type"=>"ewallet","date"=>$date,"regid"=>$regid,"member_id"=>$member_id,
+                                         "booking_id"=>$booking_id,"remarks"=>"Direct Income");
                             if($this->db->get_where("wallet",$where)->num_rows()==0){
                                 $this->db->insert("wallet",$data);
                             }
@@ -94,8 +105,12 @@ class Wallet_model extends CI_Model{
 	
 	
 	public function addcommission($regid,$date=NULL){
-		//$this->checkstatus($regid,$date);
-		//$this->sponsorincome($regid,$date);
+		$this->checkstatus($regid,$date);
+        echo '<br>---------------------<br>';
+        echo $regid.':'.$this->activation_date.':';
+        var_dump($this->status);
+        echo '<br>';
+		$this->directincome($regid,$date);
 		//$this->levelincome($regid,$date);
 		//$this->addreward($regid,$date);
 	}
