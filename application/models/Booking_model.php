@@ -73,12 +73,12 @@ class Booking_model extends CI_Model{
         $parent_id=logupdateoperations('bookings',$data,['id'=>$booking_id]);
         if($this->db->update('bookings',$data,['id'=>$booking_id])){
             $parent_id=logupdateoperations('booking_details',['status'=>1,'updated_on'=>$datetime],
-                                           ['booking_id'=>$booking_id]);
+                                           ['booking_id'=>$booking_id],$parent_id);
             $this->db->update('booking_details',['status'=>1,'updated_on'=>$datetime],
                               ['booking_id'=>$booking_id]);
             if($member['status']==0){
                 $data=array('activation_date'=>$datetime,'status'=>1);
-                $parent_id=logupdateoperations('members',$data,['regid'=>$regid]);
+                $parent_id=logupdateoperations('members',$data,['regid'=>$regid],$parent_id);
                 $this->db->update('members',$data,['regid'=>$regid]);
             }
             return array('status'=>true,'message'=>"Booking Approved Successfully");
