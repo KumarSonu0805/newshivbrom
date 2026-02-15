@@ -10,5 +10,5 @@
                                 </div>
                             </div>
 <?php
-print_pre($booking);
+//print_pre($booking);
 ?>
