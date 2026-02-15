@@ -401,14 +401,14 @@ class Member_model extends CI_Model{
 	}
 		
 	public function getallmembers($regid,$type="all"){
-		$table=TP.$this->downline_table;
+		$table=TP.'member_tree';
 		$regids=NULL;
 		$array=$result=array();
 		$inclimit=$this->db->query("SET SESSION group_concat_max_len = 1000000;");
 		$sql="select GROUP_CONCAT(regid SEPARATOR ',') as regids from 
-				(select * from $table order by ".$this->downline_order.") member_tree, 
+				(select * from $table order by parent_id) member_tree, 
 				(select @pv := '$regid') initialisation 
-				where find_in_set(".$this->downline_parent.", @pv) > 0 and @pv := concat(@pv, ',', regid)";
+				where find_in_set(parent_id, @pv) > 0 and @pv := concat(@pv, ',', regid)";
 		$exe=$this->db->query($sql);
 		$regids=$exe->row()->regids;
 		if($regids!==NULL){
