@@ -267,8 +267,7 @@ class Home extends MY_Controller {
 	
     public function runquery(){
         $query=array(
-            "ALTER TABLE `sc_wallet` ADD `leftbv` DECIMAL(16,2) NOT NULL AFTER `purchase`, ADD `rightbv` DECIMAL(16,2) NOT NULL AFTER `leftbv`;",
-            "RENAME TABLE `sc_areas` TO `sc_cities`;"
+            
         );
         foreach($query as $sql){
             if(!$this->db->query($sql)){
