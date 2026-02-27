@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class MY_Controller extends CI_Controller {
     
     var $bv=200000;
+    var $min_deposit=0;
     var $direct=10;
     var $matching=10;
     

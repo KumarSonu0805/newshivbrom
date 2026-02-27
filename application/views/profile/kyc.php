@@ -14,85 +14,111 @@
 							else{
 						?>
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-12">
                                 <?php echo form_open_multipart('profile/uploaddocs', 'id="myform"'); ?>
-                                    <div class="form-group">
-                                        <?php 
-                                            $attributes=array("readonly"=>"true","Placeholder"=>"Member ID");
-                                            echo create_form_input("text","","Member ID",false,$user['username'],$attributes); 
-                                        ?>
-                                    </div>
-                                    <div class="form-group">
-                                        <?php 
-                                            $attributes=array("readonly"=>"true","Placeholder"=>"Member Name");
-                                            echo create_form_input("text","name","Member Name",false,$user['name'],$attributes); 
-                                        ?>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
                                                 <?php 
-                                                    $attributes=array("id"=>"aadhar1","onChange"=>"getPhoto(this,'aadhar1')","accept"=>"image/*");
-                                                    echo create_form_input("file","aadhar1","Upload Aadhar Card Front :",true,'',$attributes); 
-                                                    $aadhar1="";
-                                                    if($acc_details['aadhar1']!=''){
-                                                        $aadhar1="src='".file_url($acc_details['aadhar1'])."'";
-                                                    }
+                                                    $attributes=array("readonly"=>"true","Placeholder"=>"Member ID");
+                                                    echo create_form_input("text","","Member ID",false,$user['username'],$attributes); 
                                                 ?>
                                             </div>
-                                            <div class="col-md-6">
-                                                <img <?php echo $aadhar1; ?> id="aadhar1preview" style="height:150px; width:250px;" >
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <?php 
+                                                    $attributes=array("readonly"=>"true","Placeholder"=>"Member Name");
+                                                    echo create_form_input("text","name","Member Name",false,$user['name'],$attributes); 
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <?php 
+                                                    $attributes=array("readonly"=>"true","Placeholder"=>"Aadhar No.");
+                                                    echo create_form_input("text","","Aadhar No.",false,$member['aadhar'],$attributes); 
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <?php 
+                                                    $attributes=array("readonly"=>"true","Placeholder"=>"PAN");
+                                                    echo create_form_input("text","","PAN",false,$member['pan'],$attributes); 
+                                                ?>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <?php 
-                                                    $attributes=array("id"=>"aadhar2","onChange"=>"getPhoto(this,'aadhar2')","accept"=>"image/*");
-                                                    echo create_form_input("file","aadhar2","Upload Aadhar Card Back:",true,'',$attributes); 
-                                                    $aadhar2="";
-                                                    if($acc_details['aadhar2']!=''){
-                                                        $aadhar2="src='".file_url($acc_details['aadhar2'])."'";
-                                                    }
-                                                ?>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?php 
+                                                            $attributes=array("id"=>"aadhar1","onChange"=>"getPhoto(this,'aadhar1')","accept"=>"image/*");
+                                                            echo create_form_input("file","aadhar1","Upload Aadhar Card Front :",true,'',$attributes); 
+                                                            $aadhar1="";
+                                                            if($acc_details['aadhar1']!=''){
+                                                                $aadhar1="src='".file_url($acc_details['aadhar1'])."'";
+                                                            }
+                                                        ?>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <img <?php echo $aadhar1; ?> id="aadhar1preview" style="height:150px; width:250px;" >
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <img <?php echo $aadhar2; ?> id="aadhar2preview" style="height:150px; width:250px;" >
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?php 
+                                                            $attributes=array("id"=>"aadhar2","onChange"=>"getPhoto(this,'aadhar2')","accept"=>"image/*");
+                                                            echo create_form_input("file","aadhar2","Upload Aadhar Card Back:",true,'',$attributes); 
+                                                            $aadhar2="";
+                                                            if($acc_details['aadhar2']!=''){
+                                                                $aadhar2="src='".file_url($acc_details['aadhar2'])."'";
+                                                            }
+                                                        ?>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <img <?php echo $aadhar2; ?> id="aadhar2preview" style="height:150px; width:250px;" >
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <?php 
-                                                    $attributes=array("id"=>"cheque","onChange"=>"getPhoto(this,'cheque')","accept"=>"image/*");
-                                                    echo create_form_input("file","cheque","Upload Cancelled Cheque/Passbook:",false,'',$attributes); 
-                                                    $cheque="";
-                                                    if($acc_details['cheque']!=''){
-                                                        $cheque="src='".file_url($acc_details['cheque'])."'";
-                                                    }
-                                                ?>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?php 
+                                                            $attributes=array("id"=>"cheque","onChange"=>"getPhoto(this,'cheque')","accept"=>"image/*");
+                                                            echo create_form_input("file","cheque","Upload Cancelled Cheque/Passbook:",false,'',$attributes); 
+                                                            $cheque="";
+                                                            if($acc_details['cheque']!=''){
+                                                                $cheque="src='".file_url($acc_details['cheque'])."'";
+                                                            }
+                                                        ?>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <img <?php echo $cheque; ?> id="chequepreview" style="height:150px; width:250px;" >
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <img <?php echo $cheque; ?> id="chequepreview" style="height:150px; width:250px;" >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <?php 
-                                                    $attributes=array("id"=>"pan","onChange"=>"getPhoto(this,'pan')","accept"=>"image/*");
-                                                    echo create_form_input("file","pan","Upload PAN Card :",false,'',$attributes); 
-                                                    $pan="";
-                                                    if($acc_details['pan']!=''){
-                                                        $pan="src='".file_url($acc_details['pan'])."'";
-                                                    }
-                                                ?>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <img <?php echo $pan; ?> id="panpreview" style="height:150px; width:250px;" >
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?php 
+                                                            $attributes=array("id"=>"pan","onChange"=>"getPhoto(this,'pan')","accept"=>"image/*");
+                                                            echo create_form_input("file","pan","Upload PAN Card :",false,'',$attributes); 
+                                                            $pan="";
+                                                            if($acc_details['pan']!=''){
+                                                                $pan="src='".file_url($acc_details['pan'])."'";
+                                                            }
+                                                        ?>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <img <?php echo $pan; ?> id="panpreview" style="height:150px; width:250px;" >
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

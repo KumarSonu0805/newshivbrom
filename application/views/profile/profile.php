@@ -58,8 +58,8 @@
                                         <td><?php echo $member['father']; ?></td>
                                     </tr>
                                     <tr>
-                                        <th>Mother Name</th>
-                                        <td><?php echo $member['mother']; ?></td>
+                                        <th>Grand Father Name</th>
+                                        <td><?php echo $member['grand_father']; ?></td>
                                     </tr>
                                     <tr>
                                         <th>Gender</th>
@@ -70,7 +70,11 @@
                                         <td><?php echo $member['mstatus']; ?></td>
                                     </tr>
                                     <tr>
-                                        <th>Pan No.</th>
+                                        <th>Aadhar No.</th>
+                                        <td><?php echo $member['aadhar']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>PAN</th>
                                         <td><?php echo $member['pan']; ?></td>
                                     </tr>
                                     <tr>
@@ -98,10 +102,10 @@
                                         ?>
                                     </div>
                                     <div class="form-group">
-                                        <label for="father" class=" form-control-label">Mother Name</label>
+                                        <label for="father" class=" form-control-label">Grand Father Name</label>
                                         <?php
-                                            $input=array("name"=>"mother","id"=>"mother","Placeholder"=>"Mother Name","class"=>"form-control",
-                                                    "autocomplete"=>"off","value"=>$member['mother']);
+                                            $input=array("name"=>"grand_father","id"=>"grand_father","Placeholder"=>"Grand Father Name","class"=>"form-control",
+                                                    "autocomplete"=>"off","value"=>$member['grand_father']);
                                             echo form_input($input);
                                         ?>
                                     </div>
@@ -129,10 +133,28 @@
                                         ?>
                                     </div>
                                     <div class="form-group">
-                                        <label for="pan" class=" form-control-label">PAN No.</label>
+                                        <label for="aadhar" class=" form-control-label">Aadhar No.</label>
                                         <?php
-                                            $input=array("name"=>"pan","id"=>"pan","Placeholder"=>"PAN No.","class"=>"form-control",
-                                                            "pattern"=>"[A-Za-z0-9]{10}","title"=>"Enter Valid Pan No.","autocomplete"=>"off","maxlength"=>"10","value"=>$member['pan']);
+                                            $input=array("name"=>"aadhar","id"=>"aadhar","Placeholder"=>"Aadhar No.",
+                                                         "class"=>"form-control","pattern"=>"[0-9]{12}",
+                                                         "title"=>"Enter Valid Aadhar No.","autocomplete"=>"off",
+                                                         "maxlength"=>"12","value"=>$member['aadhar'],'requried'=>'true');
+                                            if(isset($acc_details['kyc']) && $acc_details['kyc']!=0){
+                                                $input['readonly']="true";
+                                            }
+                                            echo form_input($input);
+                                        ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pan" class=" form-control-label">PAN</label>
+                                        <?php
+                                            $input=array("name"=>"pan","id"=>"pan","Placeholder"=>"PAN",
+                                                         "class"=>"form-control","pattern"=>"[A-Za-z0-9]{10}",
+                                                         "title"=>"Enter Valid Pan","autocomplete"=>"off",
+                                                         "maxlength"=>"10","value"=>$member['pan']);
+                                            if(isset($acc_details['kyc']) && $acc_details['kyc']!=0){
+                                                $input['readonly']="true";
+                                            }
                                             echo form_input($input);
                                         ?>
                                     </div>
@@ -162,16 +184,16 @@
                                         <td><?php echo $member['state']; ?></td>
                                     </tr>
                                     <tr>
-                                        <th>Country</th>
-                                        <td><?php echo $member['country']; ?></td>
-                                    </tr>
-                                    <tr>
                                         <th>Pincode</th>
                                         <td><?php echo $member['pincode']; ?></td>
                                     </tr>
                                     <tr>
                                         <th>Mobile</th>
                                         <td><?php echo $member['mobile']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Alternate Mobile</th>
+                                        <td><?php echo $member['a_mobile']; ?></td>
                                     </tr>
                                     <tr>
                                         <th>Email</th>
@@ -210,14 +232,6 @@
                                         ?>
                                     </div>
                                     <div class="form-group">
-                                        <label for="country">Country</label>
-                                        <?php
-                                            $input=array("name"=>"country","id"=>"country","Placeholder"=>"Country","class"=>"form-control",
-                                                            "autocomplete"=>"off","value"=>$member['country']);
-                                            echo form_input($input);
-                                        ?>
-                                    </div>
-                                    <div class="form-group">
                                         <label for="pincode">Pincode</label>
                                         <?php
                                             $input=array("name"=>"pincode","id"=>"pincode","Placeholder"=>"Pincode","class"=>"form-control", 
@@ -228,8 +242,21 @@
                                     <div class="form-group">
                                         <label for="mobile">Mobile</label>
                                         <?php
-                                            $input=array("name"=>"mobile","id"=>"mobile","Placeholder"=>"Mobile","class"=>"form-control", 
-                                                            "autocomplete"=>"off","value"=>$member['mobile'],"readonly"=>"true");
+                                            $input=array("name"=>"mobile","id"=>"mobile","Placeholder"=>"Mobile",
+                                                         "class"=>"form-control", "autocomplete"=>"off",
+                                                         "value"=>$member['mobile'],"readonly"=>"true",
+                                                         'pattern'=>"[0-9]{10}","title"=>"Enter Valid Mobile No.",
+                                                         "maxlength"=>"10");
+                                            echo form_input($input);
+                                        ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="a_mobile">Alternate Mobile</label>
+                                        <?php
+                                            $input=array("name"=>"a_mobile","id"=>"a_mobile","class"=>"form-control", 
+                                                         "Placeholder"=>"Alternate Mobile","autocomplete"=>"off",
+                                                         "value"=>$member['a_mobile'],'pattern'=>"[0-9]{10}",
+                                                         "title"=>"Enter Valid Mobile No.", "maxlength"=>"10");
                                             echo form_input($input);
                                         ?>
                                     </div>
@@ -258,12 +285,25 @@
                                         <td><?php echo $nominee_details['name']; ?></td>
                                     </tr>
                                 	<tr>
+                                    	<th>Nominee Father/Husband Name</th>
+                                        <td><?php echo $nominee_details['father']; ?></td>
+                                    </tr>
+                                	<tr>
                                     	<th>Nominee Mobile</th>
                                         <td><?php echo $nominee_details['mobile']; ?></td>
                                     </tr>
                                 	<tr>
-                                    	<th>Relation With Applicant</th>
-                                        <td><?php echo $nominee_details['relation']; ?></td>
+                                    	<th>Nominee Email</th>
+                                        <td><?php echo $nominee_details['email']; ?></td>
+                                    </tr>
+                                	<tr>
+                                    	<th>Nominee Address</th>
+                                        <td><?php echo $nominee_details['address']; ?></td>
+                                    </tr>
+                                	<tr>
+                                    	<th>Nominee Photo</th>
+                                        <td><img src="<?php if($nominee_details['photo']!=''){echo file_url($nominee_details['photo']);}else{echo file_url('assets/images/avatar.png');} ?>" 
+                                                    style="height:135px; width:120px;" alt="User Image" id="view_nom_photo"></td>
                                     </tr>
                                     <tr>
                                     	<td colspan="2">
@@ -281,18 +321,37 @@
                                         ?>
                                     </div>
                                     <div class="form-group">
-                                        <label for="ifsc">Nominee Mobile</label>
+                                        <label for="ifsc">Nominee Father/Husband</label>
                                         <?php
-                                            $input=array("name"=>"mobile","class"=>"form-control","Placeholder"=>"Nominee Mobile", "autocomplete"=>"off","value"=>$nominee_details['mobile']);
+                                            $input=array("name"=>"father","class"=>"form-control","Placeholder"=>"Nominee Father/Husband", "autocomplete"=>"off","value"=>$nominee_details['father']);
                                             echo form_input($input);
                                         ?>
                                     </div>
                                     <div class="form-group">
-                                        <label for="branch">Relation With Applicant</label>
+                                        <label for="ifsc">Nominee Mobile</label>
                                         <?php
-                                            $input=array("name"=>"relation","Placeholder"=>"Relation With Applicant","class"=>"form-control", "autocomplete"=>"off",
-														"value"=>$nominee_details['relation']);
+                                            $input=array("name"=>"mobile","class"=>"form-control","Placeholder"=>"Nominee Mobile", "autocomplete"=>"off","value"=>$nominee_details['mobile'],
+                                                         'pattern'=>"[0-9]{10}","title"=>"Enter Valid Mobile No.", 
+                                                         "maxlength"=>"10");
                                             echo form_input($input);
+                                        ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ifsc">Nominee Email</label>
+                                        <?php
+                                            $input=array("type"=>"email","name"=>"email","class"=>"form-control",
+                                                         "Placeholder"=>"Nominee Email", "autocomplete"=>"off",
+                                                         "value"=>$nominee_details['email']);
+                                            echo form_input($input);
+                                        ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address" class=" form-control-label">Nominee Address</label>
+                                        <?php
+                                            $input=array("name"=>"address","id"=>"address","Placeholder"=>"Nominee Address",
+                                                         "class"=>"form-control", "autocomplete"=>"off","rows"=>"3",
+                                                         "value"=>$nominee_details['address']);
+                                            echo form_textarea($input);
                                         ?>
                                     </div>
                                     <div class="form-group">

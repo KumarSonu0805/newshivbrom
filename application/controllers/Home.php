@@ -267,35 +267,8 @@ class Home extends MY_Controller {
 	
     public function runquery(){
         $query=array(
-            "ALTER TABLE `sc_members` ADD `grand_father` VARCHAR(100) NOT NULL AFTER `father`;",
-            "ALTER TABLE `sc_members` ADD `a_mobile` VARCHAR(10) NOT NULL AFTER `mobile`;",
-            "CREATE TABLE `sc_areas` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `state_id` int(11) NOT NULL,
- `district_id` int(11) NOT NULL,
- `name` varchar(30) NOT NULL,
- `status` tinyint(1) NOT NULL DEFAULT 1,
- `added_on` datetime NOT NULL,
- `updated_on` datetime NOT NULL,
- PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;",
-            "CREATE TABLE `sc_districts` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `state_id` int(11) NOT NULL,
- `name` varchar(30) NOT NULL,
- `status` tinyint(1) NOT NULL DEFAULT 1,
- `added_on` datetime NOT NULL,
- `updated_on` datetime NOT NULL,
- PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;",
-            "CREATE TABLE `sc_states` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `name` varchar(30) NOT NULL,
- `status` tinyint(1) NOT NULL DEFAULT 1,
- `added_on` datetime NOT NULL,
- `updated_on` datetime NOT NULL,
- PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;"
+            "ALTER TABLE `sc_wallet` ADD `leftbv` DECIMAL(16,2) NOT NULL AFTER `purchase`, ADD `rightbv` DECIMAL(16,2) NOT NULL AFTER `leftbv`;",
+            "RENAME TABLE `sc_areas` TO `sc_cities`;"
         );
         foreach($query as $sql){
             if(!$this->db->query($sql)){

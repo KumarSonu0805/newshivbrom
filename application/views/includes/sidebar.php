@@ -51,7 +51,7 @@
                             <?php
                             if($this->session->role!='admin'){
                             ?>
-                            <li class="nav-item has-treeview <?php echo activate_dropdown('profile'); ?> d-none">
+                            <li class="nav-item has-treeview <?php echo activate_dropdown('profile'); ?>">
                                 <a href="#" class="nav-link <?php echo activate_dropdown('profile','a'); ?>">
                                     <i class="nav-icon far fa-user"></i>
                                     <p>My Profile <i class="right fas fa-angle-left"></i></p>
@@ -106,14 +106,46 @@
                             <?php 
                                 }else{
                             ?>
+                            <li class="nav-item has-treeview <?= activate_dropdown('masterkey'); ?>">
+                                <a href="#" class="nav-link <?= activate_dropdown('masterkey','a'); ?>">
+                                    <i class="nav-icon fas fa-key"></i>
+                                    <p>Master Key <i class="right fas fa-angle-left"></i></p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?= base_url('masterkey/'); ?>" class="nav-link <?= activate_menu('masterkey'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>State</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?= base_url('masterkey/district/'); ?>" class="nav-link <?= activate_menu('masterkey/district'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>District</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?= base_url('masterkey/city/'); ?>" class="nav-link <?= activate_menu('masterkey/city'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>City</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?= base_url('masterkey/bank/'); ?>" class="nav-link <?= activate_menu('masterkey/bank'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Banks</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="nav-item">
                                 <a href="<?php echo base_url('changepassword/'); ?>" class="nav-link <?php echo activate_menu('home/changepassword'); ?>">
-                                    <i class="nav-icon fas fa-key"></i>
+                                    <i class="nav-icon fas fa-lock"></i>
                                     <p>Change Password</p>
                                 </a>
                             </li>
-                            <li class="nav-item d-none">
-                                <a href="<?= base_url('profile/adminaccdetails/'); ?>" class="nav-link <?= activate_menu('profile/adminaccdetails'); ?>">
+                            <li class="nav-item">
+                                <a href="<?= base_url('adminaccdetails/'); ?>" class="nav-link <?= activate_menu('profile/adminaccdetails'); ?>">
                                     <i class="nav-icon fas fa-list"></i>
                                     <p>Admin Account Details</p>
                                 </a>

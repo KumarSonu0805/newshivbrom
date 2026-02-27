@@ -13,8 +13,8 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <?php
-                                                    $attributes=array("id"=>"ref","Placeholder"=>"Member ID","autocomplete"=>"off",'readonly'=>'true');
-                                                    echo create_form_input("text","","Member ID",true,$user['username'],$attributes); 
+                                                    $attributes=array("id"=>"ref","Placeholder"=>"Registration No.","autocomplete"=>"off",'readonly'=>'true');
+                                                    echo create_form_input("text","","Registration No.",true,$user['username'],$attributes); 
                                                     echo create_form_input("hidden","regid","",false,$user['id'],array("id"=>"regid")); 
                                                 ?>
                                             </div>

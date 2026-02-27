@@ -7,130 +7,265 @@ class Masterkey extends MY_Controller {
 		parent::__construct();
 		checklogin();
 	}
-	
-	public function index(){
-		if($this->session->role=='admin'){ redirect('/'); }
-		$data['title']="New Booking";
-		$data['breadcrumb']=array("/"=>"Home");
-		$data['user']=getuser();
-		$this->template->load('bookings','bookingform',$data);
-	}
-	
-	public function bookinglist(){
-		$data['title']="My Bookings";
-		$data['breadcrumb']=array("/"=>"Home");
-		$data['user']=getuser();
-        $where=array();
-        if($this->session->role!='admin'){
-            $where['t1.regid']=$data['user']['id'];
+    
+    public function index(){
+        if($this->input->get('type')===NULL){
+            $data['title']="State";
+            $data['tabulator']=true;
+            $data['alertify']=true;
+            $this->template->load('masterkey','state',$data);          
         }
         else{
-            $data['title']="Member Bookings";
+            $states=$this->master->getstates();
+            echo json_encode($states);
         }
-        $data['bookings']=$this->booking->getbookings($where);
-        $data['datatable']=true;
-		$this->template->load('bookings','bookinglist',$data);
-	}
-	
-	public function details($id=NULL){
-		$data['title']="Booking Details";
-		$data['breadcrumb']=array("/"=>"Home",'bookings/bookinglist/'=>"Booking List");
-		$data['user']=getuser();
-        $where=array("md5(concat('id-',t1.id))"=>$id);
-        $booking=$this->booking->getbookings($where,'single');
-        $data['booking']=$booking;
-        $data['datatable']=true;
-		$this->template->load('bookings','details',$data);
-	}
-	
-	public function savebooking(){
-		if($this->input->post('savebooking')!==NULL){
-            $user=getuser();
-			$data=$this->input->post();
-            $data = array_map('strip_tags', $data);
-            $data = array_map('htmlspecialchars', $data);
-            //print_pre($data);
-            $bdata=$data;
-            unset($bdata['refid']);
-            $bdata['regid']=$user['id'];
-            $details=array('regid'=>$user['id']);
-            $details['type']=$data['b_type'];
-            $details['project_id']=$data['project_id'];
-            $details['plot_number']=$data['plot_number'];
-            $details['payment_type']=$data['payment_type'];
-            $details['price']=$data['price'];
-            $details['other_price']=$data['other_price'];
-            $details['total_amount']=$data['price']+$data['other_price'];
-            $details['token_amount']=$data['token_amount'];
-            $details['payment_mode']=$data['payment_mode'];
-            $details['address']=$data['b_address'];
-            $details['city']=$data['b_city'];
-            $details['landmark']=$data['landmark'];
-            unset($bdata['b_type'],$bdata['project_id'],$bdata['plot_number'],$bdata['payment_type'],$bdata['price'],
-                  $bdata['other_price'],$bdata['total_amount'],$bdata['token_amount'],$bdata['payment_mode'],
-                  $bdata['b_address'],$bdata['b_city'],$bdata['landmark'],$bdata['savebooking']);
-            
-            $nomineedata=array();
-            $nomineedata['regid']=$user['id'];
-            $nomineedata['name']=$data['nom_name']??'';
-            $nomineedata['father']=$data['nom_father']??'';
-            $nomineedata['mobile']=$data['nom_mobile']??'';
-            $nomineedata['email']=$data['nom_email']??'';
-            $nomineedata['address']=$data['nom_address']??'';
-            unset($bdata['nom_name'],$bdata['nom_father'],$bdata['nom_mobile'],$bdata['nom_email'],$bdata['nom_address']);
-            //print_pre($data,true);
-			unset($data['savebooking']);
-            $upload_path="./assets/uploads/bookings/";
-            $allowed_types="jpg|jpeg|png";
-            $file_name=$user['name'];
-            $upload=upload_file('photo',$upload_path,$allowed_types,$file_name.'_photo');
-            if($upload['status']===true){
-                $bdata['photo']=$upload['path'];
-            }
-            $upload=upload_file('passbook',$upload_path,$allowed_types,$file_name.'_passbook');
-            if($upload['status']===true){
-                $bdata['passbook']=$upload['path'];
-            }
-            $upload=upload_file('aadhar_image',$upload_path,$allowed_types,$file_name.'_aadhar_image');
-            if($upload['status']===true){
-                $bdata['aadhar_image']=$upload['path'];
-            }
-            $upload=upload_file('nom_photo',$upload_path,$allowed_types,$nomineedata['name'].'_nom_photo');
-            if($upload['status']===true){
-                $nomineedata['photo']=$upload['path'];
-            }
-            $upload=upload_file('document',$upload_path,$allowed_types,$nomineedata['name'].'_document');
-            if($upload['status']===true){
-                $details['document']=$upload['path'];
-            }
-            $data=array("bdata"=>$bdata,"details"=>$details,"nomineedata"=>$nomineedata);
-            //print_pre($data,true);
-            $result=$this->booking->savebooking($data);
-            //print_pre($result,true);
+    }
+    
+    public function district(){
+        if($this->input->get('type')===NULL){
+            $data['title']="District";
+            $data['tabulator']=true;
+            $data['alertify']=true;
+            $data['states']=state_dropdown();
+            $this->template->load('masterkey','district',$data);          
+        }
+        else{
+            $districts=$this->master->getdistricts();
+            echo json_encode($districts);
+        }     
+    }
+    
+    public function city(){
+        if($this->input->get('type')===NULL){
+            $data['title']="City";
+            $data['tabulator']=true;
+            $data['alertify']=true;
+            $data['states']=state_dropdown();
+            $this->template->load('masterkey','city',$data);          
+        }
+        else{
+            $cities=$this->master->getcities();
+            echo json_encode($cities);
+        }      
+    }
+    
+    public function bank(){
+        if($this->input->get('type')===NULL){
+            $data['title']="Banks";
+            $data['tabulator']=true;
+            $this->template->load('masterkey','bank',$data);          
+        }
+        else{
+            $banks=$this->master->getbanks();
+            echo json_encode($banks);
+        }    
+    }
+    
+    public function savestate(){
+        if($this->input->post('savestate')!==NULL){
+            $data=$this->input->post();
+            unset($data['savestate']);
+            $result=$this->master->savestate($data);
             if($result['status']===true){
-                $this->session->set_flashdata("msg",$result['message']);
+                $this->session->set_flashdata('msg',$result['message']);
             }
             else{
-                $this->session->set_flashdata("err_msg",$result['message']);
+                $this->session->set_flashdata('err_msg',$result['message']);
             }
-		}
-		redirect($_SERVER['HTTP_REFERER']);
-	}
-	
-	public function approvebooking(){
+        }
+
+        elseif($this->input->post('updatestate')!==NULL){
+            $data=$this->input->post();
+            unset($data['updatestate']);
+            $result=$this->master->updatestate($data);
+            if($result['status']===true){
+                $this->session->set_flashdata('msg',$result['message']);
+            }
+            else{
+                $this->session->set_flashdata('err_msg',$result['message']);
+            }
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    
+    public function getstate(){
         $id=$this->input->post('id');
-        $where=array("md5(concat('id-',t1.id))"=>$id);
-        $booking=$this->booking->getbookings($where,'single');
-        if($booking['status']==0){
-            $result=$this->booking->approvebooking($booking['id'],$booking['regid']);
-            //print_pre($result,true);
+        $state=$this->master->getstates(['id'=>$id],'single');
+        echo json_encode($state);
+    }
+    
+    
+    public function deletestate(){
+        $id=$this->input->post('id');
+        $where=array('id'=>$id);
+        logdeleteoperations('states',$where);
+        if($this->db->delete('states',$where)){
+            $this->session->set_flashdata('msg',"State Deleted Successfully");
+        }
+        else{
+            $error=$this->db->error();
+            $this->session->set_flashdata('err_msg',$error['message']);
+        }
+    }
+    
+    public function savedistrict(){
+        if($this->input->post('savedistrict')!==NULL){
+            $data=$this->input->post();
+            unset($data['savedistrict']);
+            $result=$this->master->savedistrict($data);
             if($result['status']===true){
-                $this->session->set_flashdata("msg",$result['message']);
+                $this->session->set_flashdata('msg',$result['message']);
             }
             else{
-                $this->session->set_flashdata("err_msg",$result['message']);
+                $this->session->set_flashdata('err_msg',$result['message']);
             }
         }
-	}
+
+        elseif($this->input->post('updatedistrict')!==NULL){
+            $data=$this->input->post();
+            unset($data['updatedistrict']);
+            $result=$this->master->updatedistrict($data);
+            if($result['status']===true){
+                $this->session->set_flashdata('msg',$result['message']);
+            }
+            else{
+                $this->session->set_flashdata('err_msg',$result['message']);
+            }
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    
+    public function getdistrict(){
+        $id=$this->input->post('id');
+        $district=$this->master->getdistricts(['t1.id'=>$id],'single');
+        echo json_encode($district);
+    }
+    
+    public function getdistrictdropdown(){
+        $state_id=$this->input->post('state_id');
+        $district_id=$this->input->post('district_id');
+        $district_id=!empty($district_id)?$district_id:'';
+        $districts=district_dropdown(['t1.state_id'=>$state_id,]);
+        echo create_form_input('select','district_id','',true,$district_id,array('id'=>'district_id'),$districts);
+    }
+    
+    public function deletedistrict(){
+        $id=$this->input->post('id');
+        $where=array('id'=>$id);
+        logdeleteoperations('districts',$where);
+        if($this->db->delete('districts',$where)){
+            $this->session->set_flashdata('msg',"District Deleted Successfully");
+        }
+        else{
+            $error=$this->db->error();
+            $this->session->set_flashdata('err_msg',$error['message']);
+        }
+    }
+    
+    public function savecity(){
+        if($this->input->post('savecity')!==NULL){
+            $data=$this->input->post();
+            unset($data['savecity']);
+            $result=$this->master->savecity($data);
+            if($result['status']===true){
+                $this->session->set_flashdata('msg',$result['message']);
+            }
+            else{
+                $this->session->set_flashdata('err_msg',$result['message']);
+            }
+        }
+
+        elseif($this->input->post('updatecity')!==NULL){
+            $data=$this->input->post();
+            unset($data['updatecity']);
+            $result=$this->master->updatecity($data);
+            if($result['status']===true){
+                $this->session->set_flashdata('msg',$result['message']);
+            }
+            else{
+                $this->session->set_flashdata('err_msg',$result['message']);
+            }
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    
+    public function getcity(){
+        $id=$this->input->post('id');
+        $city=$this->master->getcities(['t1.id'=>$id],'single');
+        echo json_encode($city);
+    }
+    
+    public function deletecity(){
+        $id=$this->input->post('id');
+        $where=array('id'=>$id);
+        logdeleteoperations('cities',$where);
+        if($this->db->delete('cities',$where)){
+            $this->session->set_flashdata('msg',"City Deleted Successfully");
+        }
+        else{
+            $error=$this->db->error();
+            $this->session->set_flashdata('err_msg',$error['message']);
+        }
+    }
+    
+    public function getcitydropdown(){
+        $district_id=$this->input->post('district_id');
+        $city_id=$this->input->post('city_id');
+        $city_id=!empty($city_id)?$city_id:'';
+        $cities=city_dropdown(['t1.district_id'=>$district_id,]);
+        echo create_form_input('select','city_id','',true,$city_id,array('id'=>'city_id'),$cities);
+    }
+    
+    public function savebank(){
+        if($this->input->post('savebank')!==NULL){
+            $data=$this->input->post();
+            unset($data['savebank']);
+			$upload_path='./assets/images/category/';
+			$allowed_types='jpg|jpeg|png|webp';
+			$upload=upload_file('image',$upload_path,$allowed_types,$data['name'],10000);
+            if($upload['status']===true){
+                //$path = $this->imager->processimage('.'.$upload['path'],'cropscale',80,['width'=>500,'height'=>500]);
+                $data['image']=$path;
+            }
+            $result=$this->master->savebank($data);
+            if($result['status']===true){
+                $this->session->set_flashdata('msg',$result['message']);
+            }
+            else{
+                $this->session->set_flashdata('err_msg',$result['message']);
+            }
+        }
+
+        elseif($this->input->post('updatebank')!==NULL){
+            $data=$this->input->post();
+            unset($data['updatebank']);
+			$upload_path='./assets/images/category/';
+			$allowed_types='jpg|jpeg|png|webp';
+			$upload=upload_file('image',$upload_path,$allowed_types,$data['name'],10000);
+            if($upload['status']===true){
+                //$path = $this->imager->processimage('.'.$upload['path'],'cropscale',80,['width'=>500,'height'=>500]);
+                $data['image']=$path;
+            }
+            $result=$this->master->updatebank($data);
+            if($result['status']===true){
+                $this->session->set_flashdata('msg',$result['message']);
+            }
+            else{
+                $this->session->set_flashdata('err_msg',$result['message']);
+            }
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    
+    public function getbank(){
+        $id=$this->input->post('id');
+        $bank=$this->master->getbanks(['t1.id'=>$id],'single');
+        echo json_encode($bank);
+    }
+    
 	
 }

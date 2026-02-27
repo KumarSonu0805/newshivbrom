@@ -41,18 +41,27 @@ class Wallet_model extends CI_Model{
                                                                           't1.status'=>1]);
                         $booking_id=$booking['id'];
                         $details=$booking['details'];
-                        $percent = calculatepercent($details['total_amount'],$details['token_amount']);
-                        $amount = calculateincome($percent,'direct',0);
-                        if($amount>0){
-                            $amount=round($amount,2);
-                            $data=array("date"=>$date,"type"=>"ewallet","regid"=>$regid,"member_id"=>$member_id,
-                                        "booking_id"=>$booking_id,"percent"=>$percent,"amount"=>$amount,
-                                        "remarks"=>"Direct Income","added_on"=>date('Y-m-d H:i:s'),
-                                        "updated_on"=>date('Y-m-d H:i:s'));
-                            $where=array("type"=>"ewallet","date"=>$date,"regid"=>$regid,"member_id"=>$member_id,
+                        $deposited_amount=$details['token_amount'];
+                        if($deposited_amount>=$this->min_deposit){
+                            $where=array("type"=>"ewallet","regid"=>$regid,"member_id"=>$member_id,
                                          "booking_id"=>$booking_id,"remarks"=>"Direct Income");
-                            if($this->db->get_where("wallet",$where)->num_rows()==0){
-                                $this->db->insert("wallet",$data);
+                            $this->db->select_sum('amount');
+                            $added=$this->db->get_where('wallet',$where)->unbuffered_row()->amount;
+                            $added=empty($added)?0:$added;
+                            $percent = calculatepercent($details['price'],$deposited_amount);
+                            $amount = calculateincome($percent,'direct',$added);
+                            $amount=round($amount,2);
+                            //echo $regid.':'.$added.':'.$percent.':'.$amount.'<br>';
+                            if($amount>0){
+                                $amount=round($amount,2);
+                                $data=array("date"=>$date,"type"=>"ewallet","regid"=>$regid,"member_id"=>$member_id,
+                                            "booking_id"=>$booking_id,"percent"=>$percent,"amount"=>$amount,
+                                            "remarks"=>"Direct Income","added_on"=>date('Y-m-d H:i:s'),
+                                            "updated_on"=>date('Y-m-d H:i:s'));
+                                $where['date']=$date;
+                                if($this->db->get_where("wallet",$where)->num_rows()==0){
+                                    $this->db->insert("wallet",$data);
+                                }
                             }
                         }
                     }
@@ -107,6 +116,7 @@ class Wallet_model extends CI_Model{
             $rightbookings=getdownlinebv($rightmembers,$this->activation_date);
             
             //print_pre($leftbookings);
+            //print_pre($rightbookings);
             //print_pre($rightmembers);
             return false;
             foreach($packages as $package_id=>$members){

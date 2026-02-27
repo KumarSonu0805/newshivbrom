@@ -34,85 +34,17 @@
         }
     }
 
-    if(!function_exists('area_dropdown')){
-        function area_dropdown($where=array('t1.status'=>1),$new=false){
+    if(!function_exists('city_dropdown')){
+        function city_dropdown($where=array('t1.status'=>1),$new=false){
             $CI = get_instance();
-            $options=array(''=>'Select Area');
+            $options=array(''=>'Select City');
             if($new){
                 $options['new']='Add New';
             }
-            $areas=$CI->master->getareas($where);
-            if(!empty($areas)){
-                foreach($areas as $area){
-                    $options[$area['id']]=$area['name'];
-                }
-            }
-            return $options;
-        }
-    }
-
-    if(!function_exists('beat_dropdown')){
-        function beat_dropdown($where=array('t1.status'=>1),$new=false){
-            $CI = get_instance();
-            $options=array(''=>'Select Beat');
-            if($new){
-                $options['new']='Add New';
-            }
-            $beats=$CI->master->getbeats($where);
-            if(!empty($beats)){
-                foreach($beats as $beat){
-                    $options[$beat['id']]=$beat['name'];
-                }
-            }
-            return $options;
-        }
-    }
-
-    if(!function_exists('brand_dropdown')){
-        function brand_dropdown($where=array('t1.status'=>1),$new=false){
-            $CI = get_instance();
-            $options=array(''=>'Select Brand');
-            if($new){
-                $options['new']='Add New';
-            }
-            $brands=$CI->master->getbrands($where);
-            if(!empty($brands)){
-                foreach($brands as $brand){
-                    $options[$brand['id']]=$brand['name'];
-                }
-            }
-            return $options;
-        }
-    }
-
-    if(!function_exists('finance_dropdown')){
-        function finance_dropdown($where=array('t1.status'=>1),$new=false){
-            $CI = get_instance();
-            $options=array(''=>'Select Finance');
-            if($new){
-                $options['new']='Add New';
-            }
-            $finances=$CI->master->getfinances($where);
-            if(!empty($finances)){
-                foreach($finances as $finance){
-                    $options[$finance['id']]=$finance['name'];
-                }
-            }
-            return $options;
-        }
-    }
-
-    if(!function_exists('employee_dropdown')){
-        function employee_dropdown($col="e_id",$text="Employee",$new=false){
-            $CI = get_instance();
-            $options=array(''=>'Select '.$text);
-            if($new){
-                $options['new']='Add New';
-            }
-            $users=$CI->account->getusers(['t1.role'=>'dso']);
-            if(is_array($users)){
-                foreach($users as $user){
-                    $options[$user[$col]]=$user['name'];
+            $cities=$CI->master->getcities($where);
+            if(!empty($cities)){
+                foreach($cities as $city){
+                    $options[$city['id']]=$city['name'];
                 }
             }
             return $options;

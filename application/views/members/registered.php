@@ -10,10 +10,13 @@
                             <div class="col-md-10">
                                 <h3 class="header smaller lighter green">Successfully Registered!</h3>
                                 <h4>Welcome <?php echo $this->session->flashdata('mname'); ?>,</h4><br>
-                                <ul style="list-style:none;">
+                                <ul class="p-0" style="list-style:none;">
                                     <li><h4>Username : <?php echo $this->session->flashdata('uname');?></h4><br></li>
                                     <li><h4>Password : <?php echo $this->session->flashdata('pass');?></h4></li>
                                 </ul>
+                                <p class="mb-1">
+                                    <a class="btn btn-success" href="<?= base_url('login/'); ?>">Login Now</a>
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -492,10 +492,13 @@ class Members extends MY_Controller {
             $member=array('name'=>'Admin','regid'=>1);
         }
         elseif($username!='admin'){
-		  $member=$this->member->getmemberid($username,$status);
+            $member=$this->member->getmemberid($username,$status);
+            if($member['regid']==0){
+                $member['name']="Sponsor ID not Available!";
+            }
         }
         elseif($username=='admin'){
-            $member['name']="Member ID not Available!";
+            $member['name']="Sponsor ID not Available!";
         }
 		echo json_encode($member);
 	}

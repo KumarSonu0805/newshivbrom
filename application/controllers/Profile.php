@@ -52,7 +52,7 @@ class Profile extends MY_Controller {
 	
 	public function adminaccdetails(){
 		if($this->session->role!='admin'){ redirect('home/'); }
-		$data['title']="Account Details";
+		$data['title']="Admin Account Details";
 		$data['breadcrumb']=array("home/"=>"Home");
         $getuser=$this->account->getuser(array("md5(id)"=>$this->session->userdata('user')));
         $data['user']=$getuser['user'];
@@ -92,6 +92,7 @@ class Profile extends MY_Controller {
 		$data['user']=getuser();
 		$regid=$data['user']['id'];
 		$data['acc_details']=$this->member->getaccdetails($regid);
+		$data['member']=$this->member->getmemberdetails($regid);
 		$this->template->load('profile','kyc',$data);
 	}
 	
@@ -166,7 +167,7 @@ class Profile extends MY_Controller {
                 }
 			}
 			else{
-				$this->session->set_flashdata("err_msg","Aadhar Number already Linked with 3 ID!");
+				$this->session->set_flashdata("err_msg","Aadhar Number already Added!");
 			}
 		}
 		redirect('profile/');
@@ -192,9 +193,11 @@ class Profile extends MY_Controller {
 	public function updatenomineedetails(){
 		if($this->input->post('updatenomineedetails')!==NULL){
 			$data=$this->input->post();
+            $where=array('booking_id'=>NULL);
 			$where['regid']=$data['regid'];
 			unset($data['regid']);
 			unset($data['updatenomineedetails']);
+            //print_pre($data,true);
 			$result=$this->member->updatenomineedetails($data,$where);
 			if($result===true){
 				$this->session->set_flashdata("msg","Nominee Details Updated successfully!");
