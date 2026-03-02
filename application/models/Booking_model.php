@@ -8,6 +8,27 @@ class Booking_model extends CI_Model{
     
     public function savebooking($data){
         $bdata=$data['bdata'];
+        $payment=$data['payment'];
+        $bdata['added_on']=$bdata['updated_on']=date('Y-m-d H:i:s');
+        $this->db->trans_start();
+        if($this->db->insert('bookings',$bdata)){
+            $booking_id=$this->db->insert_id();
+            
+            $payment['added_on']=$payment['updated_on']=date('Y-m-d H:i:s');
+            
+            $payment['booking_id']=$booking_id;
+            $this->db->insert('booking_payment',$payment);
+            $this->db->trans_complete();
+            return array('status'=>true,'message'=>"Booking Save Successfully!");
+        }
+        else{
+            $error=$this->db->error();
+            return array('status'=>false,'message'=>$error['message']);
+        }
+    }
+    
+    public function oldsavebooking($data){
+        $bdata=$data['bdata'];
         $details=$data['details'];
         $nomineedata=$data['nomineedata'];
         $bdata['added_on']=$bdata['updated_on']=date('Y-m-d H:i:s');
@@ -31,17 +52,25 @@ class Booking_model extends CI_Model{
     }
     
     public function getbookings($where=array(),$type='all',$order_by='t1.id desc'){
-        $columns ="t1.*,t1.type as b_type,t2.type,t2.city,t2.landmark,t2.price,t2.other_price,t2.total_amount";
-        $columns.=",t2.token_amount,t2.payment_mode,t2.payment_type";
+        $columns ="t1.*,t5.name as state,t6.name as district,t7.name as city,t5b.name as b_state,t6b.name as b_district,
+                    t7b.name as b_city";
+        $columns.=",t2.amount as paid_amount,t2.payment_type,t2.payment_mode";
         $columns.=",t4.username as member_id,t4.name as member_name,t3.status as a_status";
         $this->db->select($columns);
         $this->db->where($where);
         $this->db->order_by($order_by);
         $this->db->from('bookings t1');
-        $this->db->join('booking_details t2','t1.id=t2.booking_id');
+        $this->db->join('booking_payment t2','t1.id=t2.booking_id');
         $this->db->join('members t3','t1.regid=t3.regid');
         $this->db->join('users t4','t1.regid=t4.id');
+        $this->db->join('states t5','t1.state_id=t5.id');
+        $this->db->join('districts t6','t1.district_id=t6.id');
+        $this->db->join('cities t7','t1.city_id=t7.id');
+        $this->db->join('states t5b','t1.b_state_id=t5b.id');
+        $this->db->join('districts t6b','t1.b_district_id=t6b.id');
+        $this->db->join('cities t7b','t1.b_city_id=t7b.id');
         $query=$this->db->get();
+        print_pre($this->db->error());
         if($type=='all'){
             $array=$query->result_array();
         }

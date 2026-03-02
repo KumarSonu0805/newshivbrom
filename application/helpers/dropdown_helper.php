@@ -59,3 +59,36 @@
             return $options;
         }
     }
+
+    if(!function_exists('bookingtype_dropdown')){
+        function bookingtype_dropdown(){
+            $CI = get_instance();
+            $options=array(''=>'Select Type','land'=>'Land Booking','flat'=>'Flat Booking');
+            return $options;
+        }
+    }
+
+    if(!function_exists('project_dropdown')){
+        function project_dropdown(){
+            $CI = get_instance();
+            $options=array(''=>'Select Project','1'=>'Vaidik Vihar');
+            return $options;
+        }
+    }
+
+    if(!function_exists('paymenttype_dropdown')){
+        function paymenttype_dropdown(){
+            $CI = get_instance();
+            $options=array(''=>'Select Payment Type','full_payment'=>'Full Payment','partial'=>'Partial Payment',
+                           'token'=>'Token Payment');
+            return $options;
+        }
+    }
+
+    if(!function_exists('paymentmode_dropdown')){
+        function paymentmode_dropdown(){
+            $CI = get_instance();
+            $options=array(''=>'Select Payment Mode','cash'=>'Cash','online'=>'Online','cheque'=>'Cheque');
+            return $options;
+        }
+    }

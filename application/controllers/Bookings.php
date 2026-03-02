@@ -12,8 +12,28 @@ class Bookings extends MY_Controller {
 		if($this->session->role=='admin'){ redirect('/'); }
 		$data['title']="New Booking";
 		$data['breadcrumb']=array("/"=>"Home");
+        $data['styles']=array('file'=>'includes/plugins/icheck-bootstrap/icheck-bootstrap.min.css');
 		$data['user']=getuser();
+        $data['f_type']='new';
 		$this->template->load('bookings','bookingform',$data);
+	}
+	
+	public function bookingform($id){
+		if($this->session->role=='admin'){ redirect('/'); }
+		$data['title']="New Booking";
+		$data['breadcrumb']=array("/"=>"Home");
+        $data['styles']=array('file'=>'includes/plugins/icheck-bootstrap/icheck-bootstrap.min.css');
+		$data['user']=getuser();
+        $data['f_type']='kyc';
+		$this->template->load('bookings','bookingform',$data);
+	}
+	
+	public function o(){
+		if($this->session->role=='admin'){ redirect('/'); }
+		$data['title']="New Booking";
+		$data['breadcrumb']=array("/"=>"Home");
+		$data['user']=getuser();
+		$this->template->load('bookings','old-bookingform',$data);
 	}
 	
 	public function bookinglist(){
@@ -47,9 +67,52 @@ class Bookings extends MY_Controller {
 		if($this->input->post('savebooking')!==NULL){
             $user=getuser();
 			$data=$this->input->post();
-            $data = array_map('strip_tags', $data);
-            $data = array_map('htmlspecialchars', $data);
+            unset($data['savebooking']);
             //print_pre($data);
+            $bdata=$data;
+            $bdata['date']=!empty($data['date'])?$data['date']:date('Y-m-d');
+            $bdata['due_date']=!empty($data['due_date'])?$data['due_date']:NULL;
+            $bdata['bv']=$this->bv;
+            unset($bdata['payment_type'],$bdata['payment_date'],$bdata['payment_mode'],$bdata['paid_amount']);
+            
+            $payment=array('regid'=>$data['regid'],'booking_id'=>'');
+            $payment['payment_type']=$data['payment_type'];
+            $payment['date']=$data['payment_date'];
+            $payment['payment_mode']=$data['payment_mode'];
+            $payment['amount']=$data['paid_amount'];
+            $payment['receiver_name']=!empty($data['receiver_name'])?$data['receiver_name']:NULL;
+            $payment['utr_no']=!empty($data['utr_no'])?$data['utr_no']:NULL;
+            $payment['cheque_no']=!empty($data['cheque_no'])?$data['cheque_no']:NULL;
+            $payment['cheque_date']=!empty($data['cheque_date'])?$data['cheque_date']:NULL;
+            //print_pre($payment,true);
+            
+            $upload_path="./assets/uploads/bookings/payment/";
+            $allowed_types="jpg|jpeg|png";
+            $file_name=$user['name'].date('-dmyhis-');
+            $upload=upload_file('screenshot',$upload_path,$allowed_types,$file_name.'pay_image');
+            if($upload['status']===true){
+                $payment['screenshot']=$data['screenshot'];
+            }
+            
+            $data=array("bdata"=>$bdata,"payment"=>$payment);
+            //print_pre($data,true);
+            $result=$this->booking->savebooking($data);
+            //print_pre($result,true);
+            if($result['status']===true){
+                $this->session->set_flashdata("msg",$result['message']);
+            }
+            else{
+                $this->session->set_flashdata("err_msg",$result['message']);
+            }
+		}
+		redirect($_SERVER['HTTP_REFERER']);
+	}
+	
+	public function oldsavebooking(){
+		if($this->input->post('savebooking')!==NULL){
+            $user=getuser();
+			$data=$this->input->post();
+            print_pre($data);
             $bdata=$data;
             unset($bdata['refid']);
             $bdata['regid']=$user['id'];

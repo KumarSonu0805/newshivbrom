@@ -13,11 +13,11 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Sl No.</th>
-                                                            <th>Member ID</th>
-                                                            <th>Member Name</th>
-                                                            <th>Booking Name</th>
-                                                            <th>Email</th>
+                                                            <th>Registration No</th>
+                                                            <th>Name</th>
+                                                            <th>Purchaser Name</th>
                                                             <th>Mobile</th>
+                                                            <th>Email</th>
                                                             <th>Type</th>
                                                             <th>City</th>
                                                             <th>Landmark</th>
@@ -35,19 +35,24 @@
                                                     <tbody>
                                                         <?php
                                                             $bookings=$bookings;
+                                                            $btypes=bookingtype_dropdown();
+                                                            $projects=project_dropdown();
+                                                            $ptypes=paymenttype_dropdown();
+                                                            $pmodes=paymentmode_dropdown();
                                                             if(is_array($bookings)){$i=0;
                                                                 foreach($bookings as $booking){
                                                                     $i++;
-                                                                    $payment_type='';
-                                                                    if($booking['payment_type']=='full'){
-                                                                        $payment_type='Full Payment';
+                                                                    $type='';
+                                                                    if($booking['type']=='full_payment'){
+                                                                        $type='Full Payment';
                                                                     }
-                                                                    elseif($booking['payment_type']=='partial'){
-                                                                        $payment_type='Partial Payment';
+                                                                    elseif($booking['type']=='emi'){
+                                                                        $type='EMI';
                                                                     }
-                                                                    elseif($booking['payment_type']=='emi'){
-                                                                        $payment_type='EMI Payment';
+                                                                    elseif($booking['type']=='hold'){
+                                                                        $type='Hold';
                                                                     }
+                                                                    $payment_type=$ptypes[$booking['payment_type']];
                                                                     $a_status="<span class='text-danger'>In-Active</span>";
                                                                     if($booking['a_status']==1){
                                                                         $a_status="<span class='text-success'>Active</span>";
@@ -62,14 +67,14 @@
                                                             <td><?= $booking['member_id']; ?></td>
                                                             <td><?= $booking['member_name']; ?></td>
                                                             <td><?= $booking['name']; ?></td>
-                                                            <td><?= $booking['email']; ?></td>
                                                             <td><?= $booking['mobile']; ?></td>
+                                                            <td><?= $booking['email']; ?></td>
                                                             <td><?= $booking['type']; ?></td>
                                                             <td><?= $booking['city']; ?></td>
                                                             <td><?= $booking['landmark']; ?></td>
                                                             <td><?= $booking['total_amount']; ?></td>
-                                                            <td><?= $booking['token_amount']; ?></td>
-                                                            <td><?= $booking['b_type']; ?></td>
+                                                            <td><?= $booking['paid_amount']; ?></td>
+                                                            <td><?= $btypes[$booking['booking_type']]; ?></td>
                                                             <td><?= $payment_type; ?></td>
                                                             <td><?= ucfirst($booking['payment_mode']); ?></td>
                                                             <td><?= $a_status; ?></td>
