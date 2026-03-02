@@ -83,7 +83,7 @@
                                                             <td>
                                                                 <a href="<?= base_url('bookings/details/'.md5('id-'.$booking['id'])); ?>" class="btn btn-sm  btn-info"><i class="fa fa-eye"></i></a>
                                                                 <?php
-                                                                    if($this->session->role=='admin' && $booking['status']==0){
+                                                                    if($this->session->role=='admin' && $booking['status']==0 && !empty($booking['nominee_name'])){
                                                                 ?>
                                                                 <button type="button" value="<?= md5('id-'.$booking['id']) ?>" class="btn btn-sm btn-success approve">Approve Booking</button>
                                                                 <?php

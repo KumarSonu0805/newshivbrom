@@ -55,7 +55,7 @@ class Booking_model extends CI_Model{
         $columns ="t1.*,t5.name as state,t6.name as district,t7.name as city,t5b.name as b_state,t6b.name as b_district,
                     t7b.name as b_city";
         $columns.=",t2.amount as paid_amount,t2.payment_type,t2.payment_mode";
-        $columns.=",t4.username as member_id,t4.name as member_name,t3.status as a_status";
+        $columns.=",t4.username as member_id,t4.name as member_name,t3.status as a_status,t8.name as nominee_name";
         $this->db->select($columns);
         $this->db->where($where);
         $this->db->order_by($order_by);
@@ -69,6 +69,7 @@ class Booking_model extends CI_Model{
         $this->db->join('states t5b','t1.b_state_id=t5b.id');
         $this->db->join('districts t6b','t1.b_district_id=t6b.id');
         $this->db->join('cities t7b','t1.b_city_id=t7b.id');
+        $this->db->join('nominee t8','t1.id=t8.booking_id','left');
         $query=$this->db->get();
         if($type=='all'){
             $array=$query->result_array();
