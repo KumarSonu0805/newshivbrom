@@ -103,6 +103,12 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url('wallet/incomes/'); ?>" class="nav-link <?= activate_menu('wallet/incomes'); ?>">
+                                    <i class="nav-icon fas fa-money-bill"></i>
+                                    <p>My Incomes</p>
+                                </a>
+                            </li>
                             <?php 
                                 }else{
                             ?>

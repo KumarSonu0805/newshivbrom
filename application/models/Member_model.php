@@ -65,7 +65,7 @@ class Member_model extends CI_Model{
 		$this->db->order_by('id desc');
 		$username=$this->generateusername();
 		$userdata['username']=$username;
-		$password=random_string('numeric', 5);
+		$password=empty($userdata['password'])?random_string('numeric', 5):$userdata['password'];
 		$userdata['vp']=$password;
 		$salt=random_string('alnum', 16);
 		$encpassword=$password.SITE_SALT.$salt;

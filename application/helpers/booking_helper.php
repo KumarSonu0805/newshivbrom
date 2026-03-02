@@ -10,6 +10,17 @@
 		}  
 	}
 
+	if(!function_exists('calculatebv')) {
+  		function calculatebv($total_amount,$paid,$totalbv=NULL) {
+            $CI = get_instance();
+            $totalbv = $totalbv??$CI->bv;
+            if($total_amount<=0 || $paid==0){ return 0; }
+            $unit=$total_amount/$totalbv;
+            $bv=$paid/$unit;
+            return $bv;
+		}  
+	}
+
 	if(!function_exists('calculateincome')) {
   		function calculateincome($percent,$type,$prevpaid=0,$bv=NULL) {
             $CI = get_instance();

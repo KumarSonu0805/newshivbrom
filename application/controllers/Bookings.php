@@ -80,6 +80,7 @@ class Bookings extends MY_Controller {
             $payment['date']=$data['payment_date'];
             $payment['payment_mode']=$data['payment_mode'];
             $payment['amount']=$data['paid_amount'];
+            $payment['bv']=calculatebv($data['price'],$data['paid_amount']);
             $payment['receiver_name']=!empty($data['receiver_name'])?$data['receiver_name']:NULL;
             $payment['utr_no']=!empty($data['utr_no'])?$data['utr_no']:NULL;
             $payment['cheque_no']=!empty($data['cheque_no'])?$data['cheque_no']:NULL;
