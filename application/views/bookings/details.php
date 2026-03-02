@@ -1,6 +1,7 @@
 <?php
 $nominee=$booking['nominee'];
 $details=$booking['details'];
+$payment=$booking['payment'];
 ?>
 
             <div class="col-12">
@@ -99,7 +100,7 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"aadhar","Placeholder"=>"Aadhar No.","pattern"=>"[0-9]{12}","title"=>"Enter Valid Aadhar No.","autocomplete"=>"off","maxlength"=>"12",'readonly'=>'true');
-                                                echo create_form_input("text","aadhar","Aadhar No.",true,$booking['aadhar'],$attributes);  
+                                                echo create_form_input("text","aadhar","Aadhar No.",true,$booking['aadhar']??'',$attributes);  
                                             ?>
                                         </div>
                                     </div>
@@ -108,7 +109,7 @@ $details=$booking['details'];
                                             <?php
                                                 $attributes=array("id"=>"voter_id","Placeholder"=>"Voter ID",
                                                                   "autocomplete"=>"off",'readonly'=>'true');
-                                                echo create_form_input("text","voter_id","Voter ID",false,$booking['voter_id'],$attributes); 
+                                                echo create_form_input("text","voter_id","Voter ID",false,$booking['voter_id']??'',$attributes); 
                                             ?>
                                         </div>
                                     </div>
@@ -118,7 +119,7 @@ $details=$booking['details'];
                                                 $attributes=array("id"=>"driving_license",
                                                                   "Placeholder"=>"Driving License",
                                                                   "autocomplete"=>"off",'readonly'=>'true');
-                                                echo create_form_input("text","driving_license","Driving License",false,$booking['driving_license'],$attributes); 
+                                                echo create_form_input("text","driving_license","Driving License",false,$booking['driving_license']??'',$attributes); 
                                             ?>
                                         </div>
                                     </div>
@@ -126,7 +127,7 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"pan","Placeholder"=>"PAN No.","pattern"=>"[A-Za-z0-9]{10}","title"=>"Enter Valid Pan No.","autocomplete"=>"off","maxlength"=>"10",'readonly'=>'true');
-                                                echo create_form_input("text","pan","PAN No.",false,$booking['pan'],$attributes);
+                                                echo create_form_input("text","pan","PAN No.",false,$booking['pan']??'',$attributes);
                                             ?>
                                         </div>
                                     </div>
@@ -135,7 +136,7 @@ $details=$booking['details'];
                                             <?php
                                                 $attributes=array("id"=>"other_id","Placeholder"=>"Other ID Proof",
                                                                   "autocomplete"=>"off",'readonly'=>'true');
-                                                echo create_form_input("text","other_id","Other ID Proof",false,$booking['other_id'],$attributes); 
+                                                echo create_form_input("text","other_id","Other ID Proof",false,$booking['other_id']??'',$attributes); 
                                             ?>
                                         </div>
                                     </div>
@@ -146,6 +147,24 @@ $details=$booking['details'];
                                             <?php
                                                 $attributes=array("id"=>"address","Placeholder"=>"Address","autocomplete"=>"off",'rows'=>3,'readonly'=>'true');
                                                 echo create_form_input("textarea","address","Address",true,$booking['address'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"state","Placeholder"=>"State",
+                                                                  "autocomplete"=>"off",'readonly'=>'true');
+                                                echo create_form_input("text","state","State",true,$booking['state'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"district","Placeholder"=>"District",
+                                                                  "autocomplete"=>"off",'readonly'=>'true');
+                                                echo create_form_input("text","district","District",true,$booking['district'],$attributes); 
                                             ?>
                                         </div>
                                     </div>
@@ -196,7 +215,7 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"nom_name","Placeholder"=>"Nominee Name","autocomplete"=>"off",'readonly'=>'true');
-                                                echo create_form_input("text","nom_name","Nominee Name",true,$nominee['name'],$attributes); 
+                                                echo create_form_input("text","nom_name","Nominee Name",true,$nominee['name']??'',$attributes); 
                                             ?>
                                         </div>
                                     </div>
@@ -204,7 +223,7 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"nom_father","Placeholder"=>"Father/Husband Name","autocomplete"=>"off",'readonly'=>'true');
-                                                echo create_form_input("text","nom_father","Father/Husband Name",true,$nominee['father'],$attributes); 
+                                                echo create_form_input("text","nom_father","Father/Husband Name",true,$nominee['father']??'',$attributes); 
                                             ?>
                                         </div>
                                     </div>
@@ -214,7 +233,7 @@ $details=$booking['details'];
                                                 $attributes=array("id"=>"nom_mobile","Placeholder"=>"Mobile",
                                                                   "autocomplete"=>"off","pattern"=>"[0-9]{10}",
                                                                   "title"=>"Enter Valid Mobile No.","maxlength"=>"10",'readonly'=>'true');
-                                                echo create_form_input("text","nom_mobile","Mobile",true,$nominee['mobile'],
+                                                echo create_form_input("text","nom_mobile","Mobile",true,$nominee['mobile']??'',
                                                                        $attributes); 
                                             ?>
                                         </div>
@@ -225,7 +244,7 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"nom_email","Placeholder"=>"Email","autocomplete"=>"off",'readonly'=>'true');
-                                                echo create_form_input("email","nom_email","Email",false,$nominee['email'],$attributes); 
+                                                echo create_form_input("email","nom_email","Email",false,$nominee['email']??'',$attributes); 
                                             ?>
                                         </div>
                                     </div>
@@ -233,14 +252,14 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"nom_address","Placeholder"=>"Address","autocomplete"=>"off",'rows'=>3,'readonly'=>'true');
-                                                echo create_form_input("textarea","nom_address","Address",false,$nominee['address'],$attributes); 
+                                                echo create_form_input("textarea","nom_address","Address",false,$nominee['address']??'',$attributes); 
                                             ?>
                                         </div>
                                     </div>
                                     <?php if(!empty($nominee['photo'])){ ?>
                                     <div class="col-md-4">
                                         <div class="form-group"><br>
-                                            <a href="<?= file_url($nominee['photo']) ?>" class="btn btn-sm btn-info" target="_blank">View Photo</a>
+                                            <a href="<?= file_url($nominee['photo'])??file_url('assets/images/avatar.jpg') ?>" class="btn btn-sm btn-info" target="_blank">View Photo</a>
                                         </div>
                                     </div>
                                     <?php } ?>
@@ -251,8 +270,7 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"b_type",'disabled'=>'true');
-                                                $types=array(''=>'Select','land'=>'Land Booking');
-                                                echo create_form_input("select","b_type","Booking Type",true,$details['type'],$attributes,$types); 
+                                                echo create_form_input("select","b_type","Booking Type",true,$booking['booking_type'],$attributes,bookingtype_dropdown()); 
                                             ?>
                                         </div>
                                     </div>
@@ -260,16 +278,91 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"project_id",'disabled'=>'true');
-                                                $projects=array(''=>'Select','1'=>'Vaidik Vihar');
-                                                echo create_form_input("select","project_id","Project Name",true,$details['project_id'],$attributes,$projects); 
+                                                echo create_form_input("select","project_id","Project Name",true,$booking['project_id'],$attributes,project_dropdown()); 
                                             ?>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <?php
-                                                $attributes=array("id"=>"plot_number","Placeholder"=>"Plot Number","autocomplete"=>"off",'readonly'=>'true');
-                                                echo create_form_input("text","plot_number","Plot Number",true,$details['plot_number'],$attributes); 
+                                                $attributes=array("id"=>"plot_no","Placeholder"=>"Plot Number","autocomplete"=>"off",'readonly'=>'true');
+                                                echo create_form_input("text","plot_no","Plot Number",true,$booking['plot_no'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"b_address","Placeholder"=>"Address","autocomplete"=>"off",'rows'=>3,'readonly'=>'true');
+                                                echo create_form_input("textarea","b_address","Address",true,$booking['b_address'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"b_state","Placeholder"=>"State",
+                                                                  "autocomplete"=>"off",'readonly'=>'true');
+                                                echo create_form_input("text","b_state","State",true,$booking['b_state'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"b_district","Placeholder"=>"District",
+                                                                  "autocomplete"=>"off",'readonly'=>'true');
+                                                echo create_form_input("text","b_district","District",true,$booking['b_district'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"b_city","Placeholder"=>"City",
+                                                                  "autocomplete"=>"off",'readonly'=>'true');
+                                                echo create_form_input("text","b_city","City",true,$booking['b_city'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"landmark","Placeholder"=>"Landmark",
+                                                                  "autocomplete"=>"off",'readonly'=>'true');
+                                                echo create_form_input("text","landmark","Landmark",false,$booking['landmark'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"price","Placeholder"=>"Price",
+                                                                  "autocomplete"=>"off",'step'=>'0.01','readonly'=>'true');
+                                                echo create_form_input("number","price","Price",true,$booking['price'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"other_price","Placeholder"=>"Other Price",
+                                                                  "autocomplete"=>"off",'step'=>'0.01','readonly'=>'true');
+                                                echo create_form_input("number","other_price","Other Price",true,$booking['other_price'],$attributes); 
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?php
+                                                $attributes=array("id"=>"total_amount",'readonly'=>'true',
+                                                                  "Placeholder"=>"Final Amount",
+                                                                  "autocomplete"=>"off",'step'=>'0.01');
+                                                echo create_form_input("number","total_amount","Final Amount",true,$booking['total_amount'],$attributes); 
                                             ?>
                                         </div>
                                     </div>
@@ -279,44 +372,15 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"payment_type",'disabled'=>'true');
-                                                $payment_types=array(''=>'Select','full'=>'Full Payment','partial'=>'Partial Payment','emi'=>'EMI Payment');
-                                                echo create_form_input("select","payment_type","Payment Type",true,$details['payment_type'],$attributes,$payment_types); 
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <?php
-                                                $attributes=array("id"=>"price","Placeholder"=>"Price","autocomplete"=>"off",'step'=>'0.01','readonly'=>'true');
-                                                echo create_form_input("number","price","Price",true,$details['price'],$attributes); 
+                                                echo create_form_input("select","payment_type","Payment Type",true,$payment['payment_type'],$attributes,paymenttype_dropdown()); 
                                             ?>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <?php
-                                                $attributes=array("id"=>"other_price","Placeholder"=>"Other Price","autocomplete"=>"off",'step'=>'0.01','readonly'=>'true');
-                                                echo create_form_input("number","other_price","Other Price",false,$details['other_price'],$attributes); 
-                                            ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <?php
-                                                $attributes=array("id"=>"total_amount","Placeholder"=>"Final Amount","autocomplete"=>"off",'step'=>'0.01','readonly'=>'true');
-                                                echo create_form_input("number","total_amount","Final Amount",false,$details['total_amount'],$attributes); 
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <?php
-                                                $attributes=array("id"=>"token_amount","Placeholder"=>"Token Amount","autocomplete"=>"off",'step'=>'0.01','readonly'=>'true');
-                                                echo create_form_input("number","token_amount","Token Amount",true,$details['token_amount'],$attributes); 
+                                                $attributes=array("id"=>"payment_date",'readonly'=>'true');
+                                                echo create_form_input("date","payment_date","Payment Date",true,$payment['date'],$attributes); 
                                             ?>
                                         </div>
                                     </div>
@@ -324,9 +388,7 @@ $details=$booking['details'];
                                         <div class="form-group">
                                             <?php
                                                 $attributes=array("id"=>"payment_mode",'disabled'=>'true');
-                                                $payment_modes=array(''=>'Select','cash'=>'Cash','online'=>'Online',
-                                                                     'cheque'=>'Cheque');
-                                                echo create_form_input("select","payment_mode","Payment Type",true,$details['payment_mode'],$attributes,$payment_modes); 
+                                                echo create_form_input("select","payment_mode","Payment Mode",true,$payment['payment_mode'],$attributes,paymentmode_dropdown()); 
                                             ?>
                                         </div>
                                     </div>
@@ -335,36 +397,12 @@ $details=$booking['details'];
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <?php
-                                                $attributes=array("id"=>"b_address","Placeholder"=>"Booking Address","autocomplete"=>"off",'rows'=>3,'readonly'=>'true');
-                                                echo create_form_input("textarea","b_address","Booking Address",true,$details['address'],$attributes); 
+                                                $attributes=array("id"=>"paid_amount","Placeholder"=>"Paid Amount",
+                                                                  "autocomplete"=>"off",'step'=>'0.01','readonly'=>'true');
+                                                echo create_form_input("number","paid_amount","Paid Amount",true,$payment['amount'],$attributes); 
                                             ?>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <?php
-                                                $attributes=array("id"=>"b_city","Placeholder"=>"City","autocomplete"=>"off",'readonly'=>'true');
-                                                echo create_form_input("text","b_city","City",true,$details['city'],$attributes); 
-                                            ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <?php
-                                                $attributes=array("id"=>"landmark","Placeholder"=>"Landmark","autocomplete"=>"off",'readonly'=>'true');
-                                                echo create_form_input("text","landmark","Landmark",true,$details['landmark'],$attributes); 
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <?php if(!empty($details['document'])){ ?>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <a href="<?= file_url($details['document']) ?>" class="btn btn-sm btn-info" target="_blank">View Other Document</a>
-                                        </div>
-                                    </div>
-                                    <?php } ?>
                                 </div>
                             </div>
                         </div>

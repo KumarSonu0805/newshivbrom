@@ -70,7 +70,6 @@ class Booking_model extends CI_Model{
         $this->db->join('districts t6b','t1.b_district_id=t6b.id');
         $this->db->join('cities t7b','t1.b_city_id=t7b.id');
         $query=$this->db->get();
-        print_pre($this->db->error());
         if($type=='all'){
             $array=$query->result_array();
         }
@@ -82,15 +81,24 @@ class Booking_model extends CI_Model{
     
     public function getbookingdetails($where=array()){
         $columns ="t1.*,t2.username as member_id,t2.name as member_name,t2.mobile as member_mobile";
+        $columns.=",t3.name as state,t4.name as district,t4.name as city,t3b.name as b_state,t4b.name as b_district,
+                    t4b.name as b_city";
         $this->db->select($columns);
         $this->db->where($where);
         $this->db->from('bookings t1');
         $this->db->join('users t2','t1.regid=t2.id');
+        $this->db->join('states t3','t1.state_id=t3.id');
+        $this->db->join('districts t4','t1.district_id=t4.id');
+        $this->db->join('cities t5','t1.city_id=t5.id');
+        $this->db->join('states t3b','t1.b_state_id=t3b.id');
+        $this->db->join('districts t4b','t1.b_district_id=t4b.id');
+        $this->db->join('cities t5b','t1.b_city_id=t5b.id');
         $query=$this->db->get();
         $array=$query->unbuffered_row('array');
         if(!empty($array)){
             $array['details']=$this->db->get_where('booking_details',['booking_id'=>$array['id']])->unbuffered_row('array');
             $array['nominee']=$this->db->get_where('nominee',['booking_id'=>$array['id']])->unbuffered_row('array');
+            $array['payment']=$this->db->get_where('booking_payment',['booking_id'=>$array['id']])->unbuffered_row('array');
         }
         return $array;
     }
