@@ -30,37 +30,53 @@ class Wallet_model extends CI_Model{
         if($date===NULL){
             $date=date('Y-m-d');
         }
+        //echo '<br>------------------------<br>';
+        //echo $regid;
         if($this->status){
             $newdirects=$this->member->getdirectmembers($regid,1);
+            //print_pre($newdirects);
             if(!empty($newdirects)){
                 foreach($newdirects as $member){
                     if($member['status']==1 && $member['activation_date']>$this->activation_date){
                         $member_id=$member['regid'];
-                        $this->db->order_by('approved_date asc');
-                        $booking=$this->booking->getbookingdetails(['t1.regid'=>$member_id,
-                                                                          't1.status'=>1]);
-                        $booking_id=$booking['id'];
-                        $details=$booking['details'];
-                        $deposited_amount=$details['token_amount'];
-                        if($deposited_amount>=$this->min_deposit){
-                            $where=array("type"=>"ewallet","regid"=>$regid,"member_id"=>$member_id,
-                                         "booking_id"=>$booking_id,"remarks"=>"Direct Income");
+                        $this->db->order_by('t1.approved_date asc');
+                        $booking=$this->booking->getbookings(['t1.regid'=>$member_id,'t1.status'=>1],'single');
+                        if(!empty($booking)){
+                            $where="booking_id='$booking[id]' and status='1' and id not in (SELECT payment_id from ".TP."wallet where regid='$regid' and remarks='Direct Income')";
+                            $payments=$this->db->get_where('booking_payment',$where)->result_array();
+                            $booking_id=$booking['id'];
                             $this->db->select_sum('amount');
-                            $added=$this->db->get_where('wallet',$where)->unbuffered_row()->amount;
-                            $added=empty($added)?0:$added;
-                            $percent = calculatepercent($details['price'],$deposited_amount);
-                            $amount = calculateincome($percent,'direct',$added);
-                            $amount=round($amount,2);
-                            //echo $regid.':'.$added.':'.$percent.':'.$amount.'<br>';
-                            if($amount>0){
-                                $amount=round($amount,2);
-                                $data=array("date"=>$date,"type"=>"ewallet","regid"=>$regid,"member_id"=>$member_id,
-                                            "booking_id"=>$booking_id,"percent"=>$percent,"amount"=>$amount,
-                                            "remarks"=>"Direct Income","added_on"=>date('Y-m-d H:i:s'),
-                                            "updated_on"=>date('Y-m-d H:i:s'));
-                                $where['date']=$date;
-                                if($this->db->get_where("wallet",$where)->num_rows()==0){
-                                    $this->db->insert("wallet",$data);
+                            $deposited_amount=$this->db->get_where('booking_payment',"booking_id='$booking[id]' and status='1'")->unbuffered_row()->amount;
+                            $deposited_amount=empty($deposited_amount)?0:$deposited_amount;
+                            $newdeposits=!empty($payments)?array_column($payments,'amount'):array();
+                            $new_amount=array_sum($newdeposits);
+                            $current_deposit=$deposited_amount-$new_amount;
+                            foreach($payments as $payment){
+                                if($deposited_amount>=$this->min_deposit){
+                                    $payment_id=$payment['id'];
+                                    $where=array("type"=>"ewallet","regid"=>$regid,"member_id"=>$member_id,
+                                                 "booking_id"=>$booking_id,"payment_id"=>$payment_id,
+                                                 "remarks"=>"Direct Income");
+                                    if($this->db->get_where("wallet",$where)->num_rows()==0){
+                                        unset($where['payment_id']);
+                                        $this->db->select_sum('amount');
+                                        $added=$this->db->get_where('wallet',$where)->unbuffered_row()->amount;
+                                        $added=empty($added)?0:$added;
+                                        $current_deposit+=$payment['amount'];
+                                        $percent = calculatepercent($booking['price'],$current_deposit);
+                                        $amount = calculateincome($percent,'direct',$added);
+                                        $amount=round($amount,2);
+                                        //echo $regid.':: '.$payment_id.':: '.$added.':: '.$percent.':: '.$amount.'<br>';
+                                        if($amount>0){
+                                            $amount=round($amount,2);
+                                            $data=array("date"=>$date,"type"=>"ewallet","regid"=>$regid,"member_id"=>$member_id,
+                                                        "booking_id"=>$booking_id,"payment_id"=>$payment_id,"percent"=>$percent,
+                                                        "amount"=>$amount,"remarks"=>"Direct Income",
+                                                        "added_on"=>date('Y-m-d H:i:s'),"updated_on"=>date('Y-m-d H:i:s'));
+                                            
+                                            $this->db->insert("wallet",$data);
+                                        }
+                                    }
                                 }
                             }
                         }

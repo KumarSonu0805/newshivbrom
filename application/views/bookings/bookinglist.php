@@ -69,7 +69,7 @@
                                                             <td><?= $booking['name']; ?></td>
                                                             <td><?= $booking['mobile']; ?></td>
                                                             <td><?= $booking['email']; ?></td>
-                                                            <td><?= $booking['type']; ?></td>
+                                                            <td><?= $type; ?></td>
                                                             <td><?= $booking['city']; ?></td>
                                                             <td><?= $booking['landmark']; ?></td>
                                                             <td><?= $booking['total_amount']; ?></td>

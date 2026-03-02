@@ -27,30 +27,6 @@ class Booking_model extends CI_Model{
         }
     }
     
-    public function oldsavebooking($data){
-        $bdata=$data['bdata'];
-        $details=$data['details'];
-        $nomineedata=$data['nomineedata'];
-        $bdata['added_on']=$bdata['updated_on']=date('Y-m-d H:i:s');
-        $this->db->trans_start();
-        if($this->db->insert('bookings',$bdata)){
-            $booking_id=$this->db->insert_id();
-            
-            $details['booking_id']=$booking_id;
-            $details['added_on']=$details['updated_on']=date('Y-m-d H:i:s');
-            
-            $nomineedata['booking_id']=$booking_id;
-            $this->db->insert('nominee',$nomineedata);
-            $this->db->insert('booking_details',$details);
-            $this->db->trans_complete();
-            return array('status'=>true,'message'=>"Booking Save Successfully");
-        }
-        else{
-            $error=$this->db->error();
-            return array('status'=>false,'message'=>$error['message']);
-        }
-    }
-    
     public function getbookings($where=array(),$type='all',$order_by='t1.id desc'){
         $columns ="t1.*,t5.name as state,t6.name as district,t7.name as city,t5b.name as b_state,t6b.name as b_district,
                     t7b.name as b_city";
@@ -110,10 +86,8 @@ class Booking_model extends CI_Model{
         $data=array('approved_date'=>$datetime,'approved_by'=>1,'status'=>1,'updated_on'=>$datetime);
         $parent_id=logupdateoperations('bookings',$data,['id'=>$booking_id]);
         if($this->db->update('bookings',$data,['id'=>$booking_id])){
-            $parent_id=logupdateoperations('booking_details',['status'=>1,'updated_on'=>$datetime],
-                                           ['booking_id'=>$booking_id],$parent_id);
-            $this->db->update('booking_details',['status'=>1,'updated_on'=>$datetime],
-                              ['booking_id'=>$booking_id]);
+            $parent_id=logupdateoperations('booking_payment',$data,['booking_id'=>$booking_id,'status'=>0],$parent_id);
+            $this->db->update('booking_payment',$data,['booking_id'=>$booking_id,'status'=>0]);
             if($member['status']==0){
                 $data=array('activation_date'=>$datetime,'status'=>1);
                 $parent_id=logupdateoperations('members',$data,['regid'=>$regid],$parent_id);
