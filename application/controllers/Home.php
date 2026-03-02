@@ -268,7 +268,8 @@ class Home extends MY_Controller {
     public function runquery(){
         $query=array(
             "ALTER TABLE `sc_booking_payment` ADD `bv` DECIMAL(16,2) NOT NULL AFTER `amount`;",
-            "ALTER TABLE `sc_bookings` ADD `approved_date` DATETIME NULL DEFAULT NULL AFTER `bv`, ADD `approved_by` INT NULL DEFAULT NULL AFTER `approved_date`;"
+            "ALTER TABLE `sc_bookings` ADD `approved_date` DATETIME NULL DEFAULT NULL AFTER `bv`, ADD `approved_by` INT NULL DEFAULT NULL AFTER `approved_date`;",
+            "ALTER TABLE `sc_wallet` ADD `payment_id` INT NOT NULL AFTER `booking_id`;"
         );
         foreach($query as $sql){
             if(!$this->db->query($sql)){
