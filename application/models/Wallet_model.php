@@ -131,151 +131,52 @@ class Wallet_model extends CI_Model{
             $leftbookings=getdownlinebv($leftmembers,$this->activation_date);
             $rightbookings=getdownlinebv($rightmembers,$this->activation_date);
             
-            //print_pre($leftbookings);
-            //print_pre($rightbookings);
-            //print_pre($rightmembers);
-            return false;
-            foreach($packages as $package_id=>$members){
-                if(!isset($members['left']) || !isset($members['right'])){
-                    continue;
-                }
-				
-                $leftcount=count($members['left']);
-                $rightcount=count($members['right']);
-				
-				if(isset($members['left'][1]) && isset($members['right'][1])){
-					$lefttime=$this->db->get_where("epin_used",array("used_by"=>$members['left'][1]))->unbuffered_row()->added_on;
-					$righttime=$this->db->get_where("epin_used",array("used_by"=>$members['right'][1]))->unbuffered_row()->added_on;
-					if($lefttime<$righttime){
-						$position="left";
-					}else{
-						$position="right";
-					}
-				}
-				elseif(isset($members['left'][1])){
-                    $position="left";
-				}
-				elseif(isset($members['right'][1])){
-                    $position="right";
-				}
-				else{ continue; }
-                if($position=="right"){
-                    $rightcount--;
-                }else{
-                    $leftcount--;
-                }
-                if($leftcount<$rightcount){
-                    $pairs=$leftcount;
-                }else{
-                    $pairs=$rightcount;
-                }
-                if($pairs>0){
-                    $pairstatus=true;
-                    if($position=='left'){
-                       $l1=$members['left'][0];
-                        $l2=$members['left'][1];
-                        $r1=$members['right'][0];
-                        $i1=array_search($l1,$leftmembers);
-                        $i2=array_search($l2,$leftmembers);
-                        $i3=array_search($r1,$rightmembers);
-                        unset($leftmembers[$i1],$leftmembers[$i2],$rightmembers[$i3]);
-                    }else{
-                        $l1=$members['left'][0];
-                        $r1=$members['right'][0];
-                        $r2=$members['right'][1];
-                        $i1=array_search($l1,$leftmembers);
-                        $i2=array_search($r1,$rightmembers);
-                        $i3=array_search($r2,$rightmembers);
-                        unset($leftmembers[$i1],$rightmembers[$i2],$rightmembers[$i3]);
-                    }
-                    break;
-                }
+            if(empty($leftbookings) || empty($rightbookings)){
+                return false;
             }
-            if($pairstatus){
-                $total_amount=$total_capping=0;
-                $packages=$this->Package_model->getpackage(array("id!="=>4));
-                foreach($packages as $package){
-                    $left=$right=$pairs=0;
-                    if(!empty($leftmembers)){
-                        $this->db->group_start();
-                        $left_chunks = array_chunk($leftmembers,25);
-                        foreach($left_chunks as $left_chunk){
-                            $this->db->or_where_in('regid', $left_chunk);
-                        }
-                        $this->db->group_end();
-                        $where="status='1' and activation_date<='$date' and package_id='$package[id]'";
-                        $left=$this->db->get_where("members",$where)->num_rows();
-                    }
-                    elseif($package_id!=$package['id']){
-                        continue;
-                    }
-
-                    if(!empty($rightmembers)){
-                        $this->db->group_start();
-                        $right_chunks = array_chunk($rightmembers,25);
-                        foreach($right_chunks as $right_chunk){
-                            $this->db->or_where_in('regid', $right_chunk);
-                        }
-                        $this->db->group_end();
-                        $where="status='1' and activation_date<='$date' and package_id='$package[id]'";
-                        $right=$this->db->get_where("members",$where)->num_rows();
-                    }
-                    elseif($package_id!=$package['id']){
-                        continue;
-                    }
-					//echo $left." : ".$right."--".$pairs." : ";
-
-                    if($left<$right){
-                        $pairs=$left;
-                    }elseif($left>$right){
-                       	$pairs=$right;
-					}
-                    if($package_id==$package['id']){
-                        $pairs+=1;
-                    }
-					//echo $pairs."<br>";
-                    $this->db->select_sum("pair","pairs");
-                    $where=array("regid"=>$regid,"date<"=>$date,"package_id"=>$package['id'],"remarks"=>"Matching Income");
-                    $addedpairs=$this->db->get_where("commission",$where)->unbuffered_row()->pairs;
-                    if($addedpairs===NULL){ $addedpairs=0; }
-
-                    $rate=$package['pair'];
-                    $pairs=$pairs-$addedpairs;
-                    $amount=$pairs*$rate;
-                    $total_amount+=$amount;
-                    $capping=0;
-                    if($checkupgrade==0){
-                        $limit_amount=500;
+            echo 'Left';
+            print_pre($leftbookings);
+            echo 'Right';
+            print_pre($rightbookings);
+            $leftbvs=array_column($leftbookings,'bv');
+            $rightbvs=array_column($rightbookings,'bv');
+            
+            $leftbv=array_sum($leftbvs);
+            $rightbv=array_sum($rightbvs);
+            
+            $this->db->select('sum(leftbv) as leftbv, sum(rightbv) as rightbv');
+            $prevmatchings=$this->db->get_where('wallet',['regid'=>$regid,'date<'=>$date,
+                                                          'remarks'=>'Matching Income'])->unbuffered_row('array');
+            //print_pre($prevmatchings);
+            $prevleftbv=$prevmatchings['leftbv']??0;
+            $prevrightbv=$prevmatchings['rightbv']??0;
+            
+            $leftbv-=$prevleftbv;
+            $rightbv-=$prevrightbv;
+            
+            if($leftbv<$rightbv){
+                $matching=$leftbv;
+            }else{
+                $matching=$rightbv;
+            }
+            if($matching>0){
+                $amount = ($matching*$this->matching)/100;
+                $amount=round($amount,2);
+                //echo $regid.':: '.$payment_id.':: '.$added.':: '.$percent.':: '.$amount.'<br>';
+                if($amount>0){
+                    $amount=round($amount,2);
+                    $data=array("date"=>$date,"type"=>"ewallet","regid"=>$regid,"leftbv"=>$matching,"rightbv"=>$matching,
+                                "amount"=>$amount,"remarks"=>"Matching Income",
+                                "added_on"=>date('Y-m-d H:i:s'),"updated_on"=>date('Y-m-d H:i:s'));
+                    $where=array("date"=>$date,"type"=>"ewallet","regid"=>$regid,"remarks"=>"Matching Income");
+                    if($this->db->get_where('wallet',$where)->num_rows()==0){
+                        $this->db->insert("wallet",$data);
                     }
                     else{
-                        $limit_amount=1000;
+                        unset($data['added_on']);
+                        $this->db->update("wallet",$data,$where);
                     }
                     
-                    if($total_amount>$limit_amount){
-                        if($total_capping==0){
-                            $capping=$total_amount-$limit_amount;
-                            $amount-=$capping;
-                        }
-                        else{
-                            $capping=$amount;
-                            $amount=0;
-                        }
-                    }
-                    
-                    $total_capping+=$capping;
-
-                    if($pairs!=0 && ($amount>0 || $capping>0)){
-                        $data=array("date"=>$date,"regid"=>$regid,"package_id"=>$package['id'],"rate"=>$rate,"pair"=>$pairs,"capping"=>$capping,
-                                        "commission"=>$amount,"remarks"=>"Matching Income");
-                        $where2=array("date"=>$date,"regid"=>$regid,"package_id"=>$package['id'],"remarks"=>"Matching Income");
-                        $check=$this->db->get_where("commission",$where2)->num_rows();
-                        if($check==0){
-                            $this->db->insert("commission",$data);
-                        }
-                        else{
-                            $this->db->update("commission",$data,$where2);
-                        }
-                    }
                 }
             }
         }

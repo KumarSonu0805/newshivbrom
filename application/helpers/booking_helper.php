@@ -42,11 +42,11 @@
                 $CI->db->or_where_in('t1.regid', $regid_chunk);
             }
             $CI->db->group_end();
-            $CI->db->select("*");
+            $CI->db->select("t1.*");
             $where="t1.status='1' and t1.approved_date>'".$activation_date."'";
             $CI->db->where($where);
-            $CI->db->from('bookings t1');
-            $CI->db->join('booking_details t2','t1.id=t2.booking_id');
+            $CI->db->from('booking_payment t1');
+            $CI->db->join('bookings t2','t1.booking_id=t2.id');
             $CI->db->order_by("t1.approved_date");
             
             $bookings=$CI->db->get()->result_array();
