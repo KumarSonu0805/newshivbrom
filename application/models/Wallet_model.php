@@ -48,6 +48,9 @@ class Wallet_model extends CI_Model{
                             $this->db->select_sum('amount');
                             $deposited_amount=$this->db->get_where('booking_payment',"booking_id='$booking[id]' and status='1'")->unbuffered_row()->amount;
                             $deposited_amount=empty($deposited_amount)?0:$deposited_amount;
+                            if($deposited_amount>$booking['price']){
+                                $deposited_amount=$booking['price'];
+                            }
                             $newdeposits=!empty($payments)?array_column($payments,'amount'):array();
                             $new_amount=array_sum($newdeposits);
                             $current_deposit=$deposited_amount-$new_amount;
