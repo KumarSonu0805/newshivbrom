@@ -134,10 +134,10 @@ class Wallet_model extends CI_Model{
             if(empty($leftbookings) || empty($rightbookings)){
                 return false;
             }
-            echo 'Left';
-            print_pre($leftbookings);
-            echo 'Right';
-            print_pre($rightbookings);
+            //echo 'Left';
+            //print_pre($leftbookings);
+            //echo 'Right';
+            //print_pre($rightbookings);
             $leftbvs=array_column($leftbookings,'bv');
             $rightbvs=array_column($rightbookings,'bv');
             
