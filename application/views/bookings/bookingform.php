@@ -17,10 +17,10 @@
                                 <a class="nav-link active" href="#step1" data-toggle="pill">Booking Details</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#<?= $f_type=='new'?'':'step2'; ?>" data-toggle="pill">KYC</a>
+                                <a class="nav-link" href="#<?= $f_type=='new'?'':'step2'; ?>" id="kyc-link" data-toggle="pill">KYC Details</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#<?= $f_type=='new'?'':'step3'; ?>" data-toggle="pill">Nominee Details</a>
+                                <a class="nav-link" href="#<?= $f_type=='new' || $f_type=='kyc'?'':'step3'; ?>" data-toggle="pill">Nominee Details</a>
                             </li>
                         </ul>
 
@@ -53,6 +53,235 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"date","Placeholder"=>"Booking Date","autocomplete"=>"off");
+                                                        echo create_form_input("date","date","Booking Date",true,$booking['date']??date('Y-m-d'),$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="">Type <span class="text-danger">*</span></label>
+                                                <?php
+                                                $b_type=$booking['type']??'';
+                                                ?>
+                                                <div class="form-group clearfix">
+                                                    <div class="icheck-success d-inline">
+                                                        <input type="radio" id="t_fp" name="type" value="full_payment" required <?= $b_type=='full_payment'?'checked':'' ?>>
+                                                        <label for="t_fp">Full Payment</label>
+                                                    </div>
+                                                    <div class="ml-2 icheck-success d-inline">
+                                                        <input type="radio" id="t_emi" name="type" value="emi" <?= $b_type=='emi'?'checked':'' ?>>
+                                                        <label for="t_emi">EMI</label>
+                                                    </div>
+                                                    <div class="ml-2 icheck-success d-inline">
+                                                        <input type="radio" id="t_hold" name="type" value="hold" <?= $b_type=='hold'?'checked':'' ?>>
+                                                        <label for="t_hold">Hold</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 <?= $b_type!='hold'?'d-none':'' ?>">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"due_date","Placeholder"=>"Due Date","autocomplete"=>"off",'data-value'=>date('Y-m-d',strtotime('+7 days')));
+                                                        echo create_form_input("date","due_date","Due Date",false,$booking['due_date']??'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"booking_type");
+                                                        echo create_form_input("select","booking_type","Booking Type",true,$booking['booking_type']??'',$attributes,bookingtype_dropdown()); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"project_id");
+                                                        echo create_form_input("select","project_id","Project",true,$booking['project_id']??'',$attributes,project_dropdown()); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"plot_no","Placeholder"=>"Flat/Plot No.",
+                                                                          "autocomplete"=>"off");
+                                                        echo create_form_input("text","plot_no","Flat/Plot No.",true,$booking['plot_no']??'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"b_address","Placeholder"=>"Address",
+                                                                          "autocomplete"=>"off",'rows'=>3);
+                                                        echo create_form_input("textarea","b_address","Address",true,$booking['b_address']??'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"b_state_id",'class'=>'dropdowns');
+                                                        echo create_form_input("select","b_state_id","State",true,$booking['b_state_id']??'',$attributes,state_dropdown()); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"b_district_id",'class'=>'dropdowns');
+                                                        echo create_form_input("select","b_district_id","District",true,$booking['b_district_id']??'',$attributes,$b_districts??[''=>'Select District']); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"b_city_id",'class'=>'dropdowns city');
+                                                        echo create_form_input("select","b_city_id","City",true,$booking['b_city_id']??'',$attributes,$b_cities??[''=>'Select City']); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"landmark","Placeholder"=>"Landmark",
+                                                                          "autocomplete"=>"off");
+                                                        echo create_form_input("text","landmark","Landmark",false,$booking['landmark']??'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"price","Placeholder"=>"Price",
+                                                                          "autocomplete"=>"off",'step'=>'0.01');
+                                                        echo create_form_input("number","price","Price",true,$booking['price']??'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"other_price","Placeholder"=>"Other Price",
+                                                                          "autocomplete"=>"off",'step'=>'0.01');
+                                                        echo create_form_input("number","other_price","Other Price",true,$booking['other_price']??0,$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"total_amount",'readonly'=>'true',
+                                                                          "Placeholder"=>"Final Amount",
+                                                                          "autocomplete"=>"off",'step'=>'0.01');
+                                                        echo create_form_input("number","total_amount","Final Amount",true,$booking['total_amount']??'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"payment_type");
+                                                        echo create_form_input("select","payment_type","Payment Type",true,$booking['payment']['payment_type']??'',$attributes,paymenttype_dropdown()); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"payment_date");
+                                                        echo create_form_input("date","payment_date","Payment Date",true,$booking['payment']['date']??date('Y-m-d'),$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"payment_mode");
+                                                        echo create_form_input("select","payment_mode","Payment Mode",true,$booking['payment']['payment_mode']??'',$attributes,paymentmode_dropdown()); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 d-none pay-modes cheque cash">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"receiver_name","Placeholder"=>"Received By",
+                                                                          "autocomplete"=>"off");
+                                                        echo create_form_input("text","receiver_name","Received By",true,'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 d-none pay-modes online">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"utr_no","Placeholder"=>"UTR No",
+                                                                          "autocomplete"=>"off");
+                                                        echo create_form_input("text","utr_no","UTR No",true,'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 d-none pay-modes cheque">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"cheque_no","Placeholder"=>"Cheque No",
+                                                                          "autocomplete"=>"off");
+                                                        echo create_form_input("text","cheque_no","Cheque No",true,'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 d-none pay-modes cheque">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"cheque_date","Placeholder"=>"Cheque No",
+                                                                          "autocomplete"=>"off");
+                                                        echo create_form_input("date","cheque_date","Cheque Date",true,'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"paid_amount","Placeholder"=>"Paid Amount",
+                                                                          "autocomplete"=>"off",'step'=>'0.01');
+                                                        echo create_form_input("number","paid_amount","Paid Amount",true,$booking['payment']['amount']??'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <?php
+                                                if($f_type=='new'){
+                                                ?>
+                                                <button type="submit" class="btn btn-sm btn-success" name="savebooking">Save Booking</button>
+                                                <?php
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    <?= form_close(); ?>
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="tab-pane fade" id="step2">
+                                    <?php echo form_open_multipart('bookings/savebooking', 'id="kycform" onsubmit="return validate()"'); ?>
+                                        <div class="row">
+                                            <div class="col-md-4">
                                                 <label for="">Booking For <span class="text-danger">*</span></label>
                                                 <div class="form-group clearfix">
                                                     <div class="icheck-success d-inline">
@@ -65,37 +294,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label for="">Type <span class="text-danger">*</span></label>
-                                                <div class="form-group clearfix">
-                                                    <div class="icheck-success d-inline">
-                                                        <input type="radio" id="t_fp" name="type" value="full_payment" required >
-                                                        <label for="t_fp">Full Payment</label>
-                                                    </div>
-                                                    <div class="ml-2 icheck-success d-inline">
-                                                        <input type="radio" id="t_emi" name="type" value="emi" >
-                                                        <label for="t_emi">EMI</label>
-                                                    </div>
-                                                    <div class="ml-2 icheck-success d-inline">
-                                                        <input type="radio" id="t_hold" name="type" value="hold" >
-                                                        <label for="t_hold">Hold</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 d-none">
-                                                <div class="form-group">
-                                                    <?php
-                                                        $attributes=array("id"=>"due_date","Placeholder"=>"Due Date","autocomplete"=>"off");
-                                                        echo create_form_input("date","due_date","Due Date",false,'',$attributes); 
-                                                    ?>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"name","Placeholder"=>"Purchaser Name","autocomplete"=>"off");
+                                                        $attributes=array("id"=>"name","Placeholder"=>"Purchaser Name","autocomplete"=>"off",'data-value'=>$member['name']);
                                                         echo create_form_input("text","name","Purchaser Name",true,'',$attributes); 
                                                     ?>
                                                 </div>
@@ -103,7 +307,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"father","Placeholder"=>"Father/Husband Name","autocomplete"=>"off");
+                                                        $attributes=array("id"=>"father","Placeholder"=>"Father/Husband Name","autocomplete"=>"off",'data-value'=>$member['father']);
                                                         echo create_form_input("text","father","Father/Husband Name",true,'',$attributes); 
                                                     ?>
                                                 </div>
@@ -111,7 +315,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"grand_father","Placeholder"=>"Grand Father Name","autocomplete"=>"off");
+                                                        $attributes=array("id"=>"grand_father","Placeholder"=>"Grand Father Name","autocomplete"=>"off",'data-value'=>$member['grand_father']);
                                                         echo create_form_input("text","grand_father","Grand Father Name",true,'',$attributes); 
                                                     ?>
                                                 </div>
@@ -124,7 +328,7 @@
                                                         $attributes=array("id"=>"mobile","Placeholder"=>"Mobile",
                                                                           "autocomplete"=>"off","pattern"=>"[0-9]{10}",
                                                                           "title"=>"Enter Valid Mobile No.",
-                                                                          "maxlength"=>"10");
+                                                                          "maxlength"=>"10",'data-value'=>$member['mobile']);
                                                         echo create_form_input("text","mobile","Mobile",true,'',$attributes); 
                                                     ?>
                                                 </div>
@@ -136,7 +340,7 @@
                                                                           "Placeholder"=>"Alternate Mobile",
                                                                           "autocomplete"=>"off","pattern"=>"[0-9]{10}",
                                                                           "title"=>"Enter Valid Mobile No.",
-                                                                          "maxlength"=>"10");
+                                                                          "maxlength"=>"10",'data-value'=>$member['a_mobile']);
                                                         echo create_form_input("text","a_mobile","Alternate Mobile",true,'',$attributes); 
                                                     ?>
                                                 </div>
@@ -145,7 +349,7 @@
                                                 <div class="form-group">
                                                     <?php
                                                         $attributes=array("id"=>"email","Placeholder"=>"Email",
-                                                                          "autocomplete"=>"off");
+                                                                          "autocomplete"=>"off",'data-value'=>$member['email']);
                                                         echo create_form_input("email","email","Email",false,'',$attributes); 
                                                     ?>
                                                 </div>
@@ -156,7 +360,7 @@
                                                 <div class="form-group">
                                                     <?php
                                                         $attributes=array("id"=>"address","Placeholder"=>"Address",
-                                                                          "autocomplete"=>"off",'rows'=>3);
+                                                                          "autocomplete"=>"off",'rows'=>3,'data-value'=>$member['address']);
                                                         echo create_form_input("textarea","address","Address",true,'',$attributes); 
                                                     ?>
                                                 </div>
@@ -164,7 +368,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"state_id",'class'=>'dropdowns');
+                                                        $attributes=array("id"=>"state_id",'class'=>'dropdowns','data-value'=>$member['state_id']??'');
                                                         echo create_form_input("select","state_id","State",true,'',$attributes,state_dropdown()); 
                                                     ?>
                                                 </div>
@@ -172,7 +376,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"district_id",'class'=>'dropdowns');
+                                                        $attributes=array("id"=>"district_id",'class'=>'dropdowns','data-value'=>$member['district_id']??'');
                                                         echo create_form_input("select","district_id","District",true,'',$attributes,[''=>'Select District']); 
                                                     ?>
                                                 </div>
@@ -180,7 +384,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"city_id",'class'=>'dropdowns city');
+                                                        $attributes=array("id"=>"city_id",'class'=>'dropdowns city','data-value'=>$member['city_id']??'');
                                                         echo create_form_input("select","city_id","City",true,'',$attributes,[''=>'Select City']); 
                                                     ?>
                                                 </div>
@@ -189,36 +393,39 @@
                                                 <div class="form-group">
                                                     <?php
                                                         $attributes=array("id"=>"pincode","Placeholder"=>"Pincode",
-                                                                          "autocomplete"=>"off");
+                                                                          "autocomplete"=>"off",'data-value'=>$member['pincode']);
                                                         echo create_form_input("text","pincode","Pincode",true,'',$attributes); 
                                                     ?>
                                                 </div>
                                             </div>
                                         </div>
-                                        <h3 class="header smaller lighter">Booking Information</h3>
+                                        <h3 class="header smaller lighter">KYC Documents</h3>
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"booking_type");
-                                                        echo create_form_input("select","booking_type","Booking Type",true,'',$attributes,bookingtype_dropdown()); 
+                                                        $attributes=array("id"=>"aadhar","Placeholder"=>"Aadhar No.",
+                                                                          "pattern"=>"[0-9]{12}",
+                                                                          "title"=>"Enter Valid Aadhar No.",
+                                                                          "autocomplete"=>"off","maxlength"=>"12",
+                                                                          'data-value'=>$member['aadhar']);
+                                                        echo create_form_input("text","aadhar","Aadhar No.",true,'',$attributes); 
                                                     ?>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"project_id");
-                                                        echo create_form_input("select","project_id","Project",true,'',$attributes,project_dropdown()); 
+                                                        $attributes=array("id"=>"aadhar1",'class'=>'form-control');
+                                                        echo create_form_input("file","aadhar1","Aadhar Front Image",true,'',$attributes); 
                                                     ?>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"plot_no","Placeholder"=>"Flat/Plot No.",
-                                                                          "autocomplete"=>"off");
-                                                        echo create_form_input("text","plot_no","Flat/Plot No.",true,'',$attributes); 
+                                                        $attributes=array("id"=>"aadhar2",'class'=>'form-control');
+                                                        echo create_form_input("file","aadhar2","Aadhar Back Image",true,'',$attributes); 
                                                     ?>
                                                 </div>
                                             </div>
@@ -227,42 +434,20 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"b_address","Placeholder"=>"Address",
-                                                                          "autocomplete"=>"off",'rows'=>3);
-                                                        echo create_form_input("textarea","b_address","Address",true,'',$attributes); 
+                                                        $attributes=array("id"=>"pan","Placeholder"=>"PAN",
+                                                                          "pattern"=>"[A-Za-z0-9]{10}",
+                                                                          "title"=>"Enter Valid PAN",
+                                                                          "autocomplete"=>"off","maxlength"=>"12",
+                                                                          'data-value'=>$member['pan']);
+                                                        echo create_form_input("text","pan","PAN",true,'',$attributes); 
                                                     ?>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"b_state_id",'class'=>'dropdowns');
-                                                        echo create_form_input("select","b_state_id","State",true,'',$attributes,state_dropdown()); 
-                                                    ?>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <?php
-                                                        $attributes=array("id"=>"b_district_id",'class'=>'dropdowns');
-                                                        echo create_form_input("select","b_district_id","District",true,'',$attributes,[''=>'Select District']); 
-                                                    ?>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <?php
-                                                        $attributes=array("id"=>"b_city_id",'class'=>'dropdowns city');
-                                                        echo create_form_input("select","b_city_id","City",true,'',$attributes,[''=>'Select City']); 
-                                                    ?>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <?php
-                                                        $attributes=array("id"=>"landmark","Placeholder"=>"Landmark",
-                                                                          "autocomplete"=>"off");
-                                                        echo create_form_input("text","landmark","Landmark",false,'',$attributes); 
+                                                        $attributes=array("id"=>"pan_image",'class'=>'form-control');
+                                                        echo create_form_input("file","pan_image","PAN Card Image",true,'',$attributes); 
                                                     ?>
                                                 </div>
                                             </div>
@@ -271,91 +456,33 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"price","Placeholder"=>"Price",
-                                                                          "autocomplete"=>"off",'step'=>'0.01');
-                                                        echo create_form_input("number","price","Price",true,'',$attributes); 
+                                                        $attributes=array("id"=>"voter_id","Placeholder"=>"Voter ID");
+                                                        echo create_form_input("text","voter_id","Voter ID",false,'',$attributes); 
                                                     ?>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
-                                                        $attributes=array("id"=>"other_price","Placeholder"=>"Other Price",
-                                                                          "autocomplete"=>"off",'step'=>'0.01');
-                                                        echo create_form_input("number","other_price","Other Price",true,'',$attributes); 
-                                                    ?>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <?php
-                                                        $attributes=array("id"=>"total_amount",'readonly'=>'true',
-                                                                          "Placeholder"=>"Final Amount",
-                                                                          "autocomplete"=>"off",'step'=>'0.01');
-                                                        echo create_form_input("number","total_amount","Final Amount",true,'',$attributes); 
-                                                    ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <?php
-                                                        $attributes=array("id"=>"payment_type");
-                                                        echo create_form_input("select","payment_type","Payment Type",true,'',$attributes,paymenttype_dropdown()); 
-                                                    ?>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <?php
-                                                        $attributes=array("id"=>"payment_date");
-                                                        echo create_form_input("date","payment_date","Payment Date",true,date('Y-m-d'),$attributes); 
-                                                    ?>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <?php
-                                                        $attributes=array("id"=>"payment_mode");
-                                                        echo create_form_input("select","payment_mode","Payment Mode",true,'',$attributes,paymentmode_dropdown()); 
-                                                    ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <?php
-                                                        $attributes=array("id"=>"paid_amount","Placeholder"=>"Paid Amount",
-                                                                          "autocomplete"=>"off",'step'=>'0.01');
-                                                        echo create_form_input("number","paid_amount","Paid Amount",true,'',$attributes); 
+                                                        $attributes=array("id"=>"driving_license","Placeholder"=>"Driving License No.");
+                                                        echo create_form_input("text","driving_license","Driving License No.",false,'',$attributes); 
                                                     ?>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <button type="submit" class="btn btn-sm btn-success" name="savebooking">Save Booking</button>
+                                                <?php
+                                                if($f_type=='kyc'){
+                                                ?>
+                                                <input type="hidden" name="id" value="<?= md5('booking-id-'.$booking['id']) ?>">
+                                                <button type="submit" class="btn btn-sm btn-success" name="savekycdetails">Save KYC Details</button>
+                                                <?php
+                                                }
+                                                ?>
                                             </div>
                                         </div>
                                     <?= form_close(); ?>
-                                </div>
-
-                                <!-- Step 2 -->
-                                <div class="tab-pane fade" id="step2">
-                                <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" class="form-control" required>
-                                </div>
-
-                                <button type="button" class="btn btn-secondary prev-step">
-                                Previous
-                                </button>
-
-                                <button type="button" class="btn btn-primary float-right next-step">
-                                Next
-                                </button>
                                 </div>
 
                                 <!-- Step 3 -->
@@ -382,20 +509,41 @@
             </div>
             <script>
                 $(document).ready(function(){
+                    $('body').on('change','#date',function(){
+                        
+                        let date=new Date($(this).val());
+                        
+                        if (!this.value) return;
+
+                        // Add 7 days
+                        date.setDate(date.getDate() + 7);
+
+                        // Format to YYYY-MM-DD
+                        let nextWeekDate = date.toISOString().split('T')[0];
+                        $('#due_date').data('value',nextWeekDate);
+                        if($('input[name="type"]:checked').val()=='hold'){
+                            $('#due_date').val($('#due_date').data('value'));   
+                        }
+                    });
                     $('body').on('change','input[name="type"]',function(){
                         var type=$('input[name="type"]:checked').val();
+                        $('#due_date').parent().parent().addClass('d-none');
                         $('#payment_type,#paid_amount').val('');
-                        $('#paid_amount').prop('readonly',true);
+                        $('#paid_amount').prop('readonly',false);
                         $('#payment_type option').show();
+                        $('#due_date').val('');
                         if(type=='full_payment'){
                         }
                         else if(type=='emi'){
                         }
                         else if(type=='hold'){
+                            $('#due_date').val($('#due_date').data('value'));
+                            $('#due_date').parent().parent().removeClass('d-none');
                             $('#payment_type option').hide();
                             $('#payment_type option[value="token"]').show();
                             $('#payment_type').val('token');
                             $('#paid_amount').val('11000');
+                            $('#paid_amount').prop('readonly',true);
                         }
                     });
                     $('body').on('change','#state_id',function(){
@@ -454,6 +602,23 @@
                         var total=price+other_price;
                         $('#total_amount').val(total);
                     });
+                    $('body').on('change','#payment_mode',function(){
+                        let mode=$(this).val();
+                        $('.pay-modes').addClass('d-none');
+                        $('.pay-modes input').val('').prop('required',false);
+                        if(mode=='cash'){
+                            $('.pay-modes.cash').removeClass('d-none');
+                            $('.pay-modes.cash input').prop('required',true);
+                        }
+                        else if(mode=='online'){
+                            $('.pay-modes.online').removeClass('d-none');
+                            $('.pay-modes.online input').prop('required',true);
+                        }
+                        else if(mode=='cheque'){
+                            $('.pay-modes.cheque').removeClass('d-none');
+                            $('.pay-modes.cheque input').prop('required',true);
+                        }
+                    });
                     $('body').on('change','#payment_type',function(){
                         var type=$(this).val();
                         $('#paid_amount').prop('readonly',false);
@@ -470,5 +635,23 @@
                             $('#paid_amount').attr('min','10100');
                         }
                     });
+                    $('body').on('change','input[name="booking_for"]',function(){
+                        var booking_for=$('input[name="booking_for"]:checked').val();
+                        console.log(booking_for);
+                        let val='';
+                        $('#kycform input.form-control').each(function(){
+                            val='';
+                            if(booking_for=='Self'){
+                               val=$(this).attr('data-value');
+                            }
+                            $(this).val(val);
+                        });
+                    });
+                    <?php
+                    if($f_type=='kyc'){
+                        echo "$('#kyc-link').click();";
+                    }
+                    ?>
+                    
                 });
             </script>

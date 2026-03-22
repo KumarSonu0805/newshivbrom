@@ -19,7 +19,7 @@ class Booking_model extends CI_Model{
             $payment['booking_id']=$booking_id;
             $this->db->insert('booking_payment',$payment);
             $this->db->trans_complete();
-            return array('status'=>true,'message'=>"Booking Save Successfully!");
+            return array('status'=>true,'message'=>"Booking Save Successfully!",'booking_id'=>$booking_id);
         }
         else{
             $error=$this->db->error();
@@ -39,12 +39,12 @@ class Booking_model extends CI_Model{
         $this->db->join('booking_payment t2','t1.id=t2.booking_id');
         $this->db->join('members t3','t1.regid=t3.regid');
         $this->db->join('users t4','t1.regid=t4.id');
-        $this->db->join('states t5','t1.state_id=t5.id');
-        $this->db->join('districts t6','t1.district_id=t6.id');
-        $this->db->join('cities t7','t1.city_id=t7.id');
-        $this->db->join('states t5b','t1.b_state_id=t5b.id');
-        $this->db->join('districts t6b','t1.b_district_id=t6b.id');
-        $this->db->join('cities t7b','t1.b_city_id=t7b.id');
+        $this->db->join('states t5','t1.state_id=t5.id','left');
+        $this->db->join('districts t6','t1.district_id=t6.id','left');
+        $this->db->join('cities t7','t1.city_id=t7.id','left');
+        $this->db->join('states t5b','t1.b_state_id=t5b.id','left');
+        $this->db->join('districts t6b','t1.b_district_id=t6b.id','left');
+        $this->db->join('cities t7b','t1.b_city_id=t7b.id','left');
         $this->db->join('nominee t8','t1.id=t8.booking_id','left');
         $query=$this->db->get();
         if($type=='all'){
@@ -64,12 +64,12 @@ class Booking_model extends CI_Model{
         $this->db->where($where);
         $this->db->from('bookings t1');
         $this->db->join('users t2','t1.regid=t2.id');
-        $this->db->join('states t3','t1.state_id=t3.id');
-        $this->db->join('districts t4','t1.district_id=t4.id');
-        $this->db->join('cities t5','t1.city_id=t5.id');
-        $this->db->join('states t3b','t1.b_state_id=t3b.id');
-        $this->db->join('districts t4b','t1.b_district_id=t4b.id');
-        $this->db->join('cities t5b','t1.b_city_id=t5b.id');
+        $this->db->join('states t3','t1.state_id=t3.id','left');
+        $this->db->join('districts t4','t1.district_id=t4.id','left');
+        $this->db->join('cities t5','t1.city_id=t5.id','left');
+        $this->db->join('states t3b','t1.b_state_id=t3b.id','left');
+        $this->db->join('districts t4b','t1.b_district_id=t4b.id','left');
+        $this->db->join('cities t5b','t1.b_city_id=t5b.id','left');
         $query=$this->db->get();
         $array=$query->unbuffered_row('array');
         if(!empty($array)){
