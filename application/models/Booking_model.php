@@ -27,6 +27,25 @@ class Booking_model extends CI_Model{
         }
     }
     
+    public function updatebooking($data,$booking_id){
+        $bdata=$data['bdata'];
+        $kyc=$data['kyc'];
+        $bdata['updated_on']=date('Y-m-d H:i:s');
+        $this->db->trans_start();
+        if($this->db->update('bookings',$bdata,['id'=>$booking_id])){
+            $kyc['added_on']=$kyc['updated_on']=date('Y-m-d H:i:s');
+            
+            $payment['booking_id']=$booking_id;
+            $this->db->insert('booking_kyc',$kyc);
+            $this->db->trans_complete();
+            return array('status'=>true,'message'=>"KYC Details Saved Successfully!",'booking_id'=>$booking_id);
+        }
+        else{
+            $error=$this->db->error();
+            return array('status'=>false,'message'=>$error['message']);
+        }
+    }
+    
     public function getbookings($where=array(),$type='all',$order_by='t1.id desc'){
         $columns ="t1.*,t5.name as state,t6.name as district,t7.name as city,t5b.name as b_state,t6b.name as b_district,
                     t7b.name as b_city";

@@ -20,7 +20,7 @@
                                 <a class="nav-link" href="#<?= $f_type=='new'?'':'step2'; ?>" id="kyc-link" data-toggle="pill">KYC Details</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#<?= $f_type=='new' || $f_type=='kyc'?'':'step3'; ?>" data-toggle="pill">Nominee Details</a>
+                                <a class="nav-link" href="#<?= $f_type=='new' || $f_type=='kyc'?'':'step3'; ?>" id="nominee-link" data-toggle="pill">Nominee Details</a>
                             </li>
                         </ul>
 
@@ -487,18 +487,6 @@
 
                                 <!-- Step 3 -->
                                 <div class="tab-pane fade" id="step3">
-                                <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" class="form-control" required>
-                                </div>
-
-                                <button type="button" class="btn btn-secondary prev-step">
-                                Previous
-                                </button>
-
-                                <button type="submit" class="btn btn-success float-right">
-                                Submit
-                                </button>
                                 </div>
 
                             </div>
@@ -650,6 +638,9 @@
                     <?php
                     if($f_type=='kyc'){
                         echo "$('#kyc-link').click();";
+                    }
+                    elseif($f_type=='nominee'){
+                        echo "$('#nominee-link').click();";
                     }
                     ?>
                     

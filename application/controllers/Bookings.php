@@ -32,7 +32,13 @@ class Bookings extends MY_Controller {
         $data['member']=$memberdetails;
         $data['b_districts']=district_dropdown(['t1.state_id'=>$booking['b_state_id'],]);
         $data['b_cities']=city_dropdown(['t1.district_id'=>$booking['b_district_id'],]);
-        $data['f_type']='kyc';
+        if($this->uri->segment(2)=='bookingkyc'){
+            $data['f_type']='kyc';
+        }
+        elseif($this->uri->segment(2)=='bookingnominee'){
+            $data['f_type']='nominee';
+        }
+        
 		$this->template->load('bookings','bookingform',$data);
 	}
 	
@@ -114,7 +120,7 @@ class Bookings extends MY_Controller {
             //print_pre($result,true);
             if($result['status']===true){
                 $this->session->set_flashdata("msg",$result['message']);
-                redirect('bookings/bookingform/'.md5('booking-id-'.$result['booking_id']));
+                redirect('bookings/bookingkyc/'.md5('booking-id-'.$result['booking_id']));
             }
             else{
                 $this->session->set_flashdata("err_msg",$result['message']);
@@ -124,45 +130,43 @@ class Bookings extends MY_Controller {
             $user=getuser();
 			$data=$this->input->post();
             unset($data['savekycdetails']);
-            print_pre($data);
-            $bdata=$data;
-            $bdata['date']=!empty($data['date'])?$data['date']:date('Y-m-d');
-            $bdata['due_date']=!empty($data['due_date'])?$data['due_date']:NULL;
-            $bdata['bv']=$this->bv;
-            unset($bdata['payment_type'],$bdata['payment_date'],$bdata['payment_mode'],$bdata['paid_amount']);
-            unset($bdata['receiver_name'],$bdata['utr_no'],$bdata['cheque_no'],$bdata['cheque_date']);
+            //print_pre($data);
+            $id=$data['id'];
+            $where=array("md5(concat('booking-id-',t1.id))"=>$id);
+            $booking=$this->booking->getbookingdetails($where,'single');
             
-            $payment=array('regid'=>$data['regid'],'booking_id'=>'');
-            $payment['payment_type']=$data['payment_type'];
-            $payment['date']=$data['payment_date'];
-            $payment['payment_mode']=$data['payment_mode'];
-            $payment['amount']=$data['paid_amount'];
-            $paid=$data['paid_amount'];
-            if($paid>$data['price']){
-                $paid=$data['price'];
-            }
-            $payment['bv']=calculatebv($data['price'],$paid);
-            $payment['receiver_name']=!empty($data['receiver_name'])?$data['receiver_name']:NULL;
-            $payment['utr_no']=!empty($data['utr_no'])?$data['utr_no']:NULL;
-            $payment['cheque_no']=!empty($data['cheque_no'])?$data['cheque_no']:NULL;
-            $payment['cheque_date']=!empty($data['cheque_date'])?$data['cheque_date']:NULL;
+            $bdata=$data;
+            $kyc=array('regid'=>$booking['regid'],'booking_id'=>$booking['id'],);
+            $kyc['aadhar']=$bdata['aadhar'];
+            $kyc['pan']=$bdata['pan'];
+            $kyc['voter_id']=$bdata['voter_id'];
+            $kyc['driving_license']=$bdata['driving_license'];
+            unset($bdata['id'],$bdata['aadhar'],$bdata['pan'],$bdata['voter_id'],$bdata['driving_license']);
             //print_pre($payment,true);
             
-            $upload_path="./assets/uploads/bookings/payment/";
+            $upload_path="./assets/uploads/member/documents/";
             $allowed_types="jpg|jpeg|png";
             $file_name=$user['name'].date('-dmyhis-');
-            $upload=upload_file('screenshot',$upload_path,$allowed_types,$file_name.'pay_image');
+            $upload=upload_file('aadhar1',$upload_path,$allowed_types,$file_name.'aadhar1');
             if($upload['status']===true){
-                $payment['screenshot']=$data['screenshot'];
+                $kyc['aadhar1']=$upload['path'];
+            }
+            $upload=upload_file('aadhar2',$upload_path,$allowed_types,$file_name.'aadhar2');
+            if($upload['status']===true){
+                $kyc['aadhar2']=$upload['path'];
+            }
+            $upload=upload_file('pan_image',$upload_path,$allowed_types,$file_name.'pan_image');
+            if($upload['status']===true){
+                $kyc['pan_image']=$upload['path'];
             }
             
-            $data=array("bdata"=>$bdata,"payment"=>$payment);
+            $data=array("bdata"=>$bdata,"kyc"=>$kyc);
             //print_pre($data,true);
-            $result=$this->booking->savebooking($data);
+            $result=$this->booking->updatebooking($data,$booking['id']);
             //print_pre($result,true);
             if($result['status']===true){
                 $this->session->set_flashdata("msg",$result['message']);
-                redirect('bookings/bookingform/'.md5('booking-id-'.$result['booking_id']));
+                redirect('bookings/bookingnominee/'.md5('booking-id-'.$result['booking_id']));
             }
             else{
                 $this->session->set_flashdata("err_msg",$result['message']);
