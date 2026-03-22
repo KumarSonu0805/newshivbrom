@@ -120,4 +120,22 @@ class Booking_model extends CI_Model{
         }
 	}
 	
+	public function updatenominee($data){
+        $where=array('regid'=>$data['regid'],'booking_id'=>$data['booking_id']);
+		$checknominee=$this->db->get_where("nominee",$where)->num_rows();
+		if($checknominee==0){
+			$result=$this->db->insert("nominee",$data);
+		}
+		else{
+			$result=$this->db->update("nominee",$data,$where);
+		}
+		if($result){
+            return array('status'=>true,'message'=>"Nominee Updated Successfully");
+        }
+        else{
+            $error=$this->db->error();
+            return array('status'=>false,'message'=>$error['message']);
+        }
+	}
+	
 }

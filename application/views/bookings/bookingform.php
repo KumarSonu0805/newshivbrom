@@ -1,6 +1,8 @@
 
 <style>
-
+    #nomineeform{
+        display: block;
+    }
 </style>
 
             <div class="col-12">
@@ -487,6 +489,75 @@
 
                                 <!-- Step 3 -->
                                 <div class="tab-pane fade" id="step3">
+                                    <?php echo form_open_multipart('bookings/savebooking', 'id="nomineeform" onsubmit="return validate()"'); ?>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"nom_name","Placeholder"=>"Nominee Name","autocomplete"=>"off");
+                                                        echo create_form_input("text","name","Nominee Name",true,'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"nom_father","Placeholder"=>"Father/Husband Name","autocomplete"=>"off");
+                                                        echo create_form_input("text","father","Father/Husband Name",true,'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"nom_mobile","Placeholder"=>"Mobile",
+                                                                          "autocomplete"=>"off","pattern"=>"[0-9]{10}",
+                                                                          "title"=>"Enter Valid Mobile No.","maxlength"=>"10");
+                                                        echo create_form_input("text","mobile","Mobile",true,'',
+                                                                               $attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"nom_email","Placeholder"=>"Email","autocomplete"=>"off");
+                                                        echo create_form_input("email","email","Email",false,'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"nom_address","Placeholder"=>"Address","autocomplete"=>"off",'rows'=>3);
+                                                        echo create_form_input("textarea","address","Address",false,'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"nom_photo",'class'=>'form-control');
+                                                        echo create_form_input("file","photo","Nominee Photo",false,'',$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <?php
+                                                if($f_type=='nominee'){
+                                                ?>
+                                                <input type="hidden" name="id" value="<?= md5('booking-id-'.$booking['id']) ?>">
+                                                <button type="submit" class="btn btn-sm btn-success" name="savenomineedetails">Save Nominee Details</button>
+                                                <?php
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    <?= form_close(); ?>
                                 </div>
 
                             </div>

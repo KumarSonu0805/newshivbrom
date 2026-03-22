@@ -172,6 +172,37 @@ class Bookings extends MY_Controller {
                 $this->session->set_flashdata("err_msg",$result['message']);
             }
 		}
+		elseif($this->input->post('savenomineedetails')!==NULL){
+            $user=getuser();
+			$data=$this->input->post();
+            //print_pre($data);
+            $id=$data['id'];
+            $where=array("md5(concat('booking-id-',t1.id))"=>$id);
+            $booking=$this->booking->getbookingdetails($where,'single');
+            //print_pre($booking,true);
+            unset($data['savenomineedetails'],$data['id']);
+            //print_pre($payment,true);
+            
+            $upload_path="./assets/uploads/member/documents/";
+            $allowed_types="jpg|jpeg|png";
+            $file_name=$data['name'].date('-dmyhis-');
+            $upload=upload_file('photo',$upload_path,$allowed_types,$file_name.'photo');
+            if($upload['status']===true){
+                $data['photo']=$upload['path'];
+            }
+            $data['regid']=$booking['regid'];
+            $data['booking_id']=$booking['id'];
+            //print_pre($data,true);
+            $result=$this->booking->updatenominee($data);
+            //print_pre($result,true);
+            if($result['status']===true){
+                $this->session->set_flashdata("msg",$result['message']);
+                redirect('bookings/bookinglist/');
+            }
+            else{
+                $this->session->set_flashdata("err_msg",$result['message']);
+            }
+		}
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 	
