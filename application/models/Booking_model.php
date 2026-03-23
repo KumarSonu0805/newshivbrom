@@ -75,6 +75,25 @@ class Booking_model extends CI_Model{
         return $array;
     }
     
+    public function getbookingpayments($where=array(),$type='all',$order_by="t1.date,t1.id"){
+        $columns ="t1.*,t3.username as member_id,t3.name as member_name,t3.mobile as member_mobile,t2.type,t2.name,t2.booking_type,t2.status as b_status,t4.status as a_status,t5.name as nominee_name";
+        $this->db->select($columns);
+        $this->db->where($where);
+        $this->db->from('booking_payment t1');
+        $this->db->join('bookings t2','t1.booking_id=t2.id');
+        $this->db->join('users t3','t1.regid=t3.id');
+        $this->db->join('members t4','t1.regid=t4.regid');
+        $this->db->join('nominee t5','t1.booking_id=t5.booking_id','left');
+        $query=$this->db->get();
+        if($type=='all'){
+            $array=$query->result_array();
+        }
+        else{
+            $array=$query->unbuffered_row('array');
+        }
+        return $array;
+    }
+    
     public function getbookingdetails($where=array()){
         $columns ="t1.*,t2.username as member_id,t2.name as member_name,t2.mobile as member_mobile";
         $columns.=",t3.name as state,t4.name as district,t4.name as city,t3b.name as b_state,t4b.name as b_district,

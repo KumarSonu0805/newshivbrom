@@ -68,6 +68,20 @@ class Bookings extends MY_Controller {
 		$this->template->load('bookings','bookinglist',$data);
 	}
 	
+	public function bookingpayments(){
+        if($this->session->role!='admin'){
+            redirect('/');
+        }
+		$data['title']="Booking Payments";
+		$data['breadcrumb']=array("/"=>"Home");
+		$data['user']=getuser();
+        $where=array();
+        $data['bookings']=$this->booking->getbookingpayments($where);
+        //print_pre($data,true);
+        $data['datatable']=true;
+		$this->template->load('bookings','paymentlist',$data);
+	}
+	
 	public function details($id){
 		$data['title']="Booking Details";
         $where=array("md5(concat('booking-id-',t1.id))"=>$id);

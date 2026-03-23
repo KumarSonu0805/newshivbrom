@@ -194,6 +194,12 @@
                                             <p>Member Bookings</p>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo base_url("bookings/bookingpayments/"); ?>" class="nav-link <?php echo activate_menu('bookings/bookingpayments'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Booking Payments</p>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <?php
