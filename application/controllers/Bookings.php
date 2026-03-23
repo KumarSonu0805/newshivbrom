@@ -325,4 +325,11 @@ class Bookings extends MY_Controller {
         }
 	}
 	
+	public function getpayment(){
+        $id=$this->input->post('id');
+        $where=array("md5(concat('payment-id-',t1.id))"=>$id);
+        $payment=$this->booking->getbookingpayments($where,'single');
+        echo json_encode($payment);
+	}
+	
 }

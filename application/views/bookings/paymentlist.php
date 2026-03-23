@@ -71,7 +71,7 @@
                                                             <td><?= date('d-m-Y',strtotime($booking['added_on'])); ?></td>
                                                             <td><?= $status; ?></td>
                                                             <td>
-                                                                <a href="<?//= $url; ?>" class="btn btn-sm  btn-info"><i class="fa fa-eye"></i></a>
+                                                                <button type="button" data-toggle="modal" data-target="#mediumModal" class="btn btn-sm  btn-info view" value="<?= md5('payment-id-'.$booking['id']) ?>"><i class="fa fa-eye"></i></button>
                                                                 <?php
                                                                     if(false && $this->session->role=='admin' && $booking['status']==0 && !empty($booking['name']) && !empty($booking['nominee_name'])){
                                                                 ?>
@@ -96,15 +96,122 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title pull-left" id="mediumModalLabel"></h5>
+                <h5 class="modal-title pull-left" id="mediumModalLabel">Payment Details</h5>
                 <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
                 	<span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <img src="" alt="" id="img-popup" class="img-fluid">
+            <div class="modal-body loader">
+                <img src="<?= file_url('assets/images/loader.gif'); ?>" alt="loader">
+            </div>
+            <div class="modal-body d-none">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"price","Placeholder"=>"Price",'readonly'=>'true',
+                                                  "autocomplete"=>"off",'step'=>'0.01');
+                                echo create_form_input("number","price","Price",true,'',$attributes); 
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"other_price","Placeholder"=>"Other Price",'readonly'=>'true',
+                                                  "autocomplete"=>"off",'step'=>'0.01');
+                                echo create_form_input("number","other_price","Other Price",true,0,$attributes); 
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"total_amount",'readonly'=>'true',
+                                                  "Placeholder"=>"Final Amount",
+                                                  "autocomplete"=>"off",'step'=>'0.01');
+                                echo create_form_input("number","total_amount","Final Amount",true,'',$attributes); 
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"payment_type");
+                                echo create_form_input("select","payment_type","Payment Type",true,$booking['payment']['payment_type']??'',$attributes,paymenttype_dropdown()); 
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array('readonly'=>'true',"id"=>"payment_date");
+                                echo create_form_input("date","payment_date","Payment Date",true,'',$attributes); 
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"payment_mode");
+                                echo create_form_input("select","payment_mode","Payment Mode",true,'',$attributes,paymentmode_dropdown()); 
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <?php $paymode=$booking['payment']['payment_mode']??''; ?>
+                <div class="row">
+                    <div class="col-md-4 <?= $paymode=='cheque' || $paymode=='cash' ?'':'d-none' ?> pay-modes cheque cash">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"receiver_name","Placeholder"=>"Received By",'readonly'=>'true',
+                                                  "autocomplete"=>"off");
+                                echo create_form_input("text","receiver_name","Received By",true,$booking['payment']['receiver_name']??'',$attributes); 
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4 <?= $paymode=='online' ?'':'d-none' ?> pay-modes online">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"utr_no","Placeholder"=>"UTR No",'readonly'=>'true',
+                                                  "autocomplete"=>"off");
+                                echo create_form_input("text","utr_no","UTR No",true,$booking['payment']['utr_no']??'',$attributes); 
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4 <?= $paymode=='cheque' ?'':'d-none' ?> pay-modes cheque">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"cheque_no","Placeholder"=>"Cheque No",'readonly'=>'true',
+                                                  "autocomplete"=>"off");
+                                echo create_form_input("text","cheque_no","Cheque No",true,$booking['payment']['cheque_no']??'',$attributes); 
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4 <?= $paymode=='cheque' ?'':'d-none' ?> pay-modes cheque">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"cheque_date",'readonly'=>'true',
+                                                  "autocomplete"=>"off");
+                                echo create_form_input("date","cheque_date","Cheque Date",true,$booking['payment']['cheque_date']??'',$attributes); 
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <?php
+                                $attributes=array("id"=>"paid_amount","Placeholder"=>"Paid Amount",'readonly'=>'true',
+                                                  "autocomplete"=>"off",'step'=>'0.01');
+                                echo create_form_input("number","paid_amount","Paid Amount",true,$booking['payment']['amount']??'',$attributes); 
+                            ?>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="approve-btn" >Approve Payment</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -122,10 +229,46 @@
                             }
                         });
                         $('body').on('click','.view',function(){
-                            $('#img-popup').attr('src','');
-                            var src=$(this).val();
-                            $('#img-popup').attr('src',src);
-                            $('#mediumModalLabel').text($(this).text());
+                            $('.modal-body,#approve-btn').addClass('d-none');
+                            $('.modal-body.loader').removeClass('d-none');
+                            let id=$(this).val();
+                            $.post('<?= base_url('bookings/getpayment'); ?>',{id:id},function(data){
+                                console.log(data);
+                                data=JSON.parse(data);
+                                $('#price').val(data['price']);
+                                $('#other_price').val(data['other_price']);
+                                $('#total_amount').val(data['total_amount']);
+                                $('#payment_type').val(data['payment_type']);
+                                $('#payment_date').val(data['date']);
+                                $('#payment_mode').val(data['payment_mode']).trigger('change');
+                                $('#paid_amount').val(data['amount']);
+                                $('#receiver_name').val(data['receiver_name']);
+                                $('#cheque_no').val(data['cheque_no']);
+                                $('#cheque_date').val(data['cheque_date']);
+                                $('#utr_no').val(data['utr_no']);
+                                $('.modal-body').toggleClass('d-none');
+                                $('#approve-btn').val(id);
+                                if(data['status']==0){
+                                    //$('#approve-btn').removeClass('d-none');   
+                                }
+                            });
+                        });
+                        $('body').on('change','#payment_mode',function(){
+                            let mode=$(this).val();
+                            $('.pay-modes').addClass('d-none');
+                            $('.pay-modes input').val('').prop('required',false);
+                            if(mode=='cash'){
+                                $('.pay-modes.cash').removeClass('d-none');
+                                $('.pay-modes.cash input').prop('required',true);
+                            }
+                            else if(mode=='online'){
+                                $('.pay-modes.online').removeClass('d-none');
+                                $('.pay-modes.online input').prop('required',true);
+                            }
+                            else if(mode=='cheque'){
+                                $('.pay-modes.cheque').removeClass('d-none');
+                                $('.pay-modes.cheque input').prop('required',true);
+                            }
                         });
                     });
 
