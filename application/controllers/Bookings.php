@@ -30,6 +30,8 @@ class Bookings extends MY_Controller {
 		$data['user']=getuser();
         $memberdetails=$this->member->getmemberdetails($data['user']['id']);
         $data['member']=$memberdetails;
+        $data['districts']=district_dropdown(['t1.state_id'=>$booking['state_id'],]);
+        $data['cities']=city_dropdown(['t1.district_id'=>$booking['district_id'],]);
         $data['b_districts']=district_dropdown(['t1.state_id'=>$booking['b_state_id'],]);
         $data['b_cities']=city_dropdown(['t1.district_id'=>$booking['b_district_id'],]);
         if($this->uri->segment(2)=='bookingkyc'){
@@ -66,15 +68,29 @@ class Bookings extends MY_Controller {
 		$this->template->load('bookings','bookinglist',$data);
 	}
 	
-	public function details($id=NULL){
+	public function details($id){
 		$data['title']="Booking Details";
-		$data['breadcrumb']=array("/"=>"Home",'bookings/bookinglist/'=>"Booking List");
-		$data['user']=getuser();
         $where=array("md5(concat('booking-id-',t1.id))"=>$id);
         $booking=$this->booking->getbookingdetails($where,'single');
+        if(empty($booking)){
+            redirect('bookings/bookinglist/');
+        }
         $data['booking']=$booking;
-        $data['datatable']=true;
-		$this->template->load('bookings','details',$data);
+        $getuser=$this->account->getuser(array("id"=>$booking['regid']));
+        $data['user']=$getuser['user'];
+        //print_pre($data,true);
+		$data['title']="Booking Form";
+		$data['breadcrumb']=array("/"=>"Home");
+        $data['styles']=array('file'=>'includes/plugins/icheck-bootstrap/icheck-bootstrap.min.css');
+        $memberdetails=$this->member->getmemberdetails($booking['regid']);
+        $data['member']=$memberdetails;
+        $data['districts']=district_dropdown(['t1.state_id'=>$booking['state_id'],]);
+        $data['cities']=city_dropdown(['t1.district_id'=>$booking['district_id'],]);
+        $data['b_districts']=district_dropdown(['t1.state_id'=>$booking['b_state_id'],]);
+        $data['b_cities']=city_dropdown(['t1.district_id'=>$booking['b_district_id'],]);
+        $data['f_type']='none';
+        
+		$this->template->load('bookings','bookingform',$data);
 	}
 	
 	public function savebooking(){

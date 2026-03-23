@@ -58,7 +58,19 @@
                                                                         $a_status="<span class='text-success'>Active</span>";
                                                                     }
                                                                     $status="<span class='text-danger'>Pending</span>";
-                                                                    if($booking['status']==1){
+                                                                    $url=base_url('bookings/details/'.md5('booking-id-'.$booking['id']));
+                                                                    if($booking['status']==0 && 
+                                                                       (empty($booking['name']) || 
+                                                                        empty($booking['nominee_name']))){
+                                                                        $status="<span class='text-danger'>Incomplete</span>";
+                                                                        if($this->session->role!='admin' && empty($booking['name'])){
+                                                                            $url=base_url('bookings/bookingkyc/'.md5('booking-id-'.$booking['id']));
+                                                                        }
+                                                                        elseif($this->session->role!='admin' && empty($booking['nominee_name'])){
+                                                                            $url=base_url('bookings/bookingnominee/'.md5('booking-id-'.$booking['id']));
+                                                                        }
+                                                                    }
+                                                                    elseif($booking['status']==1){
                                                                         $status="<span class='text-success'>Approved</span>";
                                                                     }
                                                         ?>
@@ -81,9 +93,9 @@
                                                             <td><?= date('d-m-Y',strtotime($booking['added_on'])); ?></td>
                                                             <td><?= $status; ?></td>
                                                             <td>
-                                                                <a href="<?= base_url('bookings/details/'.md5('booking-id-'.$booking['id'])); ?>" class="btn btn-sm  btn-info"><i class="fa fa-eye"></i></a>
+                                                                <a href="<?= $url; ?>" class="btn btn-sm  btn-info"><i class="fa fa-eye"></i></a>
                                                                 <?php
-                                                                    if($this->session->role=='admin' && $booking['status']==0){//} && !empty($booking['nominee_name'])){
+                                                                    if($this->session->role=='admin' && $booking['status']==0 && !empty($booking['name']) && !empty($booking['nominee_name'])){
                                                                 ?>
                                                                 <button type="button" value="<?= md5('booking-id-'.$booking['id']) ?>" class="btn btn-sm btn-success approve">Approve Booking</button>
                                                                 <?php

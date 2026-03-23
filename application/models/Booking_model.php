@@ -92,7 +92,7 @@ class Booking_model extends CI_Model{
         $query=$this->db->get();
         $array=$query->unbuffered_row('array');
         if(!empty($array)){
-            $array['details']=$this->db->get_where('booking_details',['booking_id'=>$array['id']])->unbuffered_row('array');
+            $array['kyc']=$this->db->get_where('booking_kyc',['booking_id'=>$array['id']])->unbuffered_row('array');
             $array['nominee']=$this->db->get_where('nominee',['booking_id'=>$array['id']])->unbuffered_row('array');
             $array['payment']=$this->db->get_where('booking_payment',['booking_id'=>$array['id']])->unbuffered_row('array');
         }
