@@ -119,6 +119,12 @@
                                                                     ?>
                                                                 </td>
                                                             </tr>
+                                                            <tr>
+                                                                <th>Share Partner</th>
+                                                                <td>
+                                                                    <?= $this->wallet->getrank($user['id'])??'--'; ?>
+                                                                </td>
+                                                            </tr>
                                                             <?php /*?><tr>
                                                                 <th>Father's Name</th>
                                                                 <td><?= $member['father']; ?></td>

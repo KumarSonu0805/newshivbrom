@@ -3,6 +3,7 @@ class Wallet_model extends CI_Model{
 	
     var $status=false;
     var $activation_date=NULL;
+    var $ranks=array(1=>'Director','Board of Director','Managing Director');
     
 	function __construct(){
 		parent::__construct(); 
@@ -185,6 +186,34 @@ class Wallet_model extends CI_Model{
         }
     }
 	
+    public function checkrank($regid,$date=NULL){
+        if($date===NULL){
+            $date=date('Y-m-d');
+        }
+        if($this->status){
+            $datetime=date('Y-m-d H:i:s');
+            $checkdirector=$this->db->get_where('member_ranks',['regid'=>$regid,'rank_id'=>1]);
+            if($checkdirector->num_rows()==0){
+                $where=['regid'=>$regid,'type'=>'full_payment','status'=>1];
+                $mybookings=$this->db->get_where('bookings',$where)->result_array();
+                $data=array('regid'=>$regid,'rank_id'=>1,'added_on'=>$datetime,'updated_on'=>$datetime);
+                if(!empty($mybookings) && count($mybookings)>=2){
+                    $this->db->insert('member_ranks',$data);
+                }
+                else{
+                    $where="regid in (select regid from ".TP."members where refid='$regid') and type='full_payment' and status='1'";
+                    $directbookings=$this->db->get_where('bookings',$where)->result_array();
+                    if(!empty($directbookings) && count($directbookings)>=2){
+                        $this->db->insert('member_ranks',$data);
+                    }
+                }
+            }
+            else{
+                
+            }
+        }
+    }
+	
 	public function addcommission($regid,$date=NULL){
 		$this->checkstatus($regid,$date);
         if($this->status){
@@ -195,7 +224,7 @@ class Wallet_model extends CI_Model{
         }
 		$this->directincome($regid,$date);
 		$this->matchingincome($regid,$date);
-		//$this->addreward($regid,$date);
+		$this->checkrank($regid,$date);
 	}
 	
 	public function addallcommission($date=NULL){
@@ -424,5 +453,16 @@ class Wallet_model extends CI_Model{
 			}
 		}
 		return $array;
+	}
+	
+	public function getrank($regid){
+        $ranks=$this->db->get_where('member_ranks',['regid'=>$regid])->result_array();
+        $rank='';
+        if(!empty($ranks)){
+            $rank=end($ranks);
+            $rank_id=$rank['rank_id'];
+            $rank=$this->ranks[$rank_id];
+        }
+        return $rank;
 	}
 }
