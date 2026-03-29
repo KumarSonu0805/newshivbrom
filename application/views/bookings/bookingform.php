@@ -3,6 +3,9 @@
     #nomineeform{
         display: block;
     }
+    .img-fluid{
+        max-height: 150px;
+    }
 </style>
 
             <div class="col-12">
@@ -256,6 +259,21 @@
                                                     ?>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4 <?= $paymode=='cheque' || $paymode=='online' ?'':'d-none' ?> pay-modes online cheque">
+                                                <div class="form-group">
+                                                    <?php
+                                                        if(empty($booking['payment']['screenshot'])){
+                                                        $attributes=array("id"=>"screenshot","class"=>'form-control');
+                                                        echo create_form_input("file","screenshot","Screenshot",true,'',$attributes); 
+                                                        }
+                                                        else{
+                                                    ?>
+                                                    <img src="<?= file_url($booking['payment']['screenshot']) ?>" alt="" height="300">
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                </div>
+                                            </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
@@ -402,6 +420,21 @@
                                                     ?>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <?php
+                                                        if(empty($booking['photo'])){
+                                                        $attributes=array("id"=>"photo","class"=>'form-control');
+                                                        echo create_form_input("file","photo","Photo",true,'',$attributes); 
+                                                        }
+                                                        else{
+                                                    ?>
+                                                    <img src="<?= file_url($booking['photo']) ?>" alt="" height="300">
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                </div>
+                                            </div>
                                         </div>
                                         <h3 class="header smaller lighter">KYC Documents</h3>
                                         <div class="row">
@@ -420,16 +453,30 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
+                                                        if(empty($booking['kyc']['aadhar1'])){
                                                         $attributes=array("id"=>"aadhar1",'class'=>'form-control');
                                                         echo create_form_input("file","aadhar1","Aadhar Front Image",true,'',$attributes); 
+                                                        }
+                                                        else{
+                                                    ?>
+                                                    <img src="<?= file_url($booking['kyc']['aadhar1']) ?>" alt="" class="img-fluid">
+                                                    <?php
+                                                        }
                                                     ?>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
+                                                        if(empty($booking['kyc']['aadhar2'])){
                                                         $attributes=array("id"=>"aadhar2",'class'=>'form-control');
                                                         echo create_form_input("file","aadhar2","Aadhar Back Image",true,'',$attributes); 
+                                                        }
+                                                        else{
+                                                    ?>
+                                                    <img src="<?= file_url($booking['kyc']['aadhar2']) ?>" alt="" class="img-fluid">
+                                                    <?php
+                                                        }
                                                     ?>
                                                 </div>
                                             </div>
@@ -441,7 +488,7 @@
                                                         $attributes=array("id"=>"pan","Placeholder"=>"PAN",
                                                                           "pattern"=>"[A-Za-z0-9]{10}",
                                                                           "title"=>"Enter Valid PAN",
-                                                                          "autocomplete"=>"off","maxlength"=>"12",
+                                                                          "autocomplete"=>"off","maxlength"=>"10",
                                                                           'data-value'=>$member['pan']);
                                                         echo create_form_input("text","pan","PAN",true,$booking['kyc']['pan']??'',$attributes); 
                                                     ?>
@@ -450,8 +497,15 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
+                                                        if(empty($booking['kyc']['pan_image'])){
                                                         $attributes=array("id"=>"pan_image",'class'=>'form-control');
-                                                        echo create_form_input("file","pan_image","PAN Card Image",true,'',$attributes); 
+                                                        echo create_form_input("file","pan_image","PAN Card Image",true,'',$attributes);
+                                                        }
+                                                        else{
+                                                    ?>
+                                                    <img src="<?= file_url($booking['kyc']['pan_image']) ?>" alt="" class="img-fluid">
+                                                    <?php
+                                                        }
                                                     ?>
                                                 </div>
                                             </div>
@@ -537,15 +591,24 @@
                                                 <div class="form-group">
                                                     <?php
                                                         $attributes=array("id"=>"nom_address","Placeholder"=>"Address","autocomplete"=>"off",'rows'=>3);
-                                                        echo create_form_input("textarea","address","Address",false,$nominee['address']??'',$attributes); 
+                                                        echo create_form_input("textarea","address","Address",true,$nominee['address']??'',$attributes); 
                                                     ?>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <?php
+                                                    ?>
+                                                    <?php
+                                                        if(empty($nominee['photo'])){
                                                         $attributes=array("id"=>"nom_photo",'class'=>'form-control');
-                                                        echo create_form_input("file","photo","Nominee Photo",false,'',$attributes); 
+                                                        echo create_form_input("file","photo","Nominee Photo",true,'',$attributes); 
+                                                        }
+                                                        else{
+                                                    ?>
+                                                    <img src="<?= file_url($nominee['photo']) ?>" alt="" class="img-fluid">
+                                                    <?php
+                                                        }
                                                     ?>
                                                 </div>
                                             </div>

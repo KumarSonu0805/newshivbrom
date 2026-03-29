@@ -141,7 +141,7 @@ class Bookings extends MY_Controller {
             $file_name=$user['name'].date('-dmyhis-');
             $upload=upload_file('screenshot',$upload_path,$allowed_types,$file_name.'pay_image');
             if($upload['status']===true){
-                $payment['screenshot']=$data['screenshot'];
+                $payment['screenshot']=$upload['path'];
             }
             
             $data=array("bdata"=>$bdata,"payment"=>$payment);
@@ -177,6 +177,10 @@ class Bookings extends MY_Controller {
             $upload_path="./assets/uploads/member/documents/";
             $allowed_types="jpg|jpeg|png";
             $file_name=$user['name'].date('-dmyhis-');
+            $upload=upload_file('photo',$upload_path,$allowed_types,$file_name.'photo');
+            if($upload['status']===true){
+                $bdata['photo']=$upload['path'];
+            }
             $upload=upload_file('aadhar1',$upload_path,$allowed_types,$file_name.'aadhar1');
             if($upload['status']===true){
                 $kyc['aadhar1']=$upload['path'];

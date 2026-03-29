@@ -36,9 +36,14 @@ class Booking_model extends CI_Model{
             $kyc['added_on']=$kyc['updated_on']=date('Y-m-d H:i:s');
             
             $payment['booking_id']=$booking_id;
-            $this->db->insert('booking_kyc',$kyc);
-            $this->db->trans_complete();
-            return array('status'=>true,'message'=>"KYC Details Saved Successfully!",'booking_id'=>$booking_id);
+            if($this->db->insert('booking_kyc',$kyc)){
+                $this->db->trans_complete();
+                return array('status'=>true,'message'=>"KYC Details Saved Successfully!",'booking_id'=>$booking_id);
+            }
+            else{
+                $error=$this->db->error();
+                return array('status'=>false,'message'=>$error['message']);
+            }
         }
         else{
             $error=$this->db->error();

@@ -267,7 +267,7 @@ class Home extends MY_Controller {
 	
     public function runquery(){
         $query=array(
-            ""
+            "ALTER TABLE `sc_bookings` ADD `photo` VARCHAR(200) NULL DEFAULT NULL AFTER `pincode`;"
         );
         foreach($query as $sql){
             if(!$this->db->query($sql)){
