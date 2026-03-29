@@ -246,6 +246,7 @@ class Members extends MY_Controller {
 				$userdata['mobile']=$data['mobile'];
 				$userdata['name']=$data['name'];
 				$userdata['email']=$data['email'];
+				$userdata['password']=$data['password'];
 				$userdata['role']="member";
 				$userdata['status']="1";
 				
@@ -259,6 +260,7 @@ class Members extends MY_Controller {
 				$memberdata['gender']=$data['gender']??'';
 				$memberdata['mstatus']=$data['mstatus']??'';
 				$memberdata['mobile']=$data['mobile'];
+				$memberdata['a_mobile']=$data['a_mobile'];
 				$memberdata['email']=$data['email'];
 				$memberdata['aadhar']=$data['aadhar']??'';
 				$memberdata['pan']=$data['pan']??'';
