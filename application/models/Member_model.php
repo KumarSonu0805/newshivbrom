@@ -38,9 +38,9 @@ class Member_model extends CI_Model{
 			$username=$user['username'];
 			$password=$user['password'];
 			if(!empty($userdata['old_id'])){
-                if(!empty($memberdata['sponsor_id'])){
+                if(!empty($memberdata['refid'])){
                     $memberdata['refid']=$this->db->get_where('users',
-                                                              ['old_id'=>$memberdata['sponsor_id']])->unbuffered_row()->id;
+                                                              ['old_id'=>$memberdata['refid']])->unbuffered_row()->id;
                 }
                 else{
                     $memberdata['refid']=1;
