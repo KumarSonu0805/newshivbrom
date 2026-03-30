@@ -120,10 +120,18 @@ if(isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST']=='localhost')){
 	defined('DB_USER')		? null : define('DB_USER', 'root');
 	defined('DB_PASSWORD')	? null : define('DB_PASSWORD','');
 	defined('DB_NAME')		? null : define('DB_NAME','db_shivbrom');
+	defined('TEST_DB_HOST')		? null : define('TEST_DB_HOST','127.0.0.1');
+	defined('TEST_DB_USER')		? null : define('TEST_DB_USER', 'root');
+	defined('TEST_DB_PASSWORD')	? null : define('TEST_DB_PASSWORD','');
+	defined('TEST_DB_NAME')		? null : define('TEST_DB_NAME','shivbrom');
 }
 else{
 	defined('DB_HOST')      ? null : define('DB_HOST', '127.0.0.1');
 	defined('DB_USER')      ? null : define('DB_USER', 'u711511560_user_newshivb');
 	defined('DB_PASSWORD')  ? null : define('DB_PASSWORD', 'NewShivBrom@123#$');
 	defined('DB_NAME')      ? null : define('DB_NAME', 'u711511560_db_newshivb');
+	defined('TEST_DB_HOST')		? null : define('TEST_DB_HOST','127.0.0.1');
+	defined('TEST_DB_USER')		? null : define('TEST_DB_USER', 'u711511560_test_shivbrom');
+	defined('TEST_DB_PASSWORD')	? null : define('TEST_DB_PASSWORD','MKTest$^&1');
+	defined('TEST_DB_NAME')		? null : define('TEST_DB_NAME','u711511560_test_shivbrom');
 }

@@ -255,6 +255,12 @@ class Home extends MY_Controller {
         //print_pre($result);
     }
     
+	public function loadolddata(){
+        $testdb = $this->load->database('testdb', TRUE);
+        $array=$testdb->get('users')->result_array();
+        print_pre($array);
+    }
+    
 	public function showprocess(){
         $sql="SHOW PROCESSLIST;";
         $query=$this->db->query($sql);
@@ -267,6 +273,8 @@ class Home extends MY_Controller {
 	
     public function runquery(){
         $query=array(
+            "ALTER TABLE `sc_users` CHANGE `language_id` `old_id` INT(11) NULL DEFAULT NULL;",
+            "ALTER TABLE `sc_wallet` ADD `closing` BOOLEAN NOT NULL DEFAULT FALSE AFTER `remarks`, ADD `closing_date` DATETIME NULL DEFAULT NULL AFTER `closing`;",
             "ALTER TABLE `sc_bookings` ADD `photo` VARCHAR(200) NULL DEFAULT NULL AFTER `pincode`;"
         );
         foreach($query as $sql){
