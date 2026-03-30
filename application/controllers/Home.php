@@ -258,6 +258,9 @@ class Home extends MY_Controller {
 	public function loadolddata(){
         $testdb = $this->load->database('testdb', TRUE);
         $array=$testdb->get('users')->result_array();
+        if($this->db->input('test')=='test'){
+            print_pre($array,true);
+        }
         $members=array();
         if(!empty($array)){
             foreach($array as $key=>$row){
