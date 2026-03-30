@@ -37,7 +37,23 @@ class Member_model extends CI_Model{
 			$regid=$user['regid'];
 			$username=$user['username'];
 			$password=$user['password'];
-			
+			if(!empty($userdata['old_id'])){
+                if(!empty($memberdata['sponsor_id'])){
+                    $memberdata['refid']=$this->db->get_where('users',
+                                                              ['old_id'=>$memberdata['sponsor_id']])->unbuffered_row()->id;
+                }
+                else{
+                    $memberdata['refid']=1;
+                }
+                if(!empty($treedata['parent_id'])){
+                    $treedata['parent_id']=$this->db->get_where('users',
+                                                              ['old_id'=>$treedata['parent_id']])->unbuffered_row()->id;
+                }
+                else{
+                    $treedata['parent_id']=1;
+                }
+                $treedata['parent_id']=$this->findleaf($treedata['parent_id'],$treedata['position']);
+            }
 			$memberdata['regid']=$regid;
 			$accountdata['regid']=$regid;
 			$nomineedata['regid']=$regid;
@@ -52,6 +68,7 @@ class Member_model extends CI_Model{
 			$this->db->insert("nominee",$nomineedata);
             //print_pre($this->db->error());
 			$this->addintree($treedata);
+            //print_pre($this->db->error());
             $this->db->trans_complete();
             //$this->addlevel($regid);
             return $user;
@@ -63,8 +80,13 @@ class Member_model extends CI_Model{
 	
 	public function adduser($userdata){
 		$this->db->order_by('id desc');
-		$username=$this->generateusername();
-		$userdata['username']=$username;
+        if(empty($userdata['old_id'])){
+            $username=$this->generateusername();
+            $userdata['username']=$username;
+        }
+        else{
+            $username=$userdata['username'];
+        }
 		$password=empty($userdata['password'])?random_string('numeric', 5):$userdata['password'];
 		$userdata['vp']=$password;
 		$salt=random_string('alnum', 16);
@@ -72,8 +94,10 @@ class Member_model extends CI_Model{
         $encpassword=password_hash($encpassword,PASSWORD_DEFAULT);
 		$userdata['salt']=$salt;
 		$userdata['password']=$encpassword;
-		$userdata['created_on']=date('Y-m-d H:i:s');
-		$userdata['updated_on']=date('Y-m-d H:i:s');
+        if(empty($userdata['old_id'])){
+            $userdata['created_on']=date('Y-m-d H:i:s');
+            $userdata['updated_on']=date('Y-m-d H:i:s');
+        }
 		if($this->db->insert("users",$userdata)){
 			$regid=$this->db->insert_id();
 			$result=array("status"=>true,"regid"=>$regid,"username"=>$username,"password"=>$password);

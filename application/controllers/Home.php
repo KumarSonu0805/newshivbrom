@@ -258,7 +258,56 @@ class Home extends MY_Controller {
 	public function loadolddata(){
         $testdb = $this->load->database('testdb', TRUE);
         $array=$testdb->get('users')->result_array();
-        print_pre($array);
+        $members=array();
+        if(!empty($array)){
+            foreach($array as $key=>$row){
+                $userdata=$memberdata=$accountdata=$treedata=$nomineedata=array();
+                
+				$userdata['username']=$row['username'];
+				$userdata['mobile']=$row['phone'];
+				$userdata['name']=$row['name'];
+				$userdata['email']=$row['email'];
+				$userdata['password']=$row['lpassword']??'12345';
+				$userdata['role']="member";
+				$userdata['status']="1";
+				$userdata['old_id']=$row['id'];
+                $userdata['created_on']=$row['created_at'];
+                $userdata['updated_on']=$row['created_at'];
+                
+                
+				$memberdata['name']=$row['name'];
+				$memberdata['dob']=$row['dob']??NULL;
+				$memberdata['father']=$row['father']??'';
+				$memberdata['occupation']=$row['occupation']??'';
+				$memberdata['gender']=$row['gender']??'';
+				$memberdata['mstatus']=$row['mstatus']??'';
+				$memberdata['mobile']=$row['phone'];
+				$memberdata['a_mobile']=$row['a_mobile']??'';
+				$memberdata['email']=$row['email'];
+				$memberdata['aadhar']=$row['aadhar']??'';
+				$memberdata['pan']=$row['pan']??'';
+				$memberdata['address']=$row['address']??'';
+				$memberdata['district']=$row['district']??'';
+				$memberdata['state']=$row['state']??'';
+				$memberdata['pincode']=$row['pincode']??'';
+				$memberdata['refid']=$row['sponsor_id'];
+				$memberdata['date']=$row['date']??date('Y-m-d');
+				$memberdata['time']=date('H:i:s');
+				$memberdata['status']=0;
+                
+                $treedata['parent_id']=$row['parent_id'];
+                $treedata['position']=empty($row['position'])?'L':$row['position'];
+                
+                $data=array("userdata"=>$userdata,"memberdata"=>$memberdata,"accountdata"=>$accountdata,
+                            "treedata"=>$treedata,"nomineedata"=>$nomineedata);
+                $result=$this->member->addmember($data);
+                print_pre($result);
+                if($key>=10){
+                    //break;
+                }
+            }
+        }
+        
     }
     
 	public function showprocess(){
@@ -273,9 +322,6 @@ class Home extends MY_Controller {
 	
     public function runquery(){
         $query=array(
-            "ALTER TABLE `sc_users` CHANGE `language_id` `old_id` INT(11) NULL DEFAULT NULL;",
-            "ALTER TABLE `sc_wallet` ADD `closing` BOOLEAN NOT NULL DEFAULT FALSE AFTER `remarks`, ADD `closing_date` DATETIME NULL DEFAULT NULL AFTER `closing`;",
-            "ALTER TABLE `sc_bookings` ADD `photo` VARCHAR(200) NULL DEFAULT NULL AFTER `pincode`;"
         );
         foreach($query as $sql){
             if(!$this->db->query($sql)){
