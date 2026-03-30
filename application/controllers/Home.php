@@ -291,8 +291,8 @@ class Home extends MY_Controller {
 				$memberdata['state']=$row['state']??'';
 				$memberdata['pincode']=$row['pincode']??'';
 				$memberdata['refid']=$row['sponsor_id'];
-				$memberdata['date']=$row['date']??date('Y-m-d');
-				$memberdata['time']=date('H:i:s');
+				$memberdata['date']=date('Y-m-d',strtotime($row['created_at']));
+				$memberdata['time']=date('H:i:s',strtotime($row['created_at']));
 				$memberdata['status']=0;
                 
                 $treedata['parent_id']=$row['parent_id'];
