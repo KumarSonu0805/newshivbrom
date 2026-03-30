@@ -37,6 +37,9 @@ class Member_model extends CI_Model{
 			$regid=$user['regid'];
 			$username=$user['username'];
 			$password=$user['password'];
+            
+			$memberdata['added_on']=date('Y-m-d H:i:s');
+            
 			if(!empty($userdata['old_id'])){
                 if(!empty($memberdata['refid'])){
                     $memberdata['refid']=$this->db->get_where('users',
@@ -53,13 +56,13 @@ class Member_model extends CI_Model{
                     $treedata['parent_id']=1;
                 }
                 $treedata['parent_id']=$this->findleaf($treedata['parent_id'],$treedata['position']);
+                $memberdata['added_on']=$memberdata['date'].' '.$memberdata['time'];
             }
 			$memberdata['regid']=$regid;
 			$accountdata['regid']=$regid;
 			$nomineedata['regid']=$regid;
 			$treedata['regid']=$regid;
 			
-			$memberdata['added_on']=date('Y-m-d H:i:s');
 			
 			$this->db->insert("members",$memberdata);
             //print_pre($this->db->error());
