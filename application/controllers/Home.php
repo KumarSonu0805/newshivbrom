@@ -262,7 +262,7 @@ class Home extends MY_Controller {
             print_pre($array,true);
         }
         $members=array();
-        if(!empty($array)){
+        if(!empty($array) && $this->input->get('import')=='import'){
             foreach($array as $key=>$row){
                 $userdata=$memberdata=$accountdata=$treedata=$nomineedata=array();
                 
