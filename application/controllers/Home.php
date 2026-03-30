@@ -160,83 +160,6 @@ class Home extends MY_Controller {
         echo json_encode($result);
     }
     
-	public function getwallet(){     
-        /*
-        
-            $('#today-business').text(response.business);
-            $('#load-wallet').text(response.wallet);
-            $('#income-wallet').text(response.income_wallet);
-            $('#reward-wallet').text(response.reward_wallet);
-            $('#today-recharge').text(response.recharge);
-            $('#bill-payment').text(response.bill);
-         */
-        checklogin();
-        
-        session_write_close();       // Ensure native session is also closed
-        
-        $key='dashboard-data';
-        $result=$this->cachemanager->cache('file')->setkey($key)->get();
-
-        if ($result === FALSE) {
-
-            $date=date('Y-m-d');
-            $this->db->select_sum('amount');
-            $business=$this->db->get_where('member_packages',['status'=>1,'date'=>$date])->unbuffered_row()->amount;
-            $business=empty($business)?0:$business;
-
-            $this->db->select_sum('amount');
-            $credit=$this->db->get_where('daily_business',['type'=>'credit','date'=>$date])->unbuffered_row()->amount;
-            $credit=empty($credit)?0:$credit;
-            $this->db->select_sum('amount');
-            $debit=$this->db->get_where('daily_business',['type'=>'debit','date'=>$date])->unbuffered_row()->amount;
-            $debit=empty($debit)?0:$debit;
-            $business+=$credit;
-            $business-=$debit;
-
-
-            /*$this->db->select_sum('amount');
-            $wallet=$this->db->get_where('wallet_requests',['status'=>1])->unbuffered_row()->amount;
-            $wallet=empty($wallet)?0:$wallet;
-
-            $this->db->select_sum('amount');
-            $income_wallet=$this->db->get_where('wallet',['status'=>1])->unbuffered_row()->amount;
-            $income_wallet=empty($income_wallet)?0:$income_wallet;
-
-            $this->db->select_sum('point');
-            $reward_wallet=$this->db->get_where('wallet',['status'=>1])->unbuffered_row()->point;
-            $reward_wallet=empty($reward_wallet)?0:$reward_wallet;*/
-
-            $memberwallet=$this->wallet->getmemberwallet();
-
-            $wallet=$income_wallet=$reward_wallet=0;
-            if(!empty($memberwallet)){
-                $wallet=array_column($memberwallet,'fund_wallet');
-                $wallet=array_sum($wallet);
-                $income_wallet=array_column($memberwallet,'income_wallet');
-                $income_wallet=array_sum($income_wallet);
-                $reward_wallet=array_column($memberwallet,'reward_wallet');
-                $reward_wallet=array_sum($reward_wallet);
-
-            }
-            
-            $recharge=$bill=0;
-            $this->db->select_sum('amount');
-            $this->db->where("(type='prepaid_recharge' or type='dth_recharge')");
-            $recharge=$this->db->get_where('bill_payments',['status'=>1,'date'=>$date])->unbuffered_row()->amount;
-            $recharge=empty($recharge)?0:$recharge;
-
-            $result=array('business'=>$business,'wallet'=>$wallet,'income_wallet'=>$income_wallet,'reward_wallet'=>$reward_wallet,'recharge'=>$recharge,'bill'=>$bill);
-            $result=array_map(function($item){
-                return $this->amount->toDecimal($item);
-            },$result);
-            $this->cachemanager->cache('file')->setkey($key)->save($result, 1800);
-        }
-        else{
-            $result=$result['data'];
-        }
-        echo json_encode($result);
-    }
-    
 	public function testcache(){
         $this->load->library('CacheManager');
         $caches=getCacheNames();
@@ -255,6 +178,34 @@ class Home extends MY_Controller {
         //print_pre($result);
     }
     
+	public function cleardata($all=false){
+        $query=array(
+            'DELETE FROM `sc_users` WHERE id>1;',
+            'TRUNCATE `sc_acc_details`;',
+            'TRUNCATE `sc_members`;',
+            'TRUNCATE `sc_member_ranks`;',
+            'TRUNCATE `sc_nominee`;',
+            'TRUNCATE `sc_wallet`;',
+            'TRUNCATE `sc_wallet_transfers`;',
+            'TRUNCATE `sc_withdrawals`;',
+            'ALTER TABLE `sc_users` auto_increment = 1;',
+            'ALTER TABLE `sc_member_tree` auto_increment = 1;'
+        );
+        if($all=='all'){
+            $query[]='TRUNCATE `sc_bookings`';
+            $query[]='TRUNCATE `sc_booking_details`';
+            $query[]='TRUNCATE `sc_booking_kyc`';
+            $query[]='TRUNCATE `sc_booking_payment`';
+            $query[]='TRUNCATE `sc_db_operations`';
+            $query[]='TRUNCATE `sc_level_members`;';
+        }
+        foreach($query as $sql){
+            if(!$this->db->query($sql)){
+                print_r($this->db->error());
+            }
+        }
+    }
+    
 	public function loadolddata(){
         $testdb = $this->load->database('testdb', TRUE);
         $array=$testdb->get('users')->result_array();
@@ -263,6 +214,7 @@ class Home extends MY_Controller {
         }
         $members=array();
         if(!empty($array) && $this->input->get('import')=='import'){
+            $this->cleardata('all');
             foreach($array as $key=>$row){
                 $userdata=$memberdata=$accountdata=$treedata=$nomineedata=array();
                 
