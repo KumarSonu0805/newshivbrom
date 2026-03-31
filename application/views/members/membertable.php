@@ -3,10 +3,8 @@
     <thead>
         <tr>
             <th>Sl No.</th>
-            <th>Member ID</th>
+            <th>Registration No.</th>
             <th>Member Name</th>
-            <th>Sponsor ID</th>
-            <th>Sponsor Name</th>
             <th>Joining Date</th>
             <th>Activation Date</th>
             <th class="select-filter">Status</th>
@@ -34,8 +32,6 @@
             <td><?php echo $i; ?></td>
             <td><?php echo $member['username']; ?></td>
             <td><?php echo $member['name']; ?></td>
-            <td><?php echo $member['ref']; ?></td>
-            <td><?php echo $member['refname']; ?></td>
             <td><?php echo date('d-m-Y h:i A',strtotime($member['date'].' '.$member['time'])); ?></td>
             <td><?php if(!empty($member['activation_date']))echo date('d-m-Y h:i A',strtotime($member['activation_date'])); ?>
             <td><?php echo $status; ?></td>

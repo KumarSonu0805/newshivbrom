@@ -34,15 +34,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Sponsor ID</th>
-                                        <td><?php echo $member['susername']; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Sponsor Name</th>
-                                        <td><?php echo $member['sname']; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Member ID</th>
+                                        <th>Registration No</th>
                                         <td><?php echo $user['username']; ?></td>
                                     </tr>
                                     <tr>
