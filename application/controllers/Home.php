@@ -300,7 +300,7 @@ class Home extends MY_Controller {
                                 $bdata['b_city_id']=1;
                                 $bdata['landmark']=$booking['property_landmark'];
                                 $bdata['price']=$booking['price'];
-                                $bdata['other_price']=$booking['other_price'];
+                                $bdata['other_price']=empty($booking['other_price'])?0:$booking['other_price'];
                                 $bdata['total_amount']=$booking['total_amount'];
                                 $bdata['bv']=$booking['business_value'];
                                 $bdata['old_b_id']=$booking['id'];
@@ -310,7 +310,7 @@ class Home extends MY_Controller {
                                 $bdata['booking_for']=$for;
                                 $bdata['name']=$booking['name'];
                                 $bdata['father']=$booking['guardian_name'];
-                                $bdata['grand_father_name']=$booking['grand_father_name'];
+                                $bdata['grand_father']=$booking['grand_father_name'];
                                 $bdata['mobile']=$booking['mobile'];
                                 $bdata['a_mobile']=$booking['alternate_mobile'];
                                 $bdata['email']=$booking['email'];
@@ -321,6 +321,8 @@ class Home extends MY_Controller {
                                 $bdata['pincode']=$booking['pin_code'];
                                 $bdata['photo']=$booking['photo'];
                                 $bdata['details']=json_encode($booking);
+                                $bdata['added_on']=date('Y-m-d H:i:s',strtotime($booking['created_at']));
+                                $bdata['updated_on']=date('Y-m-d H:i:s',strtotime($booking['updated_at']));
                                 
                                 $bdata['old_id']=$member['old_id'];
                                 $payment=array();
@@ -344,6 +346,8 @@ class Home extends MY_Controller {
                                         $single['utr_no']=$row['utr_no'];
                                         $single['cheque_no']=$row['cheque_no'];
                                         $single['details']=json_encode($row);
+                                        $single['added_on']=date('Y-m-d H:i:s',strtotime($row['created_at']));
+                                        $single['updated_on']=date('Y-m-d H:i:s',strtotime($row['updated_at']));
                                         $payment[]=$single;
                                     }
                                 }
@@ -366,12 +370,8 @@ class Home extends MY_Controller {
                                 $nominee['photo']=$booking['nominee_photo'];
                                 
                                 $data=array("bdata"=>$bdata,"payment"=>$payment,"kyc"=>$kyc,"nominee"=>$nominee);
-                                print_pre($data);
-                                echo '<br>ppppppppppppppppppppppppppppppppppp<br>';
-                                print_pre($payments);
-                                echo '<br>ppppppppppppppppppppppppppppppppppp<br>';
-                                continue;
-                                
+                                $result=$this->booking->importdata($data);
+                                print_pre($result);
                             }
                         }
                         echo '<br>----------------------------------------------------------<br>';

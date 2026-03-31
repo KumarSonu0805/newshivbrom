@@ -6,6 +6,36 @@ class Booking_model extends CI_Model{
 		$this->db->db_debug = false;
 	}
     
+    public function importdata($data){
+        $bdata=$data['bdata'];
+        $payments=$data['payment'];
+        $kyc=$data['kyc'];
+        $nominee=$data['nominee'];
+        $this->db->trans_start();
+        if(isset($bdata['old_id'])){
+            unset($bdata['old_id']);
+        }
+        if($this->db->insert('bookings',$bdata)){
+            $booking_id=$this->db->insert_id();
+            if(!empty($payments)){
+                foreach($payments as $key=>$payment){
+                    $payments[$key]['booking_id']=$booking_id;
+                }
+                $this->db->insert_batch('booking_payment',$payments);
+            }
+            $kyc['booking_id']=$booking_id;
+            $nominee['booking_id']=$booking_id;
+            $this->db->insert('booking_kyc',$kyc);
+            $nresult=$this->updatenominee($nominee);
+            $this->db->trans_complete();
+            return array('status'=>true,'message'=>"Booking Save Successfully!",'booking_id'=>$booking_id);
+        }
+        else{
+            $error=$this->db->error();
+            return array('status'=>false,'message'=>$error['message']);
+        }
+    }
+    
     public function savebooking($data){
         $bdata=$data['bdata'];
         $payment=$data['payment'];
