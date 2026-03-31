@@ -319,7 +319,7 @@ class Home extends MY_Controller {
                                 $bdata['b_district_id']='';
                                 $bdata['b_city_id']='';
                                 $bdata['pincode']=$booking['pin_code'];
-                                $bdata['photo']=$booking['photo'];
+                                $bdata['photo']=!empty($booking['photo'])?$booking['photo']:'';
                                 $bdata['details']=json_encode($booking);
                                 $bdata['added_on']=date('Y-m-d H:i:s',strtotime($booking['created_at']));
                                 $bdata['updated_on']=date('Y-m-d H:i:s',strtotime($booking['updated_at']));
@@ -355,11 +355,11 @@ class Home extends MY_Controller {
                                 $kyc=array('regid'=>$member['regid'],'booking_id'=>'');
                                 $kyc['aadhar']=$booking['aadhaar_no'];
                                 $kyc['pan']=$booking['pan_no'];
-                                $kyc['voter_id']=$booking['voter_no'];
-                                $kyc['driving_license']=$booking['driving_licence_no'];
-                                $kyc['aadhar1']=$booking['aadhaar_card_photo'];
+                                $kyc['voter_id']=!empty($booking['voter_no'])?$booking['voter_no']:'';
+                                $kyc['driving_license']=!empty($booking['driving_license'])?$booking['driving_license']:'';
+                                $kyc['aadhar1']=!empty($booking['aadhaar_card_photo'])?$booking['aadhaar_card_photo']:'';
                                 $kyc['aadhar2']='';
-                                $kyc['pan_image']=$booking['pan_card_photo'];
+                                $kyc['pan_image']=!empty($booking['pan_card_photo'])?$booking['pan_card_photo']:'';
                                 
                                 $nominee=array('regid'=>$member['regid'],'booking_id'=>'');
                                 $nominee['name']=$booking['nominee_name'];
@@ -367,7 +367,7 @@ class Home extends MY_Controller {
                                 $nominee['mobile']=$booking['nominee_mobile'];
                                 $nominee['email']=$booking['nominee_email'];
                                 $nominee['address']=$booking['nominee_address'];
-                                $nominee['photo']=$booking['nominee_photo'];
+                                $nominee['photo']=!empty($booking['nominee_photo'])?$booking['nominee_photo']:'';
                                 
                                 $data=array("bdata"=>$bdata,"payment"=>$payment,"kyc"=>$kyc,"nominee"=>$nominee);
                                 $result=$this->booking->importdata($data);
