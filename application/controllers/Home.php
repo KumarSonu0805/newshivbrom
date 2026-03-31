@@ -298,7 +298,7 @@ class Home extends MY_Controller {
                                 $bdata['b_state_id']=1;
                                 $bdata['b_district_id']=1;
                                 $bdata['b_city_id']=1;
-                                $bdata['landmark']=$booking['property_landmark'];
+                                $bdata['landmark']=!empty($booking['property_landmark'])?$booking['property_landmark']:'';
                                 $bdata['price']=$booking['price'];
                                 $bdata['other_price']=empty($booking['other_price'])?0:$booking['other_price'];
                                 $bdata['total_amount']=$booking['total_amount'];

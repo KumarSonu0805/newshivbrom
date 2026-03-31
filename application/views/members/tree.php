@@ -85,7 +85,6 @@
             <input type="hidden" id="parent">
             <div id="tree-member-details" style="display:none;">
                 <ul>
-                    <li>Sponsor ID : <span id="ref"></span></li>
                     <li>Name : <span id="name"></span></li>
                     <li>Joining Date : <span id="jdate"></span></li>
                     <li>Activation Date : <span id="adate"></span></li>
@@ -204,7 +203,7 @@
 					$('.member-img').css('cursor','auto');
 					if(data!='false'){
 						data=JSON.parse(data);
-						$('#ref').text(data['ref']);
+						//$('#ref').text(data['ref']);
 						$('#name').text(data['name']);
 						$('#jdate').text(data['date']);
 						$('#adate').text(data['activation_date']);
