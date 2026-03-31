@@ -214,51 +214,168 @@ class Home extends MY_Controller {
         }
         $members=array();
         if(!empty($array) && $this->input->get('import')=='import'){
-            $this->cleardata('all');
+            if($this->input->get('clear')=='clear'){
+                $this->cleardata('all');
+            }
             foreach($array as $key=>$row){
                 $userdata=$memberdata=$accountdata=$treedata=$nomineedata=array();
+                $getuser=$this->db->get_where('users',['username'=>$row['username']]);
+                if($getuser->num_rows()==0){
+                    $userdata['username']=$row['username'];
+                    $userdata['mobile']=$row['phone'];
+                    $userdata['name']=$row['name'];
+                    $userdata['email']=$row['email'];
+                    $userdata['password']=$row['lpassword']??'12345';
+                    $userdata['role']="member";
+                    $userdata['status']="1";
+                    $userdata['old_id']=$row['id'];
+                    $userdata['created_on']=$row['created_at'];
+                    $userdata['updated_on']=$row['created_at'];
+
+
+                    $memberdata['name']=$row['name'];
+                    $memberdata['dob']=$row['dob']??NULL;
+                    $memberdata['father']=$row['father']??'';
+                    $memberdata['occupation']=$row['occupation']??'';
+                    $memberdata['gender']=$row['gender']??'';
+                    $memberdata['mstatus']=$row['mstatus']??'';
+                    $memberdata['mobile']=$row['phone'];
+                    $memberdata['a_mobile']=$row['a_mobile']??'';
+                    $memberdata['email']=$row['email'];
+                    $memberdata['aadhar']=$row['aadhar']??'';
+                    $memberdata['pan']=$row['pan']??'';
+                    $memberdata['address']=$row['address']??'';
+                    $memberdata['district']=$row['district']??'';
+                    $memberdata['state']=$row['state']??'';
+                    $memberdata['pincode']=$row['pincode']??'';
+                    $memberdata['refid']=$row['sponsor_id'];
+                    $memberdata['date']=date('Y-m-d',strtotime($row['created_at']));
+                    $memberdata['time']=date('H:i:s',strtotime($row['created_at']));
+                    $memberdata['status']=0;
+
+                    $treedata['parent_id']=$row['parent_id'];
+                    $treedata['position']=empty($row['position'])?'L':$row['position'];
+
+                    $data=array("userdata"=>$userdata,"memberdata"=>$memberdata,"accountdata"=>$accountdata,
+                                "treedata"=>$treedata,"nomineedata"=>$nomineedata);
+                    $result=$this->member->addmember($data);
+                    print_pre($result);
+                }
+                else{
+                    $user=$getuser->unbuffered_row('array');
+                    $result=array('regid'=>$user['id']);
+                }
                 
-				$userdata['username']=$row['username'];
-				$userdata['mobile']=$row['phone'];
-				$userdata['name']=$row['name'];
-				$userdata['email']=$row['email'];
-				$userdata['password']=$row['lpassword']??'12345';
-				$userdata['role']="member";
-				$userdata['status']="1";
-				$userdata['old_id']=$row['id'];
-                $userdata['created_on']=$row['created_at'];
-                $userdata['updated_on']=$row['created_at'];
+                $members[]=array('regid'=>$result['regid'],'name'=>$row['name'],'old_id'=>$row['id'],
+                                 'status'=>$row['is_active'],'activated_on'=>$row['activated_at']);
                 
-                
-				$memberdata['name']=$row['name'];
-				$memberdata['dob']=$row['dob']??NULL;
-				$memberdata['father']=$row['father']??'';
-				$memberdata['occupation']=$row['occupation']??'';
-				$memberdata['gender']=$row['gender']??'';
-				$memberdata['mstatus']=$row['mstatus']??'';
-				$memberdata['mobile']=$row['phone'];
-				$memberdata['a_mobile']=$row['a_mobile']??'';
-				$memberdata['email']=$row['email'];
-				$memberdata['aadhar']=$row['aadhar']??'';
-				$memberdata['pan']=$row['pan']??'';
-				$memberdata['address']=$row['address']??'';
-				$memberdata['district']=$row['district']??'';
-				$memberdata['state']=$row['state']??'';
-				$memberdata['pincode']=$row['pincode']??'';
-				$memberdata['refid']=$row['sponsor_id'];
-				$memberdata['date']=date('Y-m-d',strtotime($row['created_at']));
-				$memberdata['time']=date('H:i:s',strtotime($row['created_at']));
-				$memberdata['status']=0;
-                
-                $treedata['parent_id']=$row['parent_id'];
-                $treedata['position']=empty($row['position'])?'L':$row['position'];
-                
-                $data=array("userdata"=>$userdata,"memberdata"=>$memberdata,"accountdata"=>$accountdata,
-                            "treedata"=>$treedata,"nomineedata"=>$nomineedata);
-                $result=$this->member->addmember($data);
-                print_pre($result);
-                if($key>=10){
-                    //break;
+            }
+            //print_pre($members);
+            if(!empty($members)){
+                foreach($members as $member){
+                    $getbooking=$testdb->get_where('bookings',['user_id'=>$member['old_id']]);
+                    if($getbooking->num_rows()>0){
+                        $bookings=$getbooking->result_array();
+                        //print_pre($bookings);
+                        if(!empty($bookings)){
+                            foreach($bookings as $booking){
+                                $getpayment=$testdb->get_where('booking_payment_histories',['booking_id'=>$booking['id']]);
+                                $payments=$getpayment->result_array();
+                                //print_pre($payments);
+                                //echo $member['name'].':'.$booking['name'].':'.comparenames($member['name'],$booking['name']).'<br>';
+                                $bdata=array('regid'=>$member['regid']);
+                                
+                                $bdata['date']=date('Y-m-d',strtotime($booking['created_at']));
+                                $bdata['type']=$booking['booking_payment_status'];
+                                $bdata['due_date']=date('Y-m-d',strtotime($booking['payment_due_date']));
+                                $bdata['booking_type']=$booking['type'];
+                                $bdata['project_id']=$booking['project_id'];
+                                $bdata['plot_no']=$booking['property_number'];
+                                $bdata['b_address']=$booking['property_address'];
+                                
+                                $city=$booking['property_city'];
+                                //Find City
+                                $bdata['b_state_id']=1;
+                                $bdata['b_district_id']=1;
+                                $bdata['b_city_id']=1;
+                                $bdata['landmark']=$booking['property_landmark'];
+                                $bdata['price']=$booking['price'];
+                                $bdata['other_price']=$booking['other_price'];
+                                $bdata['total_amount']=$booking['total_amount'];
+                                $bdata['bv']=$booking['business_value'];
+                                $bdata['old_b_id']=$booking['id'];
+                                
+                                
+                                $for=comparenames($member['name'],$booking['name'])?'Self':'Other';
+                                $bdata['booking_for']=$for;
+                                $bdata['name']=$booking['name'];
+                                $bdata['father']=$booking['guardian_name'];
+                                $bdata['grand_father_name']=$booking['grand_father_name'];
+                                $bdata['mobile']=$booking['mobile'];
+                                $bdata['a_mobile']=$booking['alternate_mobile'];
+                                $bdata['email']=$booking['email'];
+                                $bdata['address']=$booking['address'];
+                                $bdata['b_state_id']='';
+                                $bdata['b_district_id']='';
+                                $bdata['b_city_id']='';
+                                $bdata['pincode']=$booking['pin_code'];
+                                $bdata['photo']=$booking['photo'];
+                                $bdata['details']=json_encode($booking);
+                                
+                                $bdata['old_id']=$member['old_id'];
+                                $payment=array();
+                                if(!empty($payments)){
+                                    foreach($payments as $row){
+                                        $single=array('regid'=>$member['regid'],'booking_id'=>'');
+                                        $single['payment_type']=$row['payment_type'];
+                                        $single['date']=date('Y-m-d',strtotime($row['created_at']));
+                                        $single['payment_mode']=$row['payment_mode'];
+                                        $paid=$single['amount']=$row['amount'];
+                                        if($paid>$booking['price']){
+                                            $paid=$booking['price'];
+                                        }
+                                        $single['bv']=calculatebv($booking['price'],$paid);
+                                        if(!empty($row['cheque_receiver_name'])){
+                                            $single['receiver_name']=$row['cheque_receiver_name'];
+                                        }
+                                        elseif(!empty($row['cash_receiver_name'])){
+                                            $single['receiver_name']=$row['cash_receiver_name'];
+                                        }
+                                        $single['utr_no']=$row['utr_no'];
+                                        $single['cheque_no']=$row['cheque_no'];
+                                        $single['details']=json_encode($row);
+                                        $payment[]=$single;
+                                    }
+                                }
+                                
+                                $kyc=array('regid'=>$member['regid'],'booking_id'=>'');
+                                $kyc['aadhar']=$booking['aadhaar_no'];
+                                $kyc['pan']=$booking['pan_no'];
+                                $kyc['voter_id']=$booking['voter_no'];
+                                $kyc['driving_license']=$booking['driving_licence_no'];
+                                $kyc['aadhar1']=$booking['aadhaar_card_photo'];
+                                $kyc['aadhar2']='';
+                                $kyc['pan_image']=$booking['pan_card_photo'];
+                                
+                                $nominee=array('regid'=>$member['regid'],'booking_id'=>'');
+                                $nominee['name']=$booking['nominee_name'];
+                                $nominee['father']=$booking['nominee_guardian_name'];
+                                $nominee['mobile']=$booking['nominee_mobile'];
+                                $nominee['email']=$booking['nominee_email'];
+                                $nominee['address']=$booking['nominee_address'];
+                                $nominee['photo']=$booking['nominee_photo'];
+                                
+                                $data=array("bdata"=>$bdata,"payment"=>$payment,"kyc"=>$kyc,"nominee"=>$nominee);
+                                print_pre($data);
+                                echo '<br>ppppppppppppppppppppppppppppppppppp<br>';
+                                print_pre($payments);
+                                echo '<br>ppppppppppppppppppppppppppppppppppp<br>';
+                                continue;
+                                
+                            }
+                        }
+                        echo '<br>----------------------------------------------------------<br>';
+                    }
                 }
             }
         }
@@ -277,6 +394,9 @@ class Home extends MY_Controller {
 	
     public function runquery(){
         $query=array(
+            "ALTER TABLE `sc_booking_payment` ADD `details` JSON NULL DEFAULT NULL AFTER `screenshot`;",
+            "ALTER TABLE `sc_bookings` ADD `old_b_id` INT NULL DEFAULT NULL AFTER `status`;",
+            "ALTER TABLE `sc_bookings` ADD `details` JSON NULL DEFAULT NULL AFTER `status`;"
         );
         foreach($query as $sql){
             if(!$this->db->query($sql)){

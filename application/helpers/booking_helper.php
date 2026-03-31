@@ -17,6 +17,7 @@
             if($total_amount<=0 || $paid==0){ return 0; }
             $unit=$total_amount/$totalbv;
             $bv=$paid/$unit;
+            $bv=round($bv,2);
             return $bv;
 		}  
 	}

@@ -174,3 +174,30 @@
             return true;
         }
     }
+
+    if(!function_exists('normalize')) {
+        function normalize($str) {
+            $str = strtolower($str);        // case-insensitive
+            $str = trim($str);             // remove extra spaces
+            $str = preg_replace('/\s+/', ' ', $str); // normalize spaces
+            return $str;
+        }
+    }
+
+    if(!function_exists('comparenames')) {
+        function comparenames($name1,$name2,$benchmark=90) {
+            $name1 = normalize($name1);
+            $name2 = normalize($name2);
+
+            // similarity %
+            similar_text($name1, $name2, $percent);
+            // phonetic match
+            $soundMatch = soundex($name1) == soundex($name2);
+            
+            if ($percent > $benchmark && $soundMatch) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
