@@ -289,9 +289,9 @@ class Home extends MY_Controller {
                                 $bdata['type']=$booking['booking_payment_status'];
                                 $bdata['due_date']=date('Y-m-d',strtotime($booking['payment_due_date']));
                                 $bdata['booking_type']=$booking['type'];
-                                $bdata['project_id']=$booking['project_id'];
+                                $bdata['project_id']=!empty($booking['project_id'])?$booking['project_id']:1;
                                 $bdata['plot_no']=$booking['property_number'];
-                                $bdata['b_address']=$booking['property_address'];
+                                $bdata['b_address']=!empty($booking['property_address'])?$booking['property_address']:'';
                                 
                                 $city=$booking['property_city'];
                                 //Find City
@@ -312,7 +312,7 @@ class Home extends MY_Controller {
                                 $bdata['father']=$booking['guardian_name'];
                                 $bdata['grand_father']=$booking['grand_father_name'];
                                 $bdata['mobile']=$booking['mobile'];
-                                $bdata['a_mobile']=$booking['alternate_mobile'];
+                                $bdata['a_mobile']=!empty($booking['alternate_mobile'])?$booking['alternate_mobile']:'';
                                 $bdata['email']=$booking['email'];
                                 $bdata['address']=$booking['address'];
                                 $bdata['b_state_id']='';
