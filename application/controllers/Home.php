@@ -290,7 +290,7 @@ class Home extends MY_Controller {
                                 $bdata['due_date']=date('Y-m-d',strtotime($booking['payment_due_date']));
                                 $bdata['booking_type']=$booking['type'];
                                 $bdata['project_id']=!empty($booking['project_id'])?$booking['project_id']:1;
-                                $bdata['plot_no']=$booking['property_number'];
+                                $bdata['plot_no']=!empty($booking['property_number'])?$booking['property_number']:'';
                                 $bdata['b_address']=!empty($booking['property_address'])?$booking['property_address']:'';
                                 
                                 $city=$booking['property_city'];
