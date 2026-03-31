@@ -213,7 +213,7 @@ class Home extends MY_Controller {
             print_pre($array,true);
         }
         $members=array();
-        if(!empty($array) && $this->input->get('import')=='import'){
+        if(!empty($array) && $this->input->get('import')=='impor'){
             if($this->input->get('clear')=='clear'){
                 $this->cleardata('all');
             }
