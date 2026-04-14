@@ -394,9 +394,8 @@ class Home extends MY_Controller {
 	
     public function runquery(){
         $query=array(
-            "ALTER TABLE `sc_booking_payment` ADD `details` JSON NULL DEFAULT NULL AFTER `screenshot`;",
-            "ALTER TABLE `sc_bookings` ADD `old_b_id` INT NULL DEFAULT NULL AFTER `status`;",
-            "ALTER TABLE `sc_bookings` ADD `details` JSON NULL DEFAULT NULL AFTER `status`;"
+            "ALTER TABLE `sc_projects` ADD `distance` VARCHAR(200) NOT NULL AFTER `project_status`, ADD `discount` DECIMAL(5,2) NOT NULL AFTER `distance`, ADD `final_price` DECIMAL(16,2) NOT NULL AFTER `discount`;",
+            "ALTER TABLE `sc_projects` CHANGE `thumb_image` `thumbnail_image` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;"
         );
         foreach($query as $sql){
             if(!$this->db->query($sql)){

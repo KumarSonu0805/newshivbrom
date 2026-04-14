@@ -134,4 +134,4 @@ $autoload['language'] = array();
 */
 $autoload['model'] = array('Account_model'=>'account','Member_model'=>'member','Wallet_model'=>'wallet',
                            'Deposit_model'=>'deposit','Common_model'=>'common','Booking_model'=>'booking',
-                           'Master_model'=>'master');
+                           'Master_model'=>'master','Project_model'=>'project');

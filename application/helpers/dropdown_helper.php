@@ -68,6 +68,14 @@
         }
     }
 
+    if(!function_exists('projecttype_dropdown')){
+        function projecttype_dropdown(){
+            $CI = get_instance();
+            $options=array(''=>'Select Type','land'=>'Land','flat'=>'Flat','mixed'=>'Mixed');
+            return $options;
+        }
+    }
+
     if(!function_exists('project_dropdown')){
         function project_dropdown(){
             $CI = get_instance();
@@ -89,6 +97,37 @@
         function paymentmode_dropdown(){
             $CI = get_instance();
             $options=array(''=>'Select Payment Mode','cash'=>'Cash','online'=>'Online','cheque'=>'Cheque');
+            return $options;
+        }
+    }
+
+    if(!function_exists('projectstatus_dropdown')){
+        function projectstatus_dropdown(){
+            $CI = get_instance();
+            $options=array(''=>'Select Status','sale'=>'Sale','soldout'=>'Sold Out','upcoming'=>'Upcoming');
+            return $options;
+        }
+    }
+
+    if(!function_exists('propertytype_dropdown')){
+        function propertytype_dropdown(){
+            $CI = get_instance();
+            $options=array(''=>'Select Property Type','residential'=>'Residential','commercial'=>'Commercial');
+            return $options;
+        }
+    }
+
+    if(!function_exists('amenities_dropdown')){
+        function amenities_dropdown(){
+            $CI = get_instance();
+            $options=array('park'=>'Park','temple'=>'Temple');
+            $options['swimming_pool']='Swimming Pool';
+            $options['community_hall']='Community Hall';
+            $options['playground']='Playground';
+            $options['stadium']='Stadium';
+            $options['gym']='Gym';
+            $options['school']='School';
+            $options['market']='Market';
             return $options;
         }
     }

@@ -208,6 +208,26 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item has-treeview <?php echo activate_dropdown('projects'); ?>">
+                                <a href="#" class="nav-link <?php echo activate_dropdown('projects','a'); ?>">
+                                    <i class="nav-icon far fa-list-alt"></i>
+                                    <p>Projects <i class="right fas fa-angle-left"></i></p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?php echo base_url("projects/addproject/"); ?>" class="nav-link <?php echo activate_menu('projects/addproject'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add Project</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo base_url("projects/"); ?>" class="nav-link <?php echo activate_menu('projects'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Projects</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="nav-item has-treeview <?php echo activate_dropdown('bookings'); ?>">
                                 <a href="#" class="nav-link <?php echo activate_dropdown('bookings','a'); ?>">
                                     <i class="nav-icon far fa-address-book"></i>

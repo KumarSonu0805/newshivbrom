@@ -5,7 +5,12 @@
 			if($required===true){ $attributes['required']='required'; }
 			$form_input="";
 			$form_input.=get_label($name,$label,$required);
-			
+			if($type=='text' || $type=='textarea' || $type=='number'){
+                if(!isset($attributes['placeholder'])){
+                    $attributes['placeholder']=$label;
+                }
+            }
+            
 			switch($type){
 				case 'date': $form_input.=create_simple_input($type,$name,$value,$attributes);
 				break;

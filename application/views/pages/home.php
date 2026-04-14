@@ -335,7 +335,7 @@
                                                             <div class="card bg-warning text-white">
                                                                 <div class="card-body">
                                                                     <div class="inner text-white">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($myincome,true,3); ?></h3>
+                                                                        <h3><?= $this->amount->toDecimal($myincome,true,3); ?></h3>
                                                                         <p>My Income</p>
                                                                     </div>
                                                                     <div class="icon text-white">
@@ -351,7 +351,7 @@
                                                             <div class="card bg-success">
                                                                 <div class="card-body">
                                                                     <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($mypayout,true,3); ?></h3>
+                                                                        <h3><?= $this->amount->toDecimal($mypayout,true,3); ?></h3>
                                                                         <p>My Payout</p>
                                                                     </div>
                                                                     <div class="icon">
