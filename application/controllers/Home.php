@@ -258,7 +258,7 @@ class Home extends MY_Controller {
                     $data=array("userdata"=>$userdata,"memberdata"=>$memberdata,"accountdata"=>$accountdata,
                                 "treedata"=>$treedata,"nomineedata"=>$nomineedata);
                     $result=$this->member->addmember($data);
-                    print_pre($result);
+                    //print_pre($result);
                 }
                 else{
                     $user=$getuser->unbuffered_row('array');
@@ -314,9 +314,6 @@ class Home extends MY_Controller {
                                 $bdata['a_mobile']=!empty($booking['alternate_mobile'])?$booking['alternate_mobile']:'';
                                 $bdata['email']=$booking['email'];
                                 $bdata['address']=$booking['address'];
-                                $bdata['b_state_id']='';
-                                $bdata['b_district_id']='';
-                                $bdata['b_city_id']='';
                                 $bdata['pincode']=$booking['pin_code'];
                                 $bdata['photo']=!empty($booking['photo'])?$booking['photo']:'';
                                 $bdata['details']=json_encode($booking);
@@ -359,6 +356,8 @@ class Home extends MY_Controller {
                                 $kyc['aadhar1']=!empty($booking['aadhaar_card_photo'])?$booking['aadhaar_card_photo']:'';
                                 $kyc['aadhar2']='';
                                 $kyc['pan_image']=!empty($booking['pan_card_photo'])?$booking['pan_card_photo']:'';
+                                $kyc['added_on']=date('Y-m-d H:i:s',strtotime($booking['created_at']));
+                                $kyc['updated_on']=date('Y-m-d H:i:s',strtotime($booking['updated_at']));
                                 
                                 $nominee=array('regid'=>$member['regid'],'booking_id'=>'');
                                 $nominee['name']=$booking['nominee_name'];
@@ -369,6 +368,7 @@ class Home extends MY_Controller {
                                 $nominee['photo']=!empty($booking['nominee_photo'])?$booking['nominee_photo']:'';
                                 
                                 $data=array("bdata"=>$bdata,"payment"=>$payment,"kyc"=>$kyc,"nominee"=>$nominee);
+                                print_pre($data);
                                 $result=$this->booking->importdata($data);
                                 print_pre($result);
                             }

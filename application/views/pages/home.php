@@ -255,7 +255,7 @@
                                                             <div class="card bg-info">
                                                                 <div class="card-body">
                                                                     <div class="inner">
-                                                                        <h3><?= $this->amount->toDecimal($left); ?></h3>
+                                                                        <h3><?= $this->amount->toDecimal($left,false); ?></h3>
                                                                         <p>Left Team</p>
                                                                     </div>
                                                                     <div class="icon">
@@ -271,7 +271,7 @@
                                                             <div class="card bg-maroon">
                                                                 <div class="card-body">
                                                                     <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($right); ?></h3>
+                                                                        <h3><?= $this->amount->toDecimal($right,false); ?></h3>
                                                                         <p>Right Team</p>
                                                                     </div>
                                                                     <div class="icon">
@@ -319,7 +319,7 @@
                                                             <div class="card bg-purple">
                                                                 <div class="card-body">
                                                                     <div class="inner">
-                                                                        <h3><?= $this->amount->toDecimal($bookings); ?></h3>
+                                                                        <h3><?= $this->amount->toDecimal($bookings,false); ?></h3>
                                                                         <p>My Bookings</p>
                                                                     </div>
                                                                     <div class="icon">
