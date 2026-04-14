@@ -16,8 +16,8 @@
                                                     <div class="card bg-info">
                                                         <div class="card-body">
                                                             <div class="inner">
-                                                                <h3><?= $total_members??0; ?></h3>
-                                                                <p>Total Members</p>
+                                                                <h3><?= $total_users??0; ?></h3>
+                                                                <p>Total Users</p>
                                                             </div>
                                                             <div class="icon">
                                                                 <i class="fas fa-users"></i>
@@ -32,8 +32,8 @@
                                                     <div class="card bg-success">
                                                         <div class="card-body">
                                                             <div class="inner">
-                                                                <h3><?= $active_members??0; ?></h3>
-                                                                <p>Active Members</p>
+                                                                <h3><?= $active_users??0; ?></h3>
+                                                                <p>Active Users</p>
                                                             </div>
                                                             <div class="icon">
                                                                 <i class="fa fa-users"></i>
@@ -44,12 +44,12 @@
                                                 </a>
                                             </div>
                                             <div class="col-lg-3 col-6">
-                                                <a href="<?= base_url('members/activelist/'); ?>">            
+                                                <a href="<?= base_url('members/inactivelist/'); ?>">            
                                                     <div class="card bg-primary">
                                                         <div class="card-body">
                                                             <div class="inner">
-                                                                <h3><?= $inactive_members??0 ?></h3>
-                                                                <p>In-Active Members</p>
+                                                                <h3><?= $inactive_users??0 ?></h3>
+                                                                <p>In-Active Users</p>
                                                             </div>
                                                             <div class="icon">
                                                                 <i class="fas fa-users"></i>
@@ -58,6 +58,117 @@
                                                         </div>
                                                     </div>
                                                 </a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-6">
+                                                <a href="#">            
+                                                    <div class="card bg-warning">
+                                                        <div class="card-body">
+                                                            <div class="inner">
+                                                                <h3><?= $landbookings??0; ?></h3>
+                                                                <p>Land Bookings</p>
+                                                            </div>
+                                                            <div class="icon">
+                                                                <i class="fas fa-list"></i>
+                                                            </div>
+                                                            <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-lg-3 col-6">
+                                                <a href="#">            
+                                                    <div class="card bg-info">
+                                                        <div class="card-body">
+                                                            <div class="inner">
+                                                                <h3><?= $flatbookings??0; ?></h3>
+                                                                <p>Flat Bookings</p>
+                                                            </div>
+                                                            <div class="icon">
+                                                                <i class="fa fa-list"></i>
+                                                            </div>
+                                                            <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-lg-3 col-6">
+                                                <a href="#">            
+                                                    <div class="card bg-danger">
+                                                        <div class="card-body">
+                                                            <div class="inner">
+                                                                <h3><?= $pendingbookings??0 ?></h3>
+                                                                <p>Pending Bookings</p>
+                                                            </div>
+                                                            <div class="icon">
+                                                                <i class="fas fa-list"></i>
+                                                            </div>
+                                                            <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-lg-3 col-6">
+                                                <a href="#">            
+                                                    <div class="card bg-success">
+                                                        <div class="card-body">
+                                                            <div class="inner">
+                                                                <h3><?= $approvedbookings??0 ?></h3>
+                                                                <p>Approved Bookings</p>
+                                                            </div>
+                                                            <div class="icon">
+                                                                <i class="fas fa-list"></i>
+                                                            </div>
+                                                            <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div><hr>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive">
+                                                    <div class="lead">New Users</div>
+                                                    <table class="table table-bordered table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Sl.No.</th>
+                                                                <th>Registration No</th>
+                                                                <th>Name</th>
+                                                                <th>Email</th>
+                                                                <th>Mobile</th>
+                                                                <th>Sponsor</th>
+                                                                <th>Status</th>
+                                                                <th>Joining Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php
+                                                            if(!empty($newusers)){$i=0;
+                                                                foreach($newusers as $user){
+                                                                    $status='<span class="badge badge-success">Active</span>';
+                                                                    if($user['status']==0){
+                                                                        $status='<span class="badge badge-danger">In-Active</span>';
+                                                                    }
+                                                            ?>
+                                                            <tr>
+                                                                <td><?= ++$i; ?></td>
+                                                                <td><?= $user['username']; ?></td>
+                                                                <td><?= $user['name']; ?></td>
+                                                                <td><?= $user['email']; ?></td>
+                                                                <td><?= $user['mobile']; ?></td>
+                                                                <td><?= $user['sponsor']; ?></td>
+                                                                <td><?= $status; ?></td>
+                                                                <td><?= date('d-m-Y',strtotime($user['date'])); ?></td>
+                                                            </tr>
+                                                            <?php
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                         <?php
@@ -132,217 +243,116 @@
                                                                 <button onclick="copyLink()" class="btn btn-sm btn-info">Copy Link</button>
                                                             </div>
                                                         </div><hr>
-                                                        <div class="row d-none">
-                                                            <div class="col-lg-6 col-12">
-                                                                <a href="<?= base_url('epins/newpins/'); ?>">            
-                                                                    <div class="card bg-info">
-                                                                        <div class="card-body text-white">
-                                                                            <div class="inner">
-                                                                                <h3><?= $unused; ?></h3>
-                                                                                <p>Un-Used E-Pins</p>
-                                                                            </div>
-                                                                            <div class="icon">
-                                                                                <i class="fas fa-tasks"></i>
-                                                                            </div>
-                                                                            <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                            </div>
-                                                            <div class="col-lg-6 col-12">
-                                                                <a href="<?= base_url('epins/usedepins/'); ?>">            
-                                                                    <div class="card bg-purple">
-                                                                        <div class="card-body text-white">
-                                                                            <div class="inner">
-                                                                                <h3><?= $used; ?></h3>
-                                                                                <p>Used E-Pins</p>
-                                                                            </div>
-                                                                            <div class="icon">
-                                                                                <i class="fas fa-tasks"></i>
-                                                                            </div>
-                                                                            <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 d-none">
+                                            <div class="col-md-6">
                                                 <?php
-                                                    $royalty=$recycle=0;
-                                                    if(!empty($incomes)){
-                                                        $remarks=array_column($incomes,'remarks');
-                                                        $index=array_search('Level Income',$remarks);
-                                                        if($index!==false){
-                                                            //$levelincome=$incomes[$index]['income'];
-                                                        }
-                                                        $index=array_search('Recycle Income',$remarks);
-                                                        if($index!==false){
-                                                            $recycle=$incomes[$index]['income'];
-                                                        }
-                                                        $index=array_search('Royalty Income',$remarks);
-                                                        if($index!==false){
-                                                            $royalty=$incomes[$index]['income'];
-                                                        }
-                                                    }
                                                 ?>
                                                 <div class="row">
-                                                    <div class="col-lg-6 col-12">
-                                                        <a href="#">            
-                                                            <div class="card bg-success">
-                                                                <div class="card-body">
-                                                                    <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($totaldeposit,true,3); ?></h3>
-                                                                        <p>Total Deposit</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="fas fa-money-bill"></i>
-                                                                    </div>
-                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-6 col-12">
-                                                        <a href="#">            
-                                                            <div class="card bg-maroon">
-                                                                <div class="card-body">
-                                                                    <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($roiincome,true,3); ?></h3>
-                                                                        <p>ROI Income</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="fas fa-money-bill"></i>
-                                                                    </div>
-                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-6 col-12">
-                                                        <a href="#">            
-                                                            <div class="card bg-purple">
-                                                                <div class="card-body">
-                                                                    <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($directincome,true,3); ?></h3>
-                                                                        <p>Direct Income</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="fas fa-money-bill"></i>
-                                                                    </div>
-                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-6 col-12">
-                                                        <a href="#">            
-                                                            <div class="card bg-primary">
-                                                                <div class="card-body">
-                                                                    <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($levelincome,true,3); ?></h3>
-                                                                        <p>Level Income</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="fas fa-money-bill"></i>
-                                                                    </div>
-                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-6 col-12">
-                                                        <a href="#">            
-                                                            <div class="card bg-success">
-                                                                <div class="card-body">
-                                                                    <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($totalincome,true,3); ?></h3>
-                                                                        <p>Total Earning</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="fas fa-money-bill"></i>
-                                                                    </div>
-                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-6 col-12">
-                                                        <a href="#">            
-                                                            <div class="card bg-maroon">
-                                                                <div class="card-body">
-                                                                    <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($epingeneration,true,3); ?></h3>
-                                                                        <p>E-Pin Generated</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="fas fa-money-bill"></i>
-                                                                    </div>
-                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-6 col-12">
-                                                        <a href="#">            
-                                                            <div class="card bg-purple">
-                                                                <div class="card-body">
-                                                                    <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($transferred,true,3); ?></h3>
-                                                                        <p>Wallet Transfers</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="fas fa-money-bill"></i>
-                                                                    </div>
-                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-6 col-12">
-                                                        <a href="#">            
-                                                            <div class="card bg-primary">
-                                                                <div class="card-body">
-                                                                    <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($received,true,3); ?></h3>
-                                                                        <p>Wallet Received</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="fas fa-money-bill"></i>
-                                                                    </div>
-                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-6 col-12">
-                                                        <a href="#">            
-                                                            <div class="card bg-danger">
-                                                                <div class="card-body">
-                                                                    <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($withdrawals,true,3); ?></h3>
-                                                                        <p>Withdrawal</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="fas fa-money-bill"></i>
-                                                                    </div>
-                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <?php
-                                                        $balance=$totalincome-$withdrawals-$epingeneration+$received-$transferred;
-                                                    ?>
                                                     <div class="col-lg-6 col-12">
                                                         <a href="#">            
                                                             <div class="card bg-info">
                                                                 <div class="card-body">
                                                                     <div class="inner">
-                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($balance,true,3); ?></h3>
-                                                                        <p>Balance</p>
+                                                                        <h3><?= $this->amount->toDecimal($left); ?></h3>
+                                                                        <p>Left Team</p>
+                                                                    </div>
+                                                                    <div class="icon">
+                                                                        <i class="fas fa-users"></i>
+                                                                    </div>
+                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-6 col-12">
+                                                        <a href="#">            
+                                                            <div class="card bg-maroon">
+                                                                <div class="card-body">
+                                                                    <div class="inner">
+                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($right); ?></h3>
+                                                                        <p>Right Team</p>
+                                                                    </div>
+                                                                    <div class="icon">
+                                                                        <i class="fas fa-users"></i>
+                                                                    </div>
+                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-6 col-12">
+                                                        <a href="#">            
+                                                            <div class="card bg-primary">
+                                                                <div class="card-body">
+                                                                    <div class="inner">
+                                                                        <h3><?= $this->amount->toDecimal($leftbv,true,3); ?></h3>
+                                                                        <p>Left BV</p>
+                                                                    </div>
+                                                                    <div class="icon">
+                                                                        <i class="fas fa-money-bill"></i>
+                                                                    </div>
+                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-6 col-12">
+                                                        <a href="#">            
+                                                            <div class="card bg-orange text-white">
+                                                                <div class="card-body">
+                                                                    <div class="inner text-white">
+                                                                        <h3><?= $this->amount->toDecimal($rightbv,true,3); ?></h3>
+                                                                        <p>Right BV</p>
+                                                                    </div>
+                                                                    <div class="icon text-white">
+                                                                        <i class="fas fa-money-bill"></i>
+                                                                    </div>
+                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-6 col-12">
+                                                        <a href="#">            
+                                                            <div class="card bg-purple">
+                                                                <div class="card-body">
+                                                                    <div class="inner">
+                                                                        <h3><?= $this->amount->toDecimal($bookings); ?></h3>
+                                                                        <p>My Bookings</p>
+                                                                    </div>
+                                                                    <div class="icon">
+                                                                        <i class="fas fa-list"></i>
+                                                                    </div>
+                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-6 col-12">
+                                                        <a href="#">            
+                                                            <div class="card bg-warning text-white">
+                                                                <div class="card-body">
+                                                                    <div class="inner text-white">
+                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($myincome,true,3); ?></h3>
+                                                                        <p>My Income</p>
+                                                                    </div>
+                                                                    <div class="icon text-white">
+                                                                        <i class="fas fa-money-bill"></i>
+                                                                    </div>
+                                                                    <!-- <a href="#" class="card-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-6 col-12">
+                                                        <a href="#">            
+                                                            <div class="card bg-success">
+                                                                <div class="card-body">
+                                                                    <div class="inner">
+                                                                        <h3><span>$</span> <?= $this->amount->toDecimal($mypayout,true,3); ?></h3>
+                                                                        <p>My Payout</p>
                                                                     </div>
                                                                     <div class="icon">
                                                                         <i class="fas fa-money-bill"></i>

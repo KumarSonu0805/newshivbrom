@@ -579,7 +579,7 @@ class Member_model extends CI_Model{
 	
 	public function getdirectmembers($regid,$status=false){
 		$columns="t1.id as regid,t1.username,t1.name,t1.vp as password,concat_ws(',',t2.district,t2.state) as location,
-					t3.username as ref,t3.name as refname,t2.date,t2.activation_date,'--' as package,0 as direct,t2.status";
+					t3.username as ref,t3.name as refname,t2.date,t2.time,t2.activation_date,'--' as package,0 as direct,t2.status";
 		$this->db->select($columns);
 		$this->db->from('users t1');
 		$this->db->join('members t2','t2.regid=t1.id','Left');

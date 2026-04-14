@@ -83,6 +83,32 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item has-treeview <?= activate_dropdown('members'); ?> ">
+                                <a href="#" class="nav-link <?= activate_dropdown('members','a'); ?>">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>Members <i class="right fas fa-angle-left"></i></p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?= base_url("members/directmembers/"); ?>" class="nav-link <?= activate_menu('members/directmembers'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Direct Member List</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?= base_url("members/memberlist/"); ?>" class="nav-link <?= activate_menu('members/memberlist'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Member List</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?= base_url("members/treeview/"); ?>" class="nav-link <?= activate_menu('members/treeview'); ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Member Tree</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="nav-item has-treeview <?php echo activate_dropdown('bookings'); ?>">
                                 <a href="#" class="nav-link <?php echo activate_dropdown('bookings','a'); ?>">
                                     <i class="nav-icon far fa-address-book"></i>

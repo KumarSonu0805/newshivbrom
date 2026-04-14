@@ -83,7 +83,13 @@ class Members extends MY_Controller {
 	
 	public function memberlist(){
 		checklogin();
-		$data['title']="Downline Member List";
+		$data['title']="Member List";
+        if($this->uri->segment(2)=='activelist'){
+            $data['title']="Active Member List";
+        }
+        elseif($this->uri->segment(2)=='inactivelist'){
+            $data['title']="In-Active Member List";
+        }
 		$data['user']=getuser();
 		$regid=$data['user']['id'];
 		$members=$this->member->getmembers($regid);
@@ -148,7 +154,7 @@ class Members extends MY_Controller {
 		$this->template->load('members','editmember',$data);
 	}
 	
-	public function mydirects(){
+	public function directmembers(){
 		checklogin();
 		if($this->session->role=='admin'){
 			redirect('members/downline/');

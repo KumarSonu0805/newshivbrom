@@ -93,94 +93,75 @@ class Common_model extends CI_Model{
     }
       
     public function homedata($regid){
-        $this->db->group_by('remarks');
-        $this->db->select("sum(amount) as income,remarks");
-        $incomes=$this->db->get_where("wallet",array("regid"=>$regid))->result_array();
+        /*
+        -Left Team
+        -RIght Team
+        -My Bookings
+        -Income
+        -Payout
+        */
+        $result=array();
+        $left=$right=$leftbv=$rightbv=0;
+        $leftright=$this->member->getleftrightmembers($regid,NULL,"regids");
+        $left=!empty($leftright['left'])?count($leftright['left']):0;
+        $right=!empty($leftright['right'])?count($leftright['right']):0;
         
-        $this->db->select_sum("amount","totalincome");
-        $totalincome=$this->db->get_where("wallet",array("regid"=>$regid))->unbuffered_row()->totalincome;
-        if($totalincome===NULL){ $totalincome=0; }
+        $bookings=$this->db->get_where('bookings',['regid'=>$regid])->num_rows();
         
-        $this->db->select_sum("amount","withdrawals");
-        $withdrawals=$this->db->get_where("withdrawals",array("regid"=>$regid,"status"=>1))->unbuffered_row()->withdrawals;
-        if($withdrawals===NULL){ $withdrawals=0; }
+        $this->db->select_sum('amount');
+        $myincome=$this->db->get_where('wallet',['regid'=>$regid])->unbuffered_row()->amount;
+        $myincome=$myincome===NULL?0:$myincome;
         
-        $where=array("regid"=>$regid,"status!="=>2,'type'=>'ewallet');
-        $this->db->select_sum('amount','amount');
-        $epingeneration=$this->db->get_where("epin_requests",$where)->unbuffered_row()->amount;
-        if($epingeneration==NULL){ $epingeneration=0; }
+        $this->db->select_sum('amount');
+        $this->db->where("closing is NOT NULL");
+        $mypayout=$this->db->get_where('wallet',['regid'=>$regid])->unbuffered_row()->amount;
+        $mypayout=$mypayout===NULL?0:$mypayout;
         
-        $this->db->select_sum("amount","directincome");
-        $directincome=$this->db->get_where("wallet",array("regid"=>$regid,"remarks"=>"Direct Income"))->unbuffered_row()->directincome;
-        if($directincome===NULL){ $directincome=0; }
-        
-        $this->db->select_sum("amount","roiincome");
-        $roiincome=$this->db->get_where("wallet",array("regid"=>$regid,"remarks"=>"ROI Income"))->unbuffered_row()->roiincome;
-        if($roiincome===NULL){ $roiincome=0; }
-        
-        $this->db->select_sum("amount","levelincome");
-        $levelincome=$this->db->get_where("wallet","regid='$regid' and remarks like 'Level%'")->unbuffered_row()->levelincome;
-        if($levelincome===NULL){ $levelincome=0; }
-        
-        $this->db->select_sum("amount","totaldeposit");
-        $totaldeposit=$this->db->get_where("deposits","regid='$regid' and status='1'")->unbuffered_row()->totaldeposit;
-        if($totaldeposit===NULL){ $totaldeposit=0; }
-        
-        $epin=$this->epin->getepin("t1.id in (SELECT epin_id from ".TP."epin_used where used_by='$regid')",'single');
-        if(!empty($epin)){
-            $totaldeposit+=$epin['amount'];
-        }
-        $this->db->select_sum("amount");
-        $transferred=$this->db->get_where("wallet_transfers","reg_from='$regid'")->unbuffered_row()->amount;
-        if($transferred===NULL){ $transferred=0; }
-        
-        $this->db->select_sum("amount");
-        $received=$this->db->get_where("wallet_transfers","reg_to='$regid'")->unbuffered_row()->amount;
-        if($received===NULL){ $received=0; }
-        
-        
-        $result['totalincome']=$totalincome;
-        $result['withdrawals']=$withdrawals;
-        $result['epingeneration']=$epingeneration;
-        $result['levelincome']=$levelincome;
-        $result['directincome']=$directincome;
-        $result['roiincome']=$roiincome;
-        $result['incomes']=$incomes;
-        $result['totaldeposit']=$totaldeposit;
-        $result['transferred']=$transferred;
-        $result['received']=$received;
+        $result['left']=$left;
+        $result['right']=$right;
+        $result['leftbv']=$leftbv;
+        $result['rightbv']=$rightbv;
+        $result['bookings']=$bookings;
+        $result['myincome']=$myincome;
+        $result['mypayout']=$mypayout;
         return $result;
     }
     
     public function adminhomedata(){
-        $total_members=$this->db->get("members")->num_rows();
-        $active_members=$this->db->get_where("members",array("status"=>1))->num_rows();
-        $inactive_members=$total_members-$active_members;
+        /*
+        -Total Users
+        -Total Land Bookings
+        -Total Flat Bookings
+        -Pending Bookings
+        -Approved Bookings
+        */
         
-        $columns="id as package_id,0 as packagecount,package,amount";
-        $this->db->select($columns);
-        $packages=$this->db->get("packages")->result_array();
+        $total_users=$this->db->get("members")->num_rows();
+        $active_users=$this->db->get_where("members",array("status"=>1))->num_rows();
+        $inactive_users=$total_users-$active_users;
         
-        $columns="package_id as package_id,count(*) as packagecount";
-        $this->db->select($columns);
-		$this->db->from("members");
-		$this->db->where(array("status"=>1));
-		$this->db->group_by("package_id");
-		$this->db->order_by("package_id");
-		$query=$this->db->get();
-		$package_count=$query->result_array();
+        $this->db->select('t2.username,t2.name,t2.email,t2.mobile,t3.name as sponsor,t1.status,t1.date');
+        $this->db->from('members t1');
+        $this->db->join('users t2','t1.regid=t2.id');
+        $this->db->join('users t3','t1.refid=t3.id');
+        $this->db->order_by('t1.id desc');
+        $this->db->limit(15);
+        $query=$this->db->get();
+        $newusers=$query->result_array();
         
-        $package_ids=array_column($package_count,'package_id');
-        foreach($packages as $key=>$package){
-            $index=array_search($package['package_id'],$package_ids);
-            if($index!==false){
-                $packages[$key]['packagecount']=$package_count[$index]['packagecount'];
-            }
-        }
-        $result['total_members']=$total_members;
-        $result['active_members']=$active_members;
-        $result['inactive_members']=$inactive_members;
-        $result['packages']=$packages;
+        $landbookings=$this->db->get_where('bookings',['booking_type'=>'land'])->num_rows();
+        $flatbookings=$this->db->get_where('bookings',['booking_type'=>'flat'])->num_rows();
+        $pendingbookings=$this->db->get_where('bookings',['status'=>0])->num_rows();
+        $approvedbookings=$this->db->get_where('bookings',['status'=>1])->num_rows();
+        
+        $result['total_users']=$total_users;
+        $result['active_users']=$active_users;
+        $result['inactive_users']=$inactive_users;
+        $result['newusers']=$newusers;
+        $result['landbookings']=$landbookings;
+        $result['flatbookings']=$flatbookings;
+        $result['pendingbookings']=$pendingbookings;
+        $result['approvedbookings']=$approvedbookings;
         
         return $result;
     }

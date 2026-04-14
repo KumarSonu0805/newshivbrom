@@ -27,6 +27,12 @@
 					elseif($member['status']==2){
                         $status="<span class='text-danger'>ID Blocked</span>";
                     }
+                    if($this->uri->segment(2)=='activelist' && $member['status']!=1){
+                        continue;
+                    }
+                    elseif($this->uri->segment(2)=='inactivelist' && $member['status']!=0){
+                        continue;
+                    }
         ?>
         <tr>
             <td><?php echo $i; ?></td>

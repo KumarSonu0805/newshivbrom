@@ -17,7 +17,7 @@ class Home extends MY_Controller {
             //$this->wallet->addcommission($regid);
             $memberdetails=$this->member->getalldetails($regid);
             $data['member']=$memberdetails['member'];
-            //$homedata=$this->common->homedata($regid);
+            $homedata=$this->common->homedata($regid);
             
             $date=date('Y-m-d');
             $status=0;
@@ -32,7 +32,6 @@ class Home extends MY_Controller {
             //$data['donations']=$this->deposit->getpendingdonation($where);
             //print_pre($data,true);
             $data['datatable']=true;
-			$homedata=array();
         }
         else{
             //$this->addallcommission();

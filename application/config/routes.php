@@ -60,6 +60,9 @@ $route['reset-password']='login/resetpassword';
 $route['logout']='login/logout';
 $route['register']='login/register';
 
+$route['members/activelist']='members/memberlist';
+$route['members/inactivelist']='members/memberlist';
+
 $route['bookings/bookingkyc/(:any)']='bookings/bookingform/$1';
 $route['bookings/bookingnominee/(:any)']='bookings/bookingform/$1';
 
