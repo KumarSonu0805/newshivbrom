@@ -328,7 +328,7 @@ class Home extends MY_Controller {
                                         $single['payment_type']=$row['payment_type']=='full'?
                                                                 'full_payment':$row['payment_type'];
                                         $single['date']=date('Y-m-d',strtotime($row['created_at']));
-                                        $single['payment_mode']=$row['payment_mode'];
+                                        $single['payment_mode']=$row['payment_mode']=='check'?'cheque':$row['payment_mode'];
                                         $paid=$single['amount']=$row['amount'];
                                         if($paid>$booking['price']){
                                             $paid=$booking['price'];
