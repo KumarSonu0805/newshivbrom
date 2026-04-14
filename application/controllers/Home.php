@@ -325,7 +325,8 @@ class Home extends MY_Controller {
                                 if(!empty($payments)){
                                     foreach($payments as $row){
                                         $single=array('regid'=>$member['regid'],'booking_id'=>'');
-                                        $single['payment_type']=$row['payment_type'];
+                                        $single['payment_type']=$row['payment_type']=='full'?
+                                                                'full_payment':$row['payment_type'];
                                         $single['date']=date('Y-m-d',strtotime($row['created_at']));
                                         $single['payment_mode']=$row['payment_mode'];
                                         $paid=$single['amount']=$row['amount'];

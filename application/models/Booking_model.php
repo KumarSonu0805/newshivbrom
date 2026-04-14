@@ -121,7 +121,9 @@ class Booking_model extends CI_Model{
     }
     
     public function getbookingpayments($where=array(),$type='all',$order_by="t1.date,t1.id"){
-        $columns ="t1.*,t3.username as member_id,t3.name as member_name,t3.mobile as member_mobile,t2.type,t2.name,t2.booking_type,t2.status as b_status,t4.status as a_status,t5.name as nominee_name";
+        $columns ="t1.*,t3.username as member_id,t3.name as member_name,t3.mobile as member_mobile,t2.type,t2.name,
+                    t2.booking_type,t2.status as b_status,t2.price,t2.other_price,t2.total_amount,t4.status as a_status,
+                    t5.name as nominee_name";
         $this->db->select($columns);
         $this->db->where($where);
         $this->db->from('booking_payment t1');

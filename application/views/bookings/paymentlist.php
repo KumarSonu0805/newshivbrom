@@ -47,6 +47,7 @@
                                                                     elseif($booking['type']=='hold'){
                                                                         $type='Hold';
                                                                     }
+                                                                    
                                                                     $payment_type=$ptypes[$booking['payment_type']];
                                                                     $a_status="<span class='text-danger'>In-Active</span>";
                                                                     if($booking['a_status']==1){
