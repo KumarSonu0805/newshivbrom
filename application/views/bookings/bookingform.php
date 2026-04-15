@@ -662,11 +662,14 @@
                     });
                     $('body').on('change','#project_id',function(){
                         var project_id=$(this).val();
+                        $('#price,#other_price,#total_amount').val('');
                         $.post('<?= base_url('projects/getproject') ?>',{project_id:project_id},function(data){
-                            data=JSON.parse(data);
-                            $('#price').val(data['price']);
-                            $('#other_price').val(data['other_price']);
-                            $('#total_amount').val(data['final_price']);
+                            if(data!='null'){
+                                data=JSON.parse(data);
+                                $('#price').val(data['price']);
+                                $('#other_price').val(data['other_price']);
+                                $('#total_amount').val(data['final_price']);
+                            }
                         });
                         
                     });
