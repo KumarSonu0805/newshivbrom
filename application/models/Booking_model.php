@@ -99,6 +99,7 @@ class Booking_model extends CI_Model{
         $this->db->select($columns);
         $this->db->where($where);
         $this->db->order_by($order_by);
+        $this->db->group_by('t1.id');
         $this->db->from('bookings t1');
         $this->db->join('booking_payment t2','t1.id=t2.booking_id');
         $this->db->join('members t3','t1.regid=t3.regid');

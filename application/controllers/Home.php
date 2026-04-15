@@ -394,7 +394,7 @@ class Home extends MY_Controller {
 	
     public function runquery(){
         $query=array(
-            "ALTER TABLE `sc_bookings` ADD `duration` INT NULL DEFAULT NULL AFTER `type`;"
+            "ALTER TABLE `sc_bookings` ADD `b_id` VARCHAR(20) NULL DEFAULT NULL AFTER `id`, ADD UNIQUE (`b_id`);"
         );
         foreach($query as $sql){
             if(!$this->db->query($sql)){

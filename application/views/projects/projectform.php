@@ -333,7 +333,7 @@
                                                 ?>
                                             </div>
                                         </div>
-                                        <div class="col-md-3 d-none">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <?php
                                                     $attributes=array("id"=>"discount",'step'=>'0.01');
