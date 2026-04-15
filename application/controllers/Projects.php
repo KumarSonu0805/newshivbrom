@@ -77,182 +77,29 @@ class Projects extends MY_Controller {
         redirect($_SERVER['HTTP_REFERER']);
     }
     
-    public function getstate(){
-        $id=$this->input->post('id');
-        $state=$this->master->getstates(['id'=>$id],'single');
-        echo json_encode($state);
-    }
-    
-    
-    public function deletestate(){
-        $id=$this->input->post('id');
-        $where=array('id'=>$id);
-        logdeleteoperations('states',$where);
-        if($this->db->delete('states',$where)){
-            $this->session->set_flashdata('msg',"State Deleted Successfully");
-        }
-        else{
-            $error=$this->db->error();
-            $this->session->set_flashdata('err_msg',$error['message']);
-        }
-    }
-    
-    public function savedistrict(){
-        if($this->input->post('savedistrict')!==NULL){
-            $data=$this->input->post();
-            unset($data['savedistrict']);
-            $result=$this->master->savedistrict($data);
-            if($result['status']===true){
-                $this->session->set_flashdata('msg',$result['message']);
-            }
-            else{
-                $this->session->set_flashdata('err_msg',$result['message']);
-            }
-        }
+    public function getproject(){
+        $id=$this->input->post('project_id');
+        $project=$this->project->getprojects(['t1.id'=>$id],'single');
+        if(!empty($project)){
+            $price=$project['price'];
+            
+            $corner_percent=$project['corner_extra_percentage'];
+            $corner_cost=$corner_percent*$price/100;
 
-        elseif($this->input->post('updatedistrict')!==NULL){
-            $data=$this->input->post();
-            unset($data['updatedistrict']);
-            $result=$this->master->updatedistrict($data);
-            if($result['status']===true){
-                $this->session->set_flashdata('msg',$result['message']);
-            }
-            else{
-                $this->session->set_flashdata('err_msg',$result['message']);
-            }
-        }
+            $amenities_percent=$project['amenities_percent'];
+            $amenities_cost=$amenities_percent*$price/100;
+            $other_price=$corner_cost+$amenities_cost;
 
-        redirect($_SERVER['HTTP_REFERER']);
-    }
-    
-    public function getdistrict(){
-        $id=$this->input->post('id');
-        $district=$this->master->getdistricts(['t1.id'=>$id],'single');
-        echo json_encode($district);
-    }
-    
-    public function getdistrictdropdown(){
-        $state_id=$this->input->post('state_id');
-        $district_id=$this->input->post('district_id');
-        $district_id=!empty($district_id)?$district_id:'';
-        $districts=district_dropdown(['t1.state_id'=>$state_id,]);
-        echo create_form_input('select','district_id','',true,$district_id,array('id'=>'district_id'),$districts);
-    }
-    
-    public function deletedistrict(){
-        $id=$this->input->post('id');
-        $where=array('id'=>$id);
-        logdeleteoperations('districts',$where);
-        if($this->db->delete('districts',$where)){
-            $this->session->set_flashdata('msg',"District Deleted Successfully");
-        }
-        else{
-            $error=$this->db->error();
-            $this->session->set_flashdata('err_msg',$error['message']);
-        }
-    }
-    
-    public function savecity(){
-        if($this->input->post('savecity')!==NULL){
-            $data=$this->input->post();
-            unset($data['savecity']);
-            $result=$this->master->savecity($data);
-            if($result['status']===true){
-                $this->session->set_flashdata('msg',$result['message']);
-            }
-            else{
-                $this->session->set_flashdata('err_msg',$result['message']);
-            }
-        }
+            $discount=$project['discount'];
 
-        elseif($this->input->post('updatecity')!==NULL){
-            $data=$this->input->post();
-            unset($data['updatecity']);
-            $result=$this->master->updatecity($data);
-            if($result['status']===true){
-                $this->session->set_flashdata('msg',$result['message']);
-            }
-            else{
-                $this->session->set_flashdata('err_msg',$result['message']);
-            }
+            $final_price=$price+$other_price;
+            $final_price-=($final_price*$discount)/100;
+            
+            $project['other_price']=$other_price;
+            $project['final_price']=$final_price;
         }
-
-        redirect($_SERVER['HTTP_REFERER']);
-    }
-    
-    public function getcity(){
-        $id=$this->input->post('id');
-        $city=$this->master->getcities(['t1.id'=>$id],'single');
-        echo json_encode($city);
-    }
-    
-    public function deletecity(){
-        $id=$this->input->post('id');
-        $where=array('id'=>$id);
-        logdeleteoperations('cities',$where);
-        if($this->db->delete('cities',$where)){
-            $this->session->set_flashdata('msg',"City Deleted Successfully");
-        }
-        else{
-            $error=$this->db->error();
-            $this->session->set_flashdata('err_msg',$error['message']);
-        }
-    }
-    
-    public function getcitydropdown(){
-        $district_id=$this->input->post('district_id');
-        $city_id=$this->input->post('city_id');
-        $city_id=!empty($city_id)?$city_id:'';
-        $cities=city_dropdown(['t1.district_id'=>$district_id,]);
-        echo create_form_input('select','city_id','',true,$city_id,array('id'=>'city_id'),$cities);
-    }
-    
-    public function savebank(){
-        if($this->input->post('savebank')!==NULL){
-            $data=$this->input->post();
-            unset($data['savebank']);
-			$upload_path='./assets/images/category/';
-			$allowed_types='jpg|jpeg|png|webp';
-			$upload=upload_file('image',$upload_path,$allowed_types,$data['name'],10000);
-            if($upload['status']===true){
-                //$path = $this->imager->processimage('.'.$upload['path'],'cropscale',80,['width'=>500,'height'=>500]);
-                $data['image']=$path;
-            }
-            $result=$this->master->savebank($data);
-            if($result['status']===true){
-                $this->session->set_flashdata('msg',$result['message']);
-            }
-            else{
-                $this->session->set_flashdata('err_msg',$result['message']);
-            }
-        }
-
-        elseif($this->input->post('updatebank')!==NULL){
-            $data=$this->input->post();
-            unset($data['updatebank']);
-			$upload_path='./assets/images/category/';
-			$allowed_types='jpg|jpeg|png|webp';
-			$upload=upload_file('image',$upload_path,$allowed_types,$data['name'],10000);
-            if($upload['status']===true){
-                //$path = $this->imager->processimage('.'.$upload['path'],'cropscale',80,['width'=>500,'height'=>500]);
-                $data['image']=$path;
-            }
-            $result=$this->master->updatebank($data);
-            if($result['status']===true){
-                $this->session->set_flashdata('msg',$result['message']);
-            }
-            else{
-                $this->session->set_flashdata('err_msg',$result['message']);
-            }
-        }
-
-        redirect($_SERVER['HTTP_REFERER']);
-    }
-    
-    public function getbank(){
-        $id=$this->input->post('id');
-        $bank=$this->master->getbanks(['t1.id'=>$id],'single');
-        echo json_encode($bank);
+        
+        echo json_encode($project);
     }
     
 	

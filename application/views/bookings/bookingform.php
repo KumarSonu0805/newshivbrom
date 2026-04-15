@@ -93,6 +93,14 @@
                                                     ?>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4 <?= $b_type!='emi'?'d-none':'' ?>">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"duration");
+                                                        echo create_form_input("select","duration","EMI Duration",false,$booking['duration']??'',$attributes,[''=>'Select','12'=>'12 Months','18'=>'18 Months']); 
+                                                    ?>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4">
@@ -652,16 +660,27 @@
                             $('#due_date').val($('#due_date').data('value'));   
                         }
                     });
+                    $('body').on('change','#project_id',function(){
+                        var project_id=$(this).val();
+                        $.post('<?= base_url('projects/getproject') ?>',{project_id:project_id},function(data){
+                            data=JSON.parse(data);
+                            $('#price').val(data['price']);
+                            $('#other_price').val(data['other_price']);
+                            $('#total_amount').val(data['final_price']);
+                        });
+                        
+                    });
                     $('body').on('change','input[name="type"]',function(){
                         var type=$('input[name="type"]:checked').val();
-                        $('#due_date').parent().parent().addClass('d-none');
+                        $('#due_date,#duration').parent().parent().addClass('d-none');
                         $('#payment_type,#paid_amount').val('');
                         $('#paid_amount').prop('readonly',false);
                         $('#payment_type option').show();
-                        $('#due_date').val('');
+                        $('#due_date,#duration').val('');
                         if(type=='full_payment'){
                         }
                         else if(type=='emi'){
+                            //$('#duration').parent().parent().removeClass('d-none');
                         }
                         else if(type=='hold'){
                             $('#due_date').val($('#due_date').data('value'));

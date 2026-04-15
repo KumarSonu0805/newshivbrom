@@ -77,9 +77,15 @@
     }
 
     if(!function_exists('project_dropdown')){
-        function project_dropdown(){
+        function project_dropdown($where=array()){
             $CI = get_instance();
-            $options=array(''=>'Select Project','1'=>'Vaidik Vihar');
+            $options=array(''=>'Select Project');
+            $projects=$CI->project->getprojects($where);
+            if(!empty($projects)){
+                foreach($projects as $project){
+                    $options[$project['id']]=$project['name'].'-'.$project['city'];
+                }
+            }
             return $options;
         }
     }
