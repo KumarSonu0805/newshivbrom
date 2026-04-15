@@ -178,7 +178,8 @@
                                                 <div class="form-group">
                                                     <?php
                                                         $attributes=array("id"=>"price","Placeholder"=>"Price",
-                                                                          "autocomplete"=>"off",'step'=>'0.01');
+                                                                          "autocomplete"=>"off",'step'=>'0.01',
+                                                                          'readonly'=>'true');
                                                         echo create_form_input("number","price","Price",true,$booking['price']??'',$attributes); 
                                                     ?>
                                                 </div>
@@ -187,7 +188,8 @@
                                                 <div class="form-group">
                                                     <?php
                                                         $attributes=array("id"=>"other_price","Placeholder"=>"Other Price",
-                                                                          "autocomplete"=>"off",'step'=>'0.01');
+                                                                          "autocomplete"=>"off",'step'=>'0.01',
+                                                                          'readonly'=>'true');
                                                         echo create_form_input("number","other_price","Other Price",true,$booking['other_price']??0,$attributes); 
                                                     ?>
                                                 </div>
