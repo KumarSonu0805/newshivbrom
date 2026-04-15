@@ -174,7 +174,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <?php
                                                         $attributes=array("id"=>"price","Placeholder"=>"Price",
@@ -184,7 +184,7 @@
                                                     ?>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <?php
                                                         $attributes=array("id"=>"other_price","Placeholder"=>"Other Price",
@@ -194,7 +194,17 @@
                                                     ?>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <?php
+                                                        $attributes=array("id"=>"discount","Placeholder"=>"Discount",
+                                                                          "autocomplete"=>"off",'step'=>'0.01',
+                                                                          'readonly'=>'true');
+                                                        echo create_form_input("number","discount","Discount",true,$booking['discount']??0,$attributes); 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <?php
                                                         $attributes=array("id"=>"total_amount",'readonly'=>'true',
@@ -670,6 +680,7 @@
                                 data=JSON.parse(data);
                                 $('#price').val(data['price']);
                                 $('#other_price').val(data['other_price']);
+                                $('#discount').val(data['discount_amt']);
                                 $('#total_amount').val(data['final_price']);
                             }
                         });

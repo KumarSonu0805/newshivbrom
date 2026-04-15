@@ -93,8 +93,10 @@ class Projects extends MY_Controller {
             $discount=$project['discount'];
 
             $final_price=$price+$other_price;
-            $final_price-=($final_price*$discount)/100;
+            $discount_amt=($final_price*$discount)/100;
+            $final_price-=$discount_amt;
             
+            $project['discount_amt']=$discount_amt;
             $project['other_price']=$other_price;
             $project['final_price']=$final_price;
         }
