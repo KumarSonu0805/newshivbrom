@@ -16,6 +16,7 @@ class Bookings extends MY_Controller {
 		$data['user']=getuser();
         $data['f_type']='new';
         $data['accdetails']=$this->member->getaccdetails(1);
+        print_pre($data);
 		$this->template->load('bookings','bookingform',$data);
 	}
 	
