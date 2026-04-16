@@ -40,6 +40,7 @@ class Bookings extends MY_Controller {
         elseif($this->uri->segment(2)=='bookingnominee'){
             $data['f_type']='nominee';
         }
+        $data['accdetails']=$this->member->getaccdetails($regid);
         
 		$this->template->load('bookings','bookingform',$data);
 	}

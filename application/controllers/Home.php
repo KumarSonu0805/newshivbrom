@@ -180,7 +180,6 @@ class Home extends MY_Controller {
 	public function cleardata($all=false){
         $query=array(
             'DELETE FROM `sc_users` WHERE id>1;',
-            'TRUNCATE `sc_acc_details`;',
             'TRUNCATE `sc_members`;',
             'TRUNCATE `sc_member_ranks`;',
             'TRUNCATE `sc_nominee`;',
@@ -188,6 +187,7 @@ class Home extends MY_Controller {
             'TRUNCATE `sc_wallet_transfers`;',
             'TRUNCATE `sc_withdrawals`;',
             'ALTER TABLE `sc_users` auto_increment = 1;',
+            'ALTER TABLE `sc_acc_details` auto_increment = 1;',
             'ALTER TABLE `sc_member_tree` auto_increment = 1;'
         );
         if($all=='all'){

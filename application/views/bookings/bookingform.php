@@ -304,6 +304,35 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row d-none" id="bank-details">
+                                            <div class="col-md-6">
+                                                <table class="table">
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <td><?php echo $acc_details['account_name']??''; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Bank</th>
+                                                        <td><?php echo $acc_details['bank']??'';  ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Account Number</th>
+                                                        <td><?php echo $acc_details['account_no']??''; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Branch</th>
+                                                        <td><?php echo $acc_details['branch']??''; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>IFSC Code</th>
+                                                        <td><?php echo $acc_details['ifsc']??''; ?></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <img src="<?= file_url('assets/images/qrcode.png'); ?>" alt="" style="width: 300px">
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-12">
                                                 <?php
@@ -768,6 +797,7 @@
                         let mode=$(this).val();
                         $('.pay-modes').addClass('d-none');
                         $('.pay-modes input').val('').prop('required',false);
+                        $('#bank-details').addClass('d-none');
                         if(mode=='cash'){
                             $('.pay-modes.cash').removeClass('d-none');
                             $('.pay-modes.cash input').prop('required',true);
@@ -775,6 +805,7 @@
                         else if(mode=='online'){
                             $('.pay-modes.online').removeClass('d-none');
                             $('.pay-modes.online input').prop('required',true);
+                            $('#bank-details').removeClass('d-none');
                         }
                         else if(mode=='cheque'){
                             $('.pay-modes.cheque').removeClass('d-none');
