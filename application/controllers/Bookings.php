@@ -15,6 +15,7 @@ class Bookings extends MY_Controller {
         $data['styles']=array('file'=>'includes/plugins/icheck-bootstrap/icheck-bootstrap.min.css');
 		$data['user']=getuser();
         $data['f_type']='new';
+        $data['accdetails']=$this->member->getaccdetails(1);
 		$this->template->load('bookings','bookingform',$data);
 	}
 	
@@ -41,7 +42,6 @@ class Bookings extends MY_Controller {
             $data['f_type']='nominee';
         }
         $data['accdetails']=$this->member->getaccdetails(1);
-        print_pre($data,true);
         
 		$this->template->load('bookings','bookingform',$data);
 	}
