@@ -309,23 +309,23 @@
                                                 <table class="table">
                                                     <tr>
                                                         <th>Name</th>
-                                                        <td><?php echo $acc_details['account_name']??''; ?></td>
+                                                        <td><?php echo $accdetails['account_name']??''; ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Bank</th>
-                                                        <td><?php echo $acc_details['bank']??'';  ?></td>
+                                                        <td><?php echo $accdetails['bank']??'';  ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Account Number</th>
-                                                        <td><?php echo $acc_details['account_no']??''; ?></td>
+                                                        <td><?php echo $accdetails['account_no']??''; ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Branch</th>
-                                                        <td><?php echo $acc_details['branch']??''; ?></td>
+                                                        <td><?php echo $accdetails['branch']??''; ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>IFSC Code</th>
-                                                        <td><?php echo $acc_details['ifsc']??''; ?></td>
+                                                        <td><?php echo $accdetails['ifsc']??''; ?></td>
                                                     </tr>
                                                 </table>
                                             </div>
