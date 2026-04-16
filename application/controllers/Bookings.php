@@ -41,6 +41,7 @@ class Bookings extends MY_Controller {
             $data['f_type']='nominee';
         }
         $data['accdetails']=$this->member->getaccdetails(1);
+        print_pre($data,true);
         
 		$this->template->load('bookings','bookingform',$data);
 	}
